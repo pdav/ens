@@ -1,0 +1,11 @@
+Ce répertoire contient un manuel simplifié des principales primitives
+systèmes et fonctions de librairie.
+
+------------------------------------------------------------------------------
+A faire :
+
+ajouter getlogin/logname
+ajouter getpass/getpwdent/getpwnam
+ajouter getut
+ajouter termios/POSIX
+ajouter mmap

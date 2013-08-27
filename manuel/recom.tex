@@ -1,0 +1,289 @@
+%
+% Chapitre "recommandations pour les projets"
+%
+
+\newcounter {regle}
+% \renewcommand {\theregle} {\arabic {regle}}
+
+\newcommand {\regle} [1] {
+    \refstepcounter {regle}
+    {\bf Règle \theregle} : {\em #1} \par
+}
+
+
+
+Afin de vous aider dans la rédaction de vos projets, voici quelques
+règles de bon sens que nous vous conseillons de suivre.  Celles-ci
+résultent de la lecture de nombreux projets de vos camarades des années
+antérieures.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Ne dépassez pas 80 caractères par ligne}
+
+Lorsqu'on imprime votre projet, les lignes trop longues sont simplement
+tronquées. Si le correcteur ne voit qu'une partie de votre projet, il
+ne vous mettra qu'une partie de la note...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Indentez avec {\em au moins} 4 espaces}
+
+La largeur d'indentation est un élément important de la lisibilité de
+vos programmes. Une largeur de 4 espaces est généralement considérée
+comme la largeur minimum d'indentation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Utilisez des espaces pour améliorer la lisibilité}
+
+Par exemple, plutôt qu'écrire~: \par
+\hspace* {20mm} \verb|fn(arg1,arg2);| \par
+ajoutez quelques espaces en respectant les règles typographiques~: \par
+\hspace* {20mm} \verb|fn (arg1, arg2) ;|
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%    - utiliser des noms de variable/fonction lisibles
+%
+%	Par exemple, ne pas nommer une variable :
+%		VariableAvecUnNomPasLisibleDuTout
+%	mais :
+%		variable_avec_un_nom_tres_lisible
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {\'Evitez de perdre trop de temps sur la forme des commentaires}
+
+Les commentaires sont importants... mais pas leur forme. Chaque année,
+on voit dans les projets des commentaires présentés avec beaucoup
+de soin, comme par exemple des cadres~:
+
+\begin {quote}
+\begin {verbatim}
+/************************************
+ * fonction pour faire ceci ou cela *
+ ************************************/
+\end{verbatim}
+\end {quote}
+
+ou des alignements~:
+
+\begin {quote}
+\begin {verbatim}
+/* ceci est un commentaire                     */
+/* ceci est un deuxieme commentaire            */
+\end{verbatim}
+\end {quote}
+
+Cela ne sert pas à grand-chose, si ce n'est à vous faire perdre du
+temps, et à enlaidir votre programme si par malheur les alignements ne
+sont pas parfaits. Alors, faites au plus simple sans fioriture.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {\'Eliminez les commentaires inutiles}
+
+Vous n'êtes pas payé au kilo de commentaire. Mieux vaut souvent pas
+de commentaire plutôt que des commentaires comme~:
+
+\begin {quote}
+\begin {verbatim}
+int x ;     /* declaration */
+x++ ;       /* incrementation de x */
+\end{verbatim}
+\end {quote}
+
+N'oubliez pas que la personne qui relit connaît déjà le langage~C.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {\'Ecrivez des commentaires utiles}
+
+Les commentaires doivent expliquer le fonctionnement de votre programme,
+ou éventuellement quelques points épineux. Mettez vous à la place de la
+personne qui relit votre programme.
+Si on enlève les instructions, on doit pouvoir comprendre le fonctionnement
+du programme à partir des commentaires.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Présentez les fonctions dans un ordre logique}
+
+Par exemple, choisissez de présenter les fonctions, dans chaque fichier
+source, du plus haut niveau vers le plus bas niveau, et restez
+homogènes. Votre lecteur doit pouvoir retrouver facilement vos
+fonctions.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Soignez l'orthographe et la grammaire}
+
+Passer le correcteur orthographique sur votre rapport, c'est bien.
+Le relire soigneusement, c'est mieux. Essayez de trouver les erreurs
+avant la personne chargée de corriger votre projet~!
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {L'orthographe, ce n'est pas seulement dans le rapport}
+
+En particulier, soignez les commentaires...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Simplifiez l'écriture}
+
+Simplifiez votre style d'écriture : attention aux phrases ampoulées,
+ambitieuses. Faites simple...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Pas de franglais}
+
+Ne faites pas de mélange entre le français et l'anglais, que ce soit
+dans les noms de variables, de fonctions, dans les commentaires, etc.
+
+Exemples à ne pas suivre : {\tt clean\_liste\_utilisateurs()}, {\tt
+affiche\_users()}, etc.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Faites des programmes robustes}
+
+Un bon programme est un programme robuste. Il ne s'arrête jamais
+inopinément avec un {\tt core}, tous les codes de retour des
+primitives et des fonctions de librairie sont testés.
+
+Un bon outil pour tester la robustesse est PureCoverage. Utilisez-le~!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Attention au débordement de chaînes}
+
+Une des erreurs les plus fréquentes est le débordement de chaînes de
+caractères ou de tableaux (par exemple, l'introduction d'une ligne trop
+longue par l'utilisateur, etc.).
+
+Un bon outil pour tester le débordement de chaînes est Purify. Utilisez-le~!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Pour la portabilité, rien ne vaut l'expérience}
+
+Essayez donc de compiler votre programme avec le maximum de compilateurs
+(au moins le compilateur fourni par le constructeur, et le compilateur
+de GNU) pour être sûr que vous n'utilisez pas des caractéristiques de
+tel ou tel compilateur.  Essayez de le compiler également sur le maximum
+de machines ayant des systèmes différents.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Attention aux "limites raisonables"}
+
+Les limites qui peuvent paraître raisonnables sur un système ne le sont
+pas sur tous Par exemple, les machines de l'ISTY ou de ens-info n'ont
+généralement pas plus de 30 ou 40 utilisateurs simultanéments connectés,
+mais on peut trouver des machines avec 500 (ou plus encore)
+utilisateurs.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Ce qui est vrai sur un système ne l'est pas forcément sur tous}
+
+Par exemple, ce n'est pas parce que sur HP et Sun, les noms des
+utilisateurs sont limités à 8 caractères, que c'est vrai sur tous les
+autres systèmes.  Autre exemple :  ce n'est pas parce que tel fichier
+est dans {\tt /etc} ({\tt /etc/utmp} par exemple) sur HP qu'il l'est sur
+tous les Unix (sur FreeBSD, c'est le fichier {\tt /var/run/utmp}).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Lisez les manuels}
+
+Une règle importante pour rédiger des programmes portables est de bien lire
+les manuels en ligne, surtout les petites lignes tout en bas sur HP...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Discriminez les caractéristiques, par les architectures}
+
+Réaliser des programmes portables impose parfois d'utiliser la
+compilation conditionnelle (\verb|#ifdef|...).  Il faut éviter
+de discriminer suivant les architectures (Sun ou HP par exemple), mais
+il vaut mieux discriminer suivant des caractéristiques. Par exemple~:
+
+\begin {itemize}
+    \item définir le symbole {\tt UNAME} suivant que le champ de la
+	structure {\tt utmp} contenant le nom d'utilisateur s'appelle
+	{\tt ut\_user} ou {\tt ut\_name}
+
+    \item définir le symbole {\tt HAS\_MACHIN} si la primitive {\tt
+	machin()} est disponible
+
+\end {itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Pas de cibles inutiles}
+
+Si vous avez bien lu ce qui précède, il ne vous viendra pas à l'idée
+d'avoir des cibles~:
+
+\begin {quote}
+{\tt monprog\_hp:} ... \\
+\hspace* {10mm} actions pour compiler sur HP \\
+{\tt monprog\_sun:} ... \\
+\hspace* {10mm} actions pour compiler sur Sun
+\end {quote}
+
+... et c'est tant mieux !
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Ne prenez pas de décision en fonction de l'environnement de l'utilisateur}
+
+N'utilisez pas les variables d'environnement du Shell, car elles sont
+bien souvent personnelles.
+Par exemple, beaucoup de projets, dans les années antérieures, ont utilisé
+la variable
+{\tt ARCH}~: cette variable était initialisée dans le {\tt .profile}
+par défaut des étudiants. Le problème est que toute autre personne qui
+n'avait pas ce fichier {\tt .profile}, en particulier le correcteur
+du projet, était incapable de le compiler.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Il n'y a qu'un seul fichier à modifier, c'est le Makefile}
+
+Mettez tout ce qui est configurable (chemin d'accès à certains fichiers,
+symboles du préprocesseur pour la portabilité, etc.) dans le fichier
+{\tt Makefile}. Celui qui compile votre projet ne devrait jamais
+avoir à modifier les sources de votre projet.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Apprenez à distinguer ce qui est installé localement}
+
+Un certain nombre de logiciels sont installés localement, à partir
+de fichiers sources. Par exemple, les compilateurs de GNU, le système
+graphique X-Window, etc. Apprenez à reconnaître ce qui est installé
+localement de ce qui est disponible sur toutes les machines.
+De plus, ce qui est installé localement ne l'est pas toujours au
+même endroit sur toutes les machines, car c'est un choix laissé à
+l'administrateur du système.
+
+Par exemple, les fichiers d'inclusion (les \verb|.h|)  de X-Window
+peuvent être dans tel ou tel répertoire. Vous devez pouvoir changer
+cela très facilement (généralement, dans le {\tt Makefile}).
+
+En particulier, ne mettez pas de nom absolu dans les {\tt \#include}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\regle {Mettez les cibles "all" et "clean" dans votre Makefile}
+
+Les cibles traditionnelles {\tt all} et {\tt clean} sont devenues
+une tradition bien utile.  Ne les oubliez pas.

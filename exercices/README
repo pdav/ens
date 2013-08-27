@@ -1,0 +1,24 @@
+Ce répertoire contient une liste d'exercices que j'ai construite depuis
+la fin des années 1980. Depuis un certain nombre d'années, je donne
+tous les exercices aux étudiants, et je pioche au fur et à mesure des
+TD/TP ceux qui je sélectionne pour une séance ou un projet.
+
+Cher lecteur-rice, tu es invité-e à ajouter de nouveaux exercices à
+cette brochure. Ce faisant, merci de respecter quelques règles :
+
+1- n'ajoute pas d'exercice s'il apporte peu par rapport aux exercices
+    existants
+
+2- respecte l'ordre de progression des exercices : en difficulté
+    croissante et en nombre de concepts
+
+3- ajoute le corrigé dans le fichier "corrige". Tu noteras que si LaTeX
+    numérote automatiquement les énoncés, le fichier "corrige" n'est
+    pas traité automatiquement. Aussi, si tu ajoutes de nouveaux
+    exercices, renumérote ceux qui se trouvent derrière dans le même
+    thème (je sais, c'est pas génial)
+
+4- enfin, je te remercie par avance de ne pas diffuser les corrigés...
+
+
+Pierre David

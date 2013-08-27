@@ -1,0 +1,33 @@
+# These definitions are overriden by the top-level makefile
+# You shouldn't have to modify this file.
+
+CCOPT         = -g
+LDOPT         = -g
+CC            = gcc -Wall
+RANLIB        = ranlib
+CFLAGS        = $(CCOPT)
+LDFLAGS       = $(LDOPT)
+
+HDRS          = lib.h max.h
+SRCS          = \
+                lexan.c \
+                error.c newstr.c
+OBJS          = \
+                lexan.o \
+                error.o newstr.o
+
+all:            libdemo.a
+
+libdemo.a:      $(OBJS)
+                ar cr libdemo.a `lorder $(OBJS) | tsort`
+                $(RANLIB) libdemo.a
+
+clean:
+                rm -f $(OBJS) libdemo.a core core.* tags
+
+tags:           $(HDRS) $(SRCS)
+                ctags $(HDRS) $(SRCS)
+
+error.o:        lib.h
+lexan.o:        lib.h max.h
+newstr.o:       lib.h max.h
