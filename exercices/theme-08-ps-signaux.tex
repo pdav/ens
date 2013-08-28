@@ -1,0 +1,122 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SIGNAUX V7, SIGNAUX POSIX
+%
+% Historique
+%   1993/01/31 : pda : création
+%   1995/05/02 : pda : ajout des signaux POSIX
+%   1996/02/28 : pda : séparation des tubes
+%   1996/09/10 : pda : séparation de l'environnement
+%   1996/09/10 : pda : réunion des signaux POSIX
+%   2007/04/19 : pda : séparation exercices 1 et 2
+%   2007/04/19 : pda : rédaction exercice envoyer/reception
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\td {Système~: Signaux}
+
+% \but
+% 
+% L'objet de ce TD est l'étude des signaux V7 et POSIX.
+
+
+\question
+
+À l'aide des primitives V7, écrivez un programme qui attend l'arrivée
+d'un signal (n'importe lequel), affiche sa signification (par
+exemple~:  {\tt illegal instruction} pour {\tt SIGILL}) puis se
+termine.
+
+
+\question
+
+Modifiez le programme de la question précédente pour traiter plusieurs
+signaux consécutifs~: votre programme ne doit pas se terminer après
+l'arrivée d'un signal.
+
+
+\question
+
+Écrivez un programme composé de deux processus.  Le processus père
+génère un processus fils qui doit exécuter une fonction {\tt traite}
+toutes les secondes.  Au bout d'une minute, le processus père le
+prévient qu'il doit s'arrêter.  Lorsque le processus fils s'arrête
+effectivement, le processus père se termine. Vous utiliserez les
+primitives V7.
+
+
+\question
+
+Écrivez un programme composé d'une boucle sans fin qui
+incrémente un compteur. Lorsque l'utilisateur appuie sur la touche
+d'interruption (signal {\tt SIGINT}), le programme sauve la date en
+clair et la valeur courante du compteur dans un fichier,
+à la suite de ce qui s'y trouve déjà.
+Lorsque le signal {\tt SIGTERM} est reçu, le programme écrit
+le mot {\tt fin} dans le fichier, puis se termine. Vous utiliserez les
+primitives POSIX.
+
+
+\question
+
+On désire simuler un mécanisme matériel comparable à un coupleur série
+à l'aide des signaux POSIX. Un 0 (zéro) est matérialisé par le signal
+{\tt SIGUSR1}, un 1 (un) est matérialisé par le signal {\tt SIGUSR2}.
+Un octet est transmis par une succession de 8 bits (0 ou 1).
+À chaque fois qu'il reçoit un bit, le récepteur doit envoyer en
+retour un acquittement (signal {\tt SIGUSR1}) pour prévenir l'émetteur
+qu'il peut passer au bit suivant.
+
+Écrivez les fonctions suivantes~:
+
+\begin {enumerate}
+    \item \verb:void envoyer (pid_t recepteur, int octet):
+
+	Cette fonction envoie les 8 bits constituant un octet au
+	processus désigné.
+
+    \item \verb:void preparer_reception (pid_t emetteur):
+
+	Cette fonction prépare le récepteur à recevoir un octet.
+
+    \item \verb:void int recevoir (void):
+
+	Cette fonction attend que suffisamment de bits soient reçus
+	pour constituer un octet,  et renvoie alors la valeur reçue.
+
+\end {enumerate}
+
+
+\question
+
+En utilisant un protocole similaire à celui de la question précédente,
+on désire simuler le fonctionnement d'un tube, c'est à dire réaliser
+les fonctions suivantes~:
+
+\begin {enumerate}
+    \item \verb:void preparer_tube (void):
+
+	Cette fonction initialise les structures de données associées
+	au tube.
+
+    \item \verb:void processus_tube (pid_t autre, int sens):
+
+	Connaissant le \textit {pid} de l'autre processus, cette
+	fonction initialise l'accès au tube pour une lecture (sens
+	= 1) ou pour une écriture (sens = 2).
+
+    \item \verb:void fermer_tube (void):
+
+	Cette fonction ferme le tube.
+
+    \item \verb:void ecrire_tube (void *buffer, int longueur):
+
+	Cette fonction écrit dans le tube les données spécifiées.
+
+    \item \verb:int lire_tube (void *buffer, int longueur):
+
+	Cette fonction extrait du tube les données et les renvoie
+	dans le buffer. Le nombre d'octets lus est renvoyé (0 en
+	fin de tube).
+
+\end {enumerate}
+
+

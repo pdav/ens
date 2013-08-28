@@ -1,0 +1,101 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PRIMITIVES DE GESTION DE PROCESSUS
+%
+% Historique
+%   1993/01/31 : pda : création
+%   1996/01/06 : pda : séparation en deux TD
+%   1996/09/10 : pda : réunion en un seul thème
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\td {Système~: Gestion des processus}
+
+% \but
+% 
+% L'objet de ce TD est l'étude des primitives système de
+% gestion des processus.
+
+
+\question
+
+Écrivez un programme générant un processus fils avec la primitive
+système {\tt fork}.
+
+\begin {itemize}
+    \item le processus fils doit afficher son numéro ({\em pid}) ainsi
+	que le numéro du père à l'aide des primitives système {\tt
+	getpid} et {\tt getppid}, puis sort (primitive {\tt exit}) avec
+	un code de retour égal au dernier chiffre du {\em pid}.
+
+    \item le processus père, quant à lui, affiche le {\em pid} du fils,
+	puis attend sa terminaison (primitive {\tt wait}) et affiche son
+	code de retour.
+
+\end {itemize}
+
+
+\question
+
+Écrivez un programme qui lance {\em n} processus fils dans une
+première étape puis, dans une deuxième étape, attend leur terminaison
+à l'aide de la primitive {\tt wait}.
+\`A chaque fois qu'un processus se termine,
+le père affiche son numéro ({\em pid}) et son code de retour.
+
+
+\question
+
+Écrivez un programme ayant la syntaxe suivante~:
+
+\vspace* {-3mm}
+\begin {quote}
+{\tt matproc $n$ $m$}
+\end {quote}
+
+L'action de ce programme doit être de générer $n$ processus, chacun
+d'entre-eux devant générer $n$ processus à son tour, et ainsi de suite
+jusqu'à $m$ niveaux.
+
+Combien de processus sont générés au total ?
+
+
+\question
+
+Écrivez un programme qui~:
+
+\begin {enumerate}
+    \item lance la commande {\tt ls} sur un répertoire passé en
+        paramètre,
+    \item redirige la sortie standard de {\tt ls} sur {\tt /dev/null},
+    \item affiche le temps pris par la commande {\tt ls} (primitive
+	système {\tt times}).
+\end {enumerate}
+
+
+\question
+
+Écrivez un programme qui~:
+
+\begin {enumerate}
+    \item attende une ligne (une commande) sur l'entrée standard (vous
+	pouvez utiliser la fonction de librairie {\tt fgets})~;
+
+    \item la décompose en mots séparés par des espaces~;
+
+    \item recherche le premier mot dans le {\tt PATH}~;
+
+    \item exécute cette commande par le biais de la primitive système
+	{\tt execv}~;
+    
+    \item revienne au point 1.
+
+\end {enumerate}
+
+Félicitations, vous avez écrit un {\em shell}~!
+
+
+\question
+
+Reprenez le programme de l'exercice précédent et ajoutez un traitement
+spécial dans le cas où la commande est terminée par le mot \verb:&:.
+
+

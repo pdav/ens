@@ -1,0 +1,158 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TUBES
+%
+% Historique
+%   1993/01/31 : pda : création
+%   1995/05/02 : pda : ajout des signaux POSIX
+%   1996/02/28 : pda : séparation des tubes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\td {Système~: Tubes}
+
+% \but
+% 
+% L'objet de ce TD est l'étude des tubes.
+
+
+\question
+    \label {q:tube1}
+
+Écrivez un programme composé de deux processus~: le
+premier lit des données sur l'entrée
+standard et les passe par un {\em tube} au deuxième qui les
+affiche sur sa sortie standard.
+
+
+\question
+
+Généralisez l'exercice précédent à $n$ processus~:  le premier passe les
+données depuis l'entrée standard au second, qui les passe au troisième,
+et ainsi de suite jusqu'au $n-1$-ème qui les passe au $n$-ème, qui les
+écrit sur sa sortie standard.
+
+
+\question
+
+On désire connaître la capacité d'un tube.  Pour cela, on propose
+d'envoyer des données, en les comptant, dans un tube qu'aucun lecteur ne
+consulte (ouvert en lecture, mais jamais lu par un processus).  Au bout
+d'un certain nombre d'octets, l'écrivain se bloque en attendant que le
+tube se vide.  Si un signal survient dans cet état, on peut afficher le
+nombre d'octets placés dans le tube, c'est à dire sa capacité.
+
+Faites un programe pour afficher la taille d'un tube avec la méthode
+ci-dessus.
+
+
+\question
+
+Reprenez l'exercice~\ref {q:tube1} en le séparant en deux
+programmes distincts et en utilisant un tube nommé.  Le premier
+programme crée le tube avec {\tt mkfifo}, et y place les données lues
+sur l'entrée standard.  Le deuxième programme ouvre le tube, lit les
+données qui s'y trouvent et les affiche sur sa sortie standard.
+
+
+\question
+
+On désire mettre en place un système de communication inter-processus
+sous le contrôle d'un gérant de communication.  Le gérant de
+communication reçoit des requêtes des processus par un (unique) tube
+nommé (appellé $T$). Le nom de ce tube est connu par tous les processus
+voulant communiquer.
+
+Lorsqu'un processus $P_i$ veut communiquer avec un autre, il crée un
+tube nommé (appelé $T_i$) qui lui est propre, puis envoie au gérant (par
+l'intermédiaire du tube $T$) un message spécifiant le nom de $T_i$.
+C'est l'{\em abonnement}.
+
+Le gérant ouvre alors $T_i$, lui associe un numéro interne ($\geq 0$),
+et renvoie ce numéro interne au processus $P_i$ par l'intermédiaire de
+$T_i$.
+
+Par la suite, lorsque le processus $P_i$ veut envoyer un message au
+processus $P_j$, le processus $P_i$ écrit un message dans le tube $T$,
+le gérant lit ce message, l'analyse pour voir si c'est possible (i.e.
+si $P_j$ est déjà abonné) et l'envoie à $P_j$ par l'intermédiaire du
+tube $T_j$. Le gérant envoie un message $P_i$ pour lui signaler si
+l'opération a réussi ou non.
+
+Le processus $P_i$ doit pouvoir obtenir la liste de tous les processus
+abonnés. Dans ce cas, il envoie un message dans $T$, le gérant répond
+alors par $T_i$ en lui envoyant la liste.
+
+Le processus $P_i$ doit aussi pouvoir se désabonner.
+
+\begin {enumerate}
+    \item Spécifiez le format des messages (c'est-à-dire le {\em
+	protocole}) circulant dans $T$ et dans les tubes $T_i$.
+
+    \item Programmez le gérant.
+
+\end {enumerate}
+
+
+\question
+
+On s'intéresse maintenant aux processus clients (les $P_i$). Ils
+doivent avoir une interface simplifiée (interface de programmation)
+pour dialoguer avec le gérant.
+
+Cette interface suppose que toutes les données relatives à une
+connexion sont décrites par un type {\tt comm} dont vous devez
+définir le contenu.
+
+Les fonctions disponibles sont~:
+
+\begin {itemize}
+
+    \item \verb:comm initialiser (char tube []):
+
+	Cette fonction amorce une communication avec le gérant spécifié
+	par le tube de nom {\tt tube} (elle crée et ouvre le tube propre
+	au processus, et elle le tube du gérant).
+
+    \item \verb:int liste (comm gerant, int abonnes [], int maxab):
+
+	Cette fonction retourne dans le tableau {\tt abonne} la liste
+	des abonnes au gérant de communication spécifié par {\tt
+	gerant}.  Le nombre maximum\footnote {S'il y a plus d'abonnés,
+	leurs numéros sont perdus.} de numéros pouvant être placés dans
+	ce tableau est spécifié par {\tt maxab}. Cette fonction retourne
+	le nombre d'abonnés placés dans le tableau, ou -1 pour signifier
+	une erreur.
+    
+    \item \verb:int envoyer (comm gerant, int abonne, char *message, int lg):
+
+	Cette fonction envoie à l'abonné {\tt abonne}, par
+	l'intermédiaire du gérant, un message spécifié par les {\tt lg}
+	octets inclus dans {\tt message}.  Le résultat est un code
+	signifiant si l'opération s'est bien déroulée.
+
+    \item \verb:int recevoir (struct comm *comm, char *message, int *lgmax):
+
+	Cette fonction attend un message. Le message (au plus {\tt
+	lgmax} octets) est placé dans la zone spécifiée par {\tt
+	message}. La longueur du message reçu est placée en retour dans
+	{\tt lgmax}. Le résultat de cette fonction est l'identificateur
+	de l'émetteur, ou -1 si une erreur est intervenue.
+
+\end {itemize}
+
+On vous demande de :
+
+\begin {enumerate}
+
+    \item définir le type {\tt comm}~;
+
+    \item programmer une application simple à l'aide des fonctions
+	décrites ci-dessus~: à chaque fois qu'un processus s'abonne, il
+	demande à tous les autres abonnés leur numéro de processus, et
+	affiche le numéro minimum~;
+    
+    \item programmer les fonctions ci-dessus.
+
+\end {enumerate}
+
+
+

@@ -1,0 +1,216 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LANGAGE C : ELEMENTS DE BASE
+%
+% Historique
+%   1993/01/24 : pda : création
+%   1995/10/04 : pda : adaptation pour 95/96
+%   1997/08/26 : pda : ajout de l'exercice lire_16
+%   1997/08/26 : pda : ajout de l'exercice ecrire_2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\td {Langage~C~: Éléments de base}
+
+% \but
+% 
+% Les exercices de ce thème ont pour but l'assimilation des éléments de
+% base du langage~C~:  déclarations des variables, structures de contrôle,
+% structures, chaînes de caractères, et utilisation d'un jeu minimum de
+% fonctions d'entrées/sorties.
+
+
+\question
+%%%% Dependances: for, printf
+
+Écrivez un programme qui affiche à l'écran les valeurs de $2^i$ ($0
+\leq i < 10$) en utilisant la fonction {\tt printf}.
+
+
+\question
+%%%% Dependances: getchar, while, EOF, constantes char
+
+Écrivez un programme qui lit des caractères (avec la fonction {\tt
+getchar}) sur l'entrée standard et compte le nombre d'occurrences de
+chaque lettre (on ne distinguera pas les minuscules des majuscules).
+
+\question
+%%%% Dependances: getchar, while, EOF
+
+Écrivez un programme qui lit des phrases (c'est-à-dire des suites de
+caractères quelconques) sur l'entrée standard et compte le nombre de
+mots (c'est-à-dire les suites de caractères composées exclusivement de
+lettres minuscules ou majuscules) qui s'y trouvent.
+
+
+\question
+%%%% Dependances: getchar, while, EOF, \n
+
+Modifiez le programme de l'exercice précédent pour afficher seulement
+les mots (et pas les chiffres, les signes de ponctuation, etc.), un par
+ligne.
+
+
+\question
+%%%% Dependances: getchar, putchar, tableaux, (chaines), modulo
+
+Avec les fonctions {\tt getchar} et {\tt putchar}, écrivez un programme
+qui affiche les 10 dernières lignes lues sur l'entrée standard.
+
+
+\question
+%%%% Dependances: chaînes, fgets, puts, printf, strncpy, strlen
+
+Écrivez un programme qui lit une chaîne de caractères sur l'entrée
+standard (avec {\tt fgets}), la recopie (avec {\tt strncpy}) dans une
+autre chaîne, puis affiche la nouvelle chaîne (avec {\tt puts}) et
+sa longueur (avec {\tt strlen} et {\tt printf}).
+
+
+\question
+%%%% Dependances: fgets, puts, chaînes
+    \label {strbrk}
+
+Écrivez un programme qui lit deux chaînes, puis cherche si la deuxième
+chaîne fait partie de la première, et affiche un message en conséquence.
+Vous n'utiliserez pas de fonction de librairie autre que {\tt fgets} et
+{\tt puts}.
+
+
+\question
+%%%% Dependances: chaînes, structures, printf
+
+On désire avoir un programme qui lit sur l'entrée standard un nom de mois
+(entre \verb:"janvier":  et \verb:"decembre":), et qui affiche son
+numéro (entre 1 et 12) ainsi que le nombre de jours dans ce
+mois\footnote {On ne tient pas compte du cas du mois de février lors
+des années bissextiles.}. Si le mois n'est pas valide,
+il doit afficher un message d'erreur.
+
+Pour cela, on propose de placer les mois valides ainsi que le nombre de
+jours correspondant, dans une structure~:
+
+\begin {quote}
+\small
+\begin {verbatim}
+struct mois
+{
+    char nom [9 + 1] ;     /* nom du mois en clair */
+    int  jours ;           /* nombre de jours dans le mois */
+} ;
+\end{verbatim}
+\end {quote}
+
+Déclarez un tableau constant (initialisé) de 12 structures de cette
+forme pour mémoriser les 12 mois possibles et écrivez le programme.
+
+
+\question
+%%%% Dependances: chaînes, switch
+    \label {backslash}
+
+Les chaînes de caractères et les constantes de type caractère en
+langage~C peuvent contenir les éléments suivants~:
+
+\begin {itemize}
+    \item caractères ``normaux'', c'est à dire tous les caractères de
+	code compris entre 32 et 126~;
+    \item caractères de contrôle ``classiques''
+	(\verb:\n:, \verb:\r:, \verb:\t:, et \verb:\b:)~;
+    \item caractères non représentables tels quels
+	(\verb:\\:, \verb:\': et \verb:\":)~;
+    \item autres caractères, dont la valeur numérique est comprise entre
+	0 et 31 ou supérieure à 127. Dans ce cas, la représentation est
+	un antislash (\verb:\:) suivi du code octal du caractère.
+\end {itemize}
+
+Écrivez un programme qui lit une chaîne de caractères contenant
+éventuellement des caractères spéciaux, puis place dans une deuxième
+chaîne la représentation~C (c'est à dire avec le caractère \verb:\t:
+remplacé par les deux caractères \verb:\: et \verb:t: par exemple).
+
+
+\question
+%%%% Dependances: chaînes, switch, base, ASCII
+
+Écrivez le programme inverse de l'exercice~\ref {backslash}, pour
+transformer une chaîne de caractère contenant éventuellement des
+caractères spéciaux en représentation~C, en chaîne de caractères
+contenant les caractères traduits (c'est à dire avec les deux caractères
+\verb:\:  et \verb:t:  remplacés par le caractère \verb:\t:  par
+exemple).
+
+
+\question
+%%%% Dependances: cpp
+
+Le programmeur qui a écrit la définition ci-dessous aura certainement
+quelques problèmes lorsqu'il l'utilisera.
+Expliquez ces problèmes et
+aidez ce pauvre programmeur à améliorer sa définition.
+
+\begin {quote}
+\begin {verbatim}
+#define carre(x) x*x
+\end{verbatim}
+\end {quote}
+
+
+\question
+%%%% Dependances: cpp, fonctions, passage par valeur
+
+Expliquez les différences entre votre version corrigée de l'exercice
+précédent et la définition ci-dessous~:
+
+\begin {quote}
+\begin {verbatim}
+int carre (int x) { return x * x ; }
+\end{verbatim}
+\end {quote}
+
+
+
+\question
+%%%% Dependances: passage par valeur, operateur --
+
+Pourquoi la fonction ci-après peut donner des résultats faux~?
+
+\begin {quote}
+\small
+\begin {verbatim}
+int factorielle (int n)
+{
+    int f ;
+    if (n <= 1) f = 1 ; else f = n * factorielle (--n) ;
+    return f ;
+}
+\end{verbatim}
+\end {quote}
+
+
+\question
+%%%% Dependances: passage par valeur, ASCII, base, opérateurs binaires
+    \label {lire16}
+
+Écrivez la fonction :
+\begin {quote}
+    \verb:unsigned int lire_16 (void):
+\end {quote}
+qui lit avec
+{\tt fgets} une chaîne contenant des chiffres hexadécimaux, et renvoie la
+valeur convertie.
+Vous n'utiliserez pas les opérateurs \verb:*:, \verb:/:  et \verb:%:.
+
+
+\question
+%%%% Dependances: passage par valeur, ASCII, base, opérateurs binaires
+
+Écrivez la fonction :
+\begin {quote}
+    \verb:void ecrire_2 (unsigned int):
+\end {quote}
+qui prend un
+nombre en paramètre, et en affiche la représentation binaire sur la
+sortie standard.
+Comme pour l'exercice~\ref {lire16}, vous n'utiliserez pas les opérateurs
+\verb:*:, \verb:/:  et \verb:%:.
+
+
