@@ -2284,8 +2284,9 @@ réussie, ou -1 en cas d'erreur.
 #include <time.h>
 
 time_t time ((time_t *) 0)
-
 time_t time (time_t *adresse)
+
+int gettimeofday (struct timeval *tv, struct timezone *tz)
 \end{verbatim}
 \end {quote}
 
@@ -2297,10 +2298,43 @@ Si le paramètre {\tt adresse} est non nul, la valeur
 de retour est aussi stockée à l'adresse
 indiquée.
 
-Cette primitive renvoie l'heure courante, ou -1
-(ou plus exactement \verb|((time_t)-1)|) en cas d'erreur.
+La primitive \texttt {time} renvoie l'heure courante, ou -1 (ou plus
+exactement \verb|((time_t)-1)|) en cas d'erreur.
 
 
+\separation
+\primitive {gettimeofday} --- renvoie la date et l'heure précises
+    \index{{\tt gettimeofday}}
+
+\begin {quote}
+\begin {verbatim}
+#include <sys/time.h>
+
+int gettimeofday (struct timeval *tv, struct timezone *tz)
+\end{verbatim}
+\end {quote}
+
+
+La primitive \texttt {gettimeofday} renvoie l'heure courante avec une
+précision supérieure à la seconde, ainsi que le fuseau horaire. La
+structure \texttt {timeval} contient les champs suivants~:
+\begin {quote}
+\begin {verbatim}
+time_t      tv_sec ;           /* secondes */
+suseconds_t tv_usec ;          /* et microsecondes */
+\end{verbatim}
+\end {quote}
+et la structure \texttt {timezone} contient les champs suivants~:
+\begin {quote}
+\begin {verbatim}
+int         tz_minuteswest ;   /* minutes à l'ouest de Greenwich */
+int         tz_dsttime ;       /* != 0 si l'heure d'été est en vigueur */
+\end{verbatim}
+\end {quote}
+
+Si un des pointeurs passé en paramètre vaut \texttt {NULL}, la structure
+correspondante n'est pas mise à jour par la primitive système. La
+primitive renvoie 0 si tout s'est bien passé, ou -1 en cas d'erreur.
 
 
 \separation
@@ -5963,7 +5997,7 @@ void srand (unsigned int semence)
 \end {quote}
 
 La fonction {\tt rand} retourne une valeur pseudo-aléatoire comprise
-entre 0 et $2^{15}-1$.
+entre 0 et \texttt {RAND\_MAX}-1 (historiquement~: $2^{15}-1$).
 
 La fonction {\tt srand} initialise la {\tt semence} de l'algorithme de
 génération afin de changer la séquence de génération des valeurs.
@@ -6068,6 +6102,39 @@ La valeur retournée est 0 si {\tt sleep} s'est terminée normalement sans
 être interrompue par un signal, ou un temps (en secondes) restant
 si elle s'est terminée à cause d'un signal.
 
+
+\separation 
+\primitive {nanosleep} --- attend un nombre de nano-secondes
+    \index{{\tt nanosleep}}
+
+\begin {quote}
+\begin {verbatim}
+int nanosleep(const struct timespec *duree, struct timespec *reste)
+\end{verbatim}
+\end {quote}
+
+La fonction {\tt nanosleep} met le processus en attente pendant un temps
+spécifié par le paramètre {\tt duree}. La structure \texttt {timespec}
+contient les champs suivants~:
+\begin {quote}
+    \small
+\begin {verbatim}
+struct timespec
+{
+    time_t tv_sec ;     /* secondes depuis l'époque (cf time()) */
+    long tv_nsec ;      /* et nanosecondes */
+} ;
+\end{verbatim}
+\end {quote}
+
+La structure pointée par le paramètre \texttt {reste} contient, si
+\texttt {nanosleep} est interrompue par un signal, le temps restant
+à attendre.
+
+La valeur retournée est 0 si {\tt nanosleep} s'est terminée normalement
+sans être interrompue par un signal. Dans le cas contraire, la valeur de
+retour est -1 et la structure pointée par le paramètre \texttt {reste},
+s'il est non nul, est mise à jour.
 
 
 \separation 
@@ -6423,17 +6490,8 @@ verrou indiqué par le paramètre devienne libre, et le verrouille.
 La fonction \verb|pthread_mutex_timedlock| fonctionne de même, mais
 attend au plus jusqu'à l'heure spécifiée par \texttt {habs}, qui
 doit être une heure absolue (et non une durée relative à l'heure
-courante). La structure \texttt {timespec} contient les champs suivants~:
-\begin {quote}
-    \small
-\begin {verbatim}
-struct timespec
-{
-    time_t tv_sec ;     /* secondes depuis l'époque (cf time()) */
-    long tv_nsec ;      /* et nanosecondes */
-} ;
-\end{verbatim}
-\end {quote}
+courante). Voir la fonction \texttt {nanosleep} pour la définition
+de la structure \texttt {timespec}.
 
 La fonction \verb|pthread_mutex_trylock| tente de verrouiller le mutex
 indiqué par le paramètre sans attendre. Si l'opération n'est pas

@@ -24,7 +24,8 @@ THEMES = \
 	theme-08-ps-signaux.tex \
 	theme-09-ps-tubes.tex \
 	theme-10-ps-ipc-sysv.tex msg.pdf \
-	theme-11-ps-sockets.tex
+	theme-11-threads.tex \
+	theme-12-sockets.tex
 
 INCLUDES = ue.tex annee.tex $(THEMES)
 

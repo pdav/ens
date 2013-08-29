@@ -1,0 +1,83 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THREADS POSIX
+%
+% Historique
+%   2013/08/28 : pda : création
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\td {Threads POSIX}
+
+% \but
+% 
+% L'objet de ce TD est l'étude des threads POSIX
+
+\question	% threads indépendants
+
+Écrivez un programme composé de $p$ threads pour calculer la somme
+des entiers de 1 à $n$ (avec $n > p$. Le premier thread calcule la
+somme des entiers de $1$ à $p-1$, le deuxième calcule la somme des
+entiers de $p$ à $2p-1$, et ainsi de suite jusqu'au dernier 
+
+\question	% threads indépendants
+
+Écrivez un programme composé de $n$ nouveaux threads. Chacun de ces
+threads incrémente un compteur qui lui est propre et s'arrête à
+la valeur 10 en affichant un message. À chaque incrément, le thread
+doit attendre un temps aléatoire (vous utiliserez \texttt {nanosleep}
+et vous limiterez la durée à une seconde) et afficherez la valeur
+du compteur préfixée par le numéro du thread ($\in [1...n]$). Le
+programme ne doit se terminer que lorsque les $n$ threads ont terminé,
+et doit afficher le numéro du thread qui s'est terminé en dernier.
+
+\question	% tri rapide en parallèle
+
+tri rapide 
+
+
+\question
+
+Expliquez, pour chacune des deux portions de code suivantes, pourquoi
+elle ne peut pas être exécutée de manière fiable par deux threads.
+
+\hfill
+\begin {minipage} [t] {0.45\linewidth}
+    \small
+    \begin {verbatim}
+struct listelem *head ;
+
+void insert_list (struct listelem *e)
+{
+    e->next = head ;
+    head = e ;
+}
+\end{verbatim}
+\end {minipage}
+\hfill
+\begin {minipage} [t] {0.45\linewidth}
+    \small
+    \begin {verbatim}
+double compte_en_banque ;
+
+void recevoir (double montant)
+{
+    compte_en_banque += montant ;
+}
+\end{verbatim}
+\end {minipage}
+
+
+\question
+
+On désire réaliser des sémaphores à utiliser avec les threads POSIX.
+Pour cela, on définit les fonctions suivantes~:
+
+\begin {quote}
+\begin {verbatim}
+semaphore_t semaphore_create (int val) ;
+void semaphore_P (semaphore_t sem) ;
+void semaphore_V (semaphore_t sem) ;
+\end{verbatim}
+\end {quote}
+
+Donnez la définition du type \verb|semaphore_t|, et rédigez ces fonctions
+en utilisant les mutex.
