@@ -11,12 +11,54 @@
 % 
 % L'objet de ce TD est l'étude des threads POSIX
 
+\question	% erreur classique
+
+Que fait le programme ci-après ?
+
+\begin {quote}
+\begin {verbatim}
+#define MAX     10
+
+void *fonction (void *arg)
+{
+    printf ("numéro du thread = %d\n", * (int *) arg) ;
+    return NULL ;
+}
+
+void erreur (char *msg)
+{
+    perror (msg) ; exit (1) ;
+}
+
+int main (int argc, char *argv [])
+{
+    pthread_t tid [MAX] ; int i ;
+    for (i = 0 ; i < MAX ; i++)
+        if (pthread_create (&tid [i], NULL, &fonction, (void *) &i) == -1)
+            erreur ("pthread_create") ;
+    for (i = 0 ; i < MAX ; i++)
+        if (pthread_join (tid [i], NULL) == -1)
+            erreur ("pthread_create") ;
+}
+\end{verbatim}
+\end {quote}
+
+
 \question	% threads indépendants
 
-Écrivez un programme composé de $p$ threads pour calculer la somme
-des entiers de 1 à $n$ (avec $n > p$. Le premier thread calcule la
-somme des entiers de $1$ à $p-1$, le deuxième calcule la somme des
-entiers de $p$ à $2p-1$, et ainsi de suite jusqu'au dernier 
+Soit un programme qui prend en argument 2 valeurs $n$ et $p$ et démarre
+$n$ threads.  Chaque thread reçoit les valeurs $n$ et $p$ ainsi que
+le numéro $t \in [1,n]$ du thread et calcule $u_t = \sum_{i=1}^{p}
+((t-1)p + i)$. Le thread principal affiche la somme des valeurs $u_t$
+calculées.
+
+Quelle est la valeur calculée par ce programme~? Rédigez-le.
+
+% . Le premier calcule la somme des entiers de $1$ à $p$, le deuxième
+% calcule la somme des entiers de $p+1$ à $2 p$, et ainsi de suite jusqu'au
+% thread numéro $n$ (qui calcule la somme des entiers de $(n-1) p +1$
+% jusqu'à $n p$.
+
 
 \question	% threads indépendants
 
@@ -25,13 +67,20 @@ threads incrémente un compteur qui lui est propre et s'arrête à
 la valeur 10 en affichant un message. À chaque incrément, le thread
 doit attendre un temps aléatoire (vous utiliserez \texttt {nanosleep}
 et vous limiterez la durée à une seconde) et afficherez la valeur
-du compteur préfixée par le numéro du thread ($\in [1...n]$). Le
+du compteur préfixée par le numéro du thread ($\in [1,n]$). Le
 programme ne doit se terminer que lorsque les $n$ threads ont terminé,
 et doit afficher le numéro du thread qui s'est terminé en dernier.
 
-\question	% tri rapide en parallèle
 
-tri rapide 
+\question	% mise en évidence du problème de variable critique
+		% note : en TP uniquement...
+
+Écrivez un programme composé de 4 nouveaux threads. Chaque thread
+incrémente un million de fois une variable globale \texttt {compteur}
+de type \texttt {long int}. Une fois les threads terminés, affichez
+la valeur du compteur.
+
+Que constatez-vous ? Que proposez-vous pour résoudre le problème ?
 
 
 \question
