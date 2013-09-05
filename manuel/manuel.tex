@@ -708,11 +708,7 @@ toujours non négative en cas de succès, ou
 \begin {verbatim}
 #include <ndir.h>
 
-int getdirentries (
-    int fd,
-    struct direct *buf,
-    int taille,
-    off_t offset)
+int getdirentries (int fd, struct direct *buf, int taille, off_t offset)
 \end{verbatim}
 \end {quote}
 
@@ -955,7 +951,6 @@ ou -1 en cas d'erreur.
 #include <sys/stat.h>
 
 int stat (const char *nom, struct stat *buf)
-
 int fstat (int desc, struct stat *buf)
 \end{verbatim}
 \end {quote}
@@ -1192,20 +1187,11 @@ réussi, ou -1 en cas d'erreur.
 \begin {verbatim}
 #include <unistd.h>
 
-int execl (char *chemin,
-           char *arg0, char *arg1, ... char *argn, (char *) 0)
-
+int execl (char *chemin, char *arg0, char *arg1, ... char *argn, (char *) 0)
 int execv (char *chemin, char *argv [])
-
-int execle (char *chemin,
-            char *arg0, char *arg1, ... char *argn, (char *) 0,
-            char *envp [])
-
+int execle (char *chemin, char *arg0, char *arg1, ... char *argn, (char *) 0, char *envp [])
 int execve (char *chemin, char *argv [], char *envp [])
-
-int execlp (char *fichier,
-            char *arg0, char *arg1, ... char *argn, (char *) 0)
-
+int execlp (char *fichier, char *arg0, char *arg1, ... char *argn, (char *) 0)
 int execvp (char *fichier, char *argv [])
 \end{verbatim}
 \end {quote}
@@ -1435,9 +1421,7 @@ En cas d'erreur, la valeur -1 est renvoyée.
 #include <sys/types.h>
 
 pid_t getpid (void)
-
 pid_t getpgrp (void)
-
 pid_t getppid (void)
 \end{verbatim}
 \end {quote}
@@ -1467,11 +1451,8 @@ du processus père du processus appelant.
 #include <sys/types.h>
 
 uid_t getuid (void)
-
 uid_t geteuid (void)
-
 gid_t getgid (void)
-
 gid_t getegid (void)
 \end{verbatim}
 \end {quote}
@@ -1572,7 +1553,6 @@ ou déverrouillage réussi, ou -1 en cas d'erreur.
 #include <sys/types.h>
 
 pid_t setpgrp (void)
-
 pid_t setsid (void)
 \end{verbatim}
 \end {quote}
@@ -1598,7 +1578,6 @@ de groupe de processus, ou -1 en cas d'erreur.
 \begin {quote}
 \begin {verbatim}
 int setuid (uid_t uid)
-
 int setgid (gid_t gid)
 \end{verbatim}
 \end {quote}
@@ -1635,9 +1614,8 @@ réussie, ou -1 en cas d'erreur.
 #include <sys/types.h>
 #include <sys/wait.h>
 
-pid_t wait (int *adresse)
-
-pid_t waitpid (pid_t pid, int *adresse, int options)
+pid_t wait (int *statut)
+pid_t waitpid (pid_t pid, int *statut, int options)
 \end{verbatim}
 \end {quote}
 
@@ -1650,7 +1628,7 @@ Cette primitive retourne prématurément à la
 réception d'un signal. Si un fils avait déjà
 terminé, le retour est immédiat.
 
-Si le paramètre {\tt adresse} est non nul, 16 bits
+Si le paramètre {\tt statut} est non nul, 16 bits
 d'information sont stockés dans les 16 bits de
 poids faible situés à l'adresse indiquée. Ils
 servent à distinguer entre un processus stoppé et
@@ -1782,7 +1760,7 @@ cela, le système envoie le signal {\tt SIGPIPE} dans ce cas.
 On rencontre deux sortes de tubes : les tubes anonymes et
 les tubes nommés. Les premiers sont créés à l'aide de la
 primitive système {\tt pipe}, alors que les seconds sont créés par
-la fonction de librairie {\tt mkfifo} (voir page~\ref {mkfifo}).
+la fonction de librairie {\tt mkfifo} (voir page~\pageref {mkfifo}).
 
 
 \separation
@@ -2068,10 +2046,7 @@ système dispose de l'extension {\em job control}.
 \begin {verbatim}
 #include <signal.h>
 
-int sigaction (
-    int sig,
-    const struct sigaction *nouvelle,
-    struct sigaction *ancienne)
+int sigaction (int sig, const struct sigaction *nouvelle, struct sigaction *ancienne)
 \end{verbatim}
 \end {quote}
 
@@ -2130,15 +2105,13 @@ d'erreur.
 \separation
 \primitive {sigprocmask} --- manipulation du masque de signaux
     \index{{\tt sigprocmask}}
+    \label {sigprocmask}
 
 \begin {quote}
 \begin {verbatim}
 #include <signal.h>
 
-int sigprocmask (
-    int comment,
-    const sigset_t *nouveau,
-    sigset_t *ancien)
+int sigprocmask (int comment, const sigset_t *nouveau, sigset_t *ancien)
 \end{verbatim}
 \end {quote}
 
@@ -2285,8 +2258,6 @@ réussie, ou -1 en cas d'erreur.
 
 time_t time ((time_t *) 0)
 time_t time (time_t *adresse)
-
-int gettimeofday (struct timeval *tv, struct timezone *tz)
 \end{verbatim}
 \end {quote}
 
@@ -2777,7 +2748,6 @@ cas d'erreur.
 #include <unistd.h>
 
 int gethostname (char *nom, size_t nombre)
-
 int sethostname (char *nom, size_t nombre)
 \end{verbatim}
 \end {quote}
@@ -2850,12 +2820,7 @@ cas d'erreur.
 #include <sys/types.h>
 #include <sys/socket.h>
 
-int getsockopt (
-    int s,
-    int niveau,
-    int option,
-    void *valeur,
-    int *longueur)
+int getsockopt (int s, int niveau, int option, void *valeur, int *longueur)
 \end{verbatim}
 \end {quote}
 
@@ -2910,37 +2875,11 @@ La primitive {\tt read} est étendue aux connexions IP.
 
 
 %%% RECV
-
-\separation
-\primitive {recv} --- lecture de données
-    \index{{\tt recv}}
-
-\begin {quote}
-\begin {verbatim}
-#include <sys/types.h>
-#include <sys/socket.h>
-
-int recv (int s, void *buf, int longueur, int flags)
-\end{verbatim}
-\end {quote}
-
-La primitive {\tt recv} attend la réception
-d'un message à partir d'une
-socket {\tt s}. Le message de longueur maximum {\tt
-longueur} est placé à partir de l'adresse {\tt buf}.
-
-Le paramètre {\tt flags} est initialisé à {\tt MSG\_PEEK}
-(lecture sans retirer de la file d'attente de réception), à {\tt
-MSG\_OOB} (lecture de données urgentes), ou 0.
-
-La valeur de retour est le nombre d'octets reçus, ou -1 si
-il y a eu erreur.
-
-
 %%% RECVFROM
 
 \separation
-\primitive {recvfrom} --- lecture de donnéees
+\primitive {recv, recvfrom} --- lecture de données
+    \index{{\tt recv}}
     \index{{\tt recvfrom}}
 
 \begin {quote}
@@ -2948,15 +2887,18 @@ il y a eu erreur.
 #include <sys/types.h>
 #include <sys/socket.h>
 
-int recvfrom (
-    int s,
-    void *buf,
-    int longueur,
-    int flags,
-    struct sockaddr *exp,
-    int longexp)
+int recv (int s, void *buf, int longueur, int flags)
+int recvfrom (int s, void *buf, int longueur, int flags, struct sockaddr *exp, int longexp)
 \end{verbatim}
 \end {quote}
+
+La primitive {\tt recv} attend la réception
+d'un message à partir d'une
+socket {\tt s}. Le message de longueur maximum {\tt
+longueur} est placé à partir de l'adresse {\tt buf}.
+Le paramètre {\tt flags} est initialisé à {\tt MSG\_PEEK}
+(lecture sans retirer de la file d'attente de réception), à {\tt
+MSG\_OOB} (lecture de données urgentes), ou 0.
 
 La primitive {\tt recvfrom} est identique à la primitive
 {\tt recv}, à la différence que les paramètres de
@@ -2976,21 +2918,16 @@ il y a eu erreur.
 \begin {verbatim}
 #include <time.h>
 
-int select (
-    int ndescs,
-    int *readdescs,
-    int *writedescs,
-    int *exceptdescs,
-    struct timeval *timeout)
+int select (int ndescs, int *rdesc, int *wdesc, int *xdesc, struct timeval *delai)
 \end{verbatim}
 \end {quote}
 
 La primitive {\tt select} attend qu'un des descripteurs
-spécifiés par {\tt readdescs} ait des données en attente, qu'un
-des descripteurs spécifiés apr {\tt writedescs} soit prêt à
+spécifiés par {\tt rdesc} ait des données en attente, qu'un
+des descripteurs spécifiés par {\tt wdesc} soit prêt à
 recevoir des données, qu'un des descripteurs spécifiés par
-{\tt exceptdescs} exhibe une condition exceptionnelle, ou
-que la durée spécifiée par {\tt timeout} soit écoulée.
+{\tt xdesc} exhibe une condition exceptionnelle, ou
+que la durée spécifiée par {\tt delai} soit écoulée.
 
 La spécification des descripteurs est réalisée par un champ
 de bits commençant à l'adresse fournie. Le descripteur $f$
@@ -3000,7 +2937,7 @@ Si un descripteur remplit une des conditions ci-dessus, le
 bit correspondant est laissé à 1 dans le masque
 correspondant. Sinon, il est remis à 0.
 
-Si un masque ou {\tt timeout} n'est pas utile, le pointeur
+Si un masque ou {\tt delai} n'est pas utile, le pointeur
 nul peut être transmis à la place.
 
 La valeur renvoyée est le nombre de descripteurs affectés,
@@ -3009,31 +2946,11 @@ d'erreur.
 
 
 %%% SEND
-
-\separation
-\primitive {send} --- émission de données
-    \index{{\tt send}}
-
-\begin {quote}
-\begin {verbatim}
-#include <sys/types.h>
-#include <sys/socket.h>
-
-int send (int s, void *buf, int longueur, int flags)
-\end{verbatim}
-\end {quote}
-
-La primitive {\tt send} envoie un message spécifié par {\tt
-buf} et de longueur {\tt longueur} par la socket {\tt s}.
-
-La valeur de retour est le nombre d'octets envoyés, ou -1 si
-il y a eu erreur.
-
-
 %%% SENDTO
 
 \separation
-\primitive {sendto} --- émission de données
+\primitive {send, sendto} --- émission de données
+    \index{{\tt send}}
     \index{{\tt sendto}}
 
 \begin {quote}
@@ -3041,15 +2958,13 @@ il y a eu erreur.
 #include <sys/types.h>
 #include <sys/socket.h>
 
-int sendto (
-    int s,
-    void *buf,
-    int longueur,
-    int flags,
-    struct sockaddr dest,
-    int longdest)
+int send (int s, void *buf, int longueur, int flags)
+int sendto (int s, void *buf, int longueur, int flags, struct sockaddr dest, int longdest)
 \end{verbatim}
 \end {quote}
+
+La primitive {\tt send} envoie un message spécifié par {\tt
+buf} et de longueur {\tt longueur} par la socket {\tt s}.
 
 La primitive {\tt sendto} est similaire à la primitive {\tt
 send} à ceci près que l'adresse de destination est
@@ -3085,12 +3000,7 @@ La primitive {\tt sethostname} permet, si l'utilisateur est
 #include <sys/types.h>
 #include <sys/socket.h>
 
-int setsockopt (
-    int s,
-    int niveau,
-    int option,
-    const void *valeur,
-    int longueur)
+int setsockopt (int s, int niveau, int option, const void *valeur, int longueur)
 \end{verbatim}
 \end {quote}
 
@@ -3346,11 +3256,8 @@ réussie, ou -1 en cas d'erreur.
 \begin {verbatim}
 #include <sys/msg.h>
 
-int msgsnd (int msqid, const void *msgp, size_t taille,
-                       int flags)
-
-int msgrcv (int msqid, void *msgp, size_t taille,
-                       long type, int flags)
+int msgsnd (int msqid, const void *msgp, size_t taille, int flags)
+int msgrcv (int msqid, void *msgp, size_t taille, long type, int flags)
 \end{verbatim}
 \end {quote}
 
@@ -3465,7 +3372,6 @@ réussie, ou -1 en cas d'erreur.
 #include <sys/shm.h>
 
 void *shmat (int shmid, void *adresse, int flags)
-
 int shmdt (void *adresse)
 \end{verbatim}
 \end {quote}
@@ -3686,7 +3592,6 @@ Cette primitive renvoie 0 en cas de réussite, ou
 \begin {quote}
 \begin {verbatim}
 int brk (const void *fin)
-
 void *sbrk (int increment)
 \end{verbatim}
 \end {quote}
@@ -3781,22 +3686,17 @@ réussie, ou -1 en cas d'erreur.
 
 \begin {quote}
 \begin {verbatim}
-void profil (
-    unsigned short *buf,
-    int taille,
-    int offset,
-    int echelle)
+void profil (unsigned short *buf, int taille, int offset, int echelle)
 \end{verbatim}
 \end {quote}
 
-La primitive {\tt profil} valide la mesure des
-temps d'exécution ({\it process profiling}), qui aide
-à identifier les portions de programme prenant le
-plus de temps. La valeur du pointeur programme est
-lue à chaque top d'horloge (tous les 1/50
-secondes) pour incrémenter un compteur dans la
-zone {\tt buf}. {\tt Echelle} et {\tt offset} sont utilisés
-pour déterminer le mot à incrémenter.
+La primitive {\tt profil} valide la mesure des temps d'exécution ({\it
+process profiling}), qui aide à identifier les portions de programme
+prenant le plus de temps. La valeur du pointeur programme est lue à
+chaque top d'horloge (i.e. {\tt CLK\_TCK} fois par seconde, voir {\tt
+sysconf} page~\pageref {sysconf}) pour incrémenter un compteur dans
+la zone {\tt buf}. {\tt Echelle} et {\tt offset} sont utilisés pour
+déterminer le mot à incrémenter.
 
 Une {\tt échelle} nulle ou égale à 1 invalide la
 mesure.
@@ -4102,7 +4002,6 @@ fichier.
 #include <stdio.h>
 
 int fclose (FILE *flux)
-
 int fflush (FILE *flux)
 \end{verbatim}
 \end {quote}
@@ -4128,11 +4027,8 @@ Ces fonctions renvoient 0 s'il n'y a pas eû d'erreur,
 #include <stdio.h>
 
 int feof (FILE *flux)
-
 int ferror (FILE *flux)
-
 void clearerr (FILE *flux)
-
 int fileno (FILE *flux)
 \end{verbatim}
 \end {quote}
@@ -4165,9 +4061,7 @@ la primitive système.
 #include <stdio.h>
 
 FILE *fopen (const char *nom, const char *mode)
-
 FILE *freopen (const char *nom, const char *mode, FILE *flux)
-
 FILE *fdopen (int descripteur, const char *mode)
 \end{verbatim}
 \end {quote}
@@ -4203,7 +4097,6 @@ Ces trois fonctions renvoient le nouveau flux, ou la valeur
 #include <stdio.h>
 
 int fread (void *buf, int taille, int nb, FILE *flux)
-
 int fwrite (const void *buf, int taille, int nb, FILE *flux)
 \end{verbatim}
 \end {quote}
@@ -4234,9 +4127,7 @@ Ces deux fonctions renvoient le nombre d'éléments lus ou
 #include <stdio.h>
 
 int fseek (FILE *flux, long offset, int mode)
-
 long ftell (FILE *flux)
-
 long rewind (FILE *flux)
 \end{verbatim}
 \end {quote}
@@ -4274,11 +4165,8 @@ du fichier.
 #include <stdio.h>
 
 int getc (FILE *flux)
-
 int getchar (void)
-
 int fgetc (FILE *flux)
-
 int getw (FILE *flux)
 \end{verbatim}
 \end {quote}
@@ -4310,7 +4198,6 @@ fichier sur le flux.
 #include <stdio.h>
 
 char *gets (char *str)
-
 char *fgets (char *str, int max, FILE *flux)
 \end{verbatim}
 \end {quote}
@@ -4345,15 +4232,10 @@ rencontrée sans qu'aucun caractère n'ait été lu.
 #include <dirent.h>
 
 DIR *opendir (const char *nom)
-
 struct dirent *readdir (DIR *dp)
-
 long int telldir (DIR *dp)
-
 void seekdir (DIR *dp, long offset)
-
 void rewinddir (DIR *dp)
-
 int closedir (DIR *dp)
 \end{verbatim}
 \end {quote}
@@ -4395,7 +4277,6 @@ d'erreur et 0 en cas de fermeture réussie.
 #include <stdio.h>
 
 FILE *popen (const char *commande, const char *mode)
-
 int pclose (FILE *flux)
 \end{verbatim}
 \end {quote}
@@ -4430,11 +4311,8 @@ commande {\tt commande}.
 #include <stdio.h>
 
 int printf (const char *format, ...)
-
 int fprintf (FILE *flux, const char *format, ...)
-
 int sprintf (char *str, const char *format, ...)
-
 int snprintf (char *str, size_t taille, const char *format, ...)
 \end{verbatim}
 \end {quote}
@@ -4526,11 +4404,8 @@ printf ("PI = %.5f", 4 * atan (1.0)) ;
 #include <stdio.h>
 
 int putc (int c, FILE *flux)
-
 int putchar (int c)
-
 int fputc (int c, FILE *flux)
-
 int putw (int mot, FILE *flux)
 \end{verbatim}
 \end {quote}
@@ -4560,7 +4435,6 @@ sinon le caractère écrit.
 #include <stdio.h>
 
 int puts (const char *str)
-
 int fputs (const char *str, FILE *flux)
 \end{verbatim}
 \end {quote}
@@ -4585,9 +4459,7 @@ Ces fonctions renvoient {\tt EOF} en cas d'erreur sur le flux.
 #include <stdio.h>
 
 int scanf (const char *format, ...)
-
 int fscanf (FILE *flux, const char *format, ...)
-
 int sscanf (char *str, const char *format, ...)
 \end{verbatim}
 \end {quote}
@@ -4715,7 +4587,6 @@ un {\tt malloc} ultérieur.
 #include <stdlib.h>
 
 void *malloc (size_t taille)
-
 void *calloc (size_t nombre, size_t taille)
 \end{verbatim}
 \end {quote}
@@ -4769,7 +4640,6 @@ erreur.
 #include <string.h>
 
 void *memcpy (void *bloc1, const void *bloc2, size_t n)
-
 void *memmove (void *bloc1, const void *bloc2, size_t n)
 
 #include <strings.h>
@@ -4840,9 +4710,7 @@ débordement des chaînes passées en paramètre.
 \begin {quote}
 \begin {verbatim}
 double atof (const char *str)
-
 int atoi (const char *str)
-
 long atol (const char *str)
 \end{verbatim}
 \end {quote}
@@ -4939,7 +4807,6 @@ compris entre 0 et 127.
 #include <string.h>
 
 char *strcat (char *str1, const char *str2)
-
 char *strncat (char *str1, const char *str2, size_t n)
 \end{verbatim}
 \end {quote}
@@ -4968,7 +4835,6 @@ résultat.
 #include <string.h>
 
 int strcmp (const char *str1, const char *str2)
-
 int strncmp (const char *str1, const char *str2, size_t n)
 \end{verbatim}
 \end {quote}
@@ -4994,7 +4860,6 @@ Le résultat est un entier signifiant~:
 #include <string.h>
 
 char *strcpy (char *str1, const char *str2)
-
 char *strncpy (char *str1, const char *str2, size_t n)
 \end{verbatim}
 \end {quote}
@@ -5036,7 +4901,6 @@ La fonction {\tt strlen} renvoie la longueur de la chaîne.
 #include <string.h>
 
 char *strchr (const char *str, int c)
-
 char *strrchr (const char *str, int c)
 \end{verbatim}
 \end {quote}
@@ -5073,13 +4937,9 @@ fichiers de configuration du réseau.
 #include <sys/socket.h>
 #include <netdb.h>
 
-int getaddrinfo (
-    const char *nom, const char *service,
-    const struct addrinfo *indic,
-    struct addrinfo **res0)
-
+int getaddrinfo (const char *nom, const char *service, const struct addrinfo *indic,
+                 struct addrinfo **res0)
 const char *gai_strerrror (int code)
-
 void freeaddrinfo (struct addrinfo *ai)
 \end{verbatim}
 \end {quote}
@@ -5112,8 +4972,6 @@ La structure \texttt {addrinfo} contient les champs suivants~:
 \begin {quote}
     \small
 \begin {verbatim}
-struct addrinfo
-{
     int ai_flags ;             /* flags pour le paramètre indic */
     int ai_family ;            /* famille de protocoles pour socket() */
     int ai_sockettype ;        /* type de socket (SOCK_STREAM ou SOCK_DGRAM) */
@@ -5122,7 +4980,6 @@ struct addrinfo
     struct sockaddr *ai_addr ; /* adresse trouvée */
     char *ai_canonname ;       /* nom canonique trouvé */
     struct addrinfo *ai_next ; /* suivant dans la liste */
-} ;
 \end{verbatim}
 \end {quote}
 
@@ -5163,11 +5020,8 @@ La fonction {\tt freeaddrinfo} désalloue la liste retournée par
 #include <sys/socket.h>
 #include <netdb.h>
 
-int getnameinfo (
-    const struct sockaddr *adr, socklen_t longadr,
-    char *nom, size_t longnom,
-    char *service, size_t longserv,
-    int flags)
+int getnameinfo (const struct sockaddr *adr, socklen_t longadr, char *nom, size_t longnom,
+                 char *service, size_t longserv, int flags)
 \end{verbatim}
 \end {quote}
 
@@ -5215,12 +5069,7 @@ endhostent} --- obtention de l'adresse IPv4
 #include <netdb.h>
 
 struct hostent *gethostbyname (const char *nom)
-
-struct hostent *gethostbyaddr (
-    const char *adresse,
-    int longueur,
-    int type)
-
+struct hostent *gethostbyaddr (const char *adresse, int longueur, int type)
 int endhostent (void)
 \end{verbatim}
 \end {quote}
@@ -5278,10 +5127,7 @@ endnetent} --- lecture de {\tt /etc/networks}
 #include <netdb.h>
 
 struct netent *getnetbyname (const char *nom)
-char *nom ;
-
 struct netent *getnetbyaddr (int reseau, int type)
-
 int endnetent (void)
 \end{verbatim}
 \end {quote}
@@ -5296,7 +5142,7 @@ dans une structure~:
 \begin {quote}
     \small
 \begin {verbatim}
-struct netent
+struct servent
 {
     char *n_name ;         /* nom officiel du netice */
     char **n_aliases ;     /* acces aux aliases par p_aliases[i] */
@@ -5327,9 +5173,7 @@ endprotoent} --- lecture de {\tt /etc/protocols}
 #include <netdb.h>
 
 struct protoent *getprotobyname (const char *nom)
-
 struct protoent *getprotobynumber (int proto)
-
 int endprotoent (void)
 \end{verbatim}
 \end {quote}
@@ -5370,9 +5214,7 @@ endservent} --- lecture de {\tt /etc/services}
 #include <netdb.h>
 
 struct servent *getservbyname (const char *nom)
-
 struct servent *getservbyport (int port)
-
 int endservent (void)
 \end{verbatim}
 \end {quote}
@@ -5414,11 +5256,8 @@ La fonction {\tt endservent} ferme le fichier {\tt /etc/services}.
 #include <netinet/in.h>
 
 unsigned long htonl (unsigned long l)
-
 unsigned short htons (unsigned short s)
-
 unsigned long ntohl (unsigned long l)
-
 unsigned short ntohs (unsigned short s)
 \end{verbatim}
 \end {quote}
@@ -5445,7 +5284,6 @@ fonctions sont toujours définies, mais elles sont vides.
 #include <arpa/inet.h>
 
 const char *inet_ntop (int famille, const void *src, char *dst, socklen_t max)
-
 int inet_pton (int famille, const char *src, void *dst)
 \end{verbatim}
 \end {quote}
@@ -5488,15 +5326,10 @@ inet\_netof} --- manipulation d'adresses IPv4
 #include <arpa/inet.h>
 
 unsigned long inet_addr (const char *chaine)
-
 unsigned long inet_network (const char *chaine)
-
 char *inet_ntoa (struct in_addr in)
-
 struct in_addr inet_makeaddr (int net, int lna)
-
 int inet_lnaof (struct in_addr in)
-
 int inet_netof (struct in_addr in)
 \end{verbatim}
 \end {quote}
@@ -5542,11 +5375,8 @@ respectivement, à partir d'une adresse IPv4 {\tt in}, l'adresse en partie
 #include <syslog.h>
 
 int openlog (const char *nom, int options, int categorie)
-
 int syslog (int prio, const char *format, ...)
-
 int closelog (void)
-
 int setlogmask (int masque)
 \end{verbatim}
 \end {quote}
@@ -5667,17 +5497,14 @@ système.
 include <time.h>
 
 char *ctime (const time_t *horloge)
-
 struct tm *localtime (const time_t *horloge)
-
 struct tm *gmtime (const time_t *horloge)
-
 char *asctime (const struct tm *tm)
 \end{verbatim}
 \end {quote}
 
 La fonction {\tt ctime} renvoie une chaîne de 26 caractères
-ayant la forme suivante~:
+(non traduite) ayant la forme suivante~:
 \begin {quote}
 \begin {verbatim}
 Sun Sep 16 01:03:52 1973\n\0
@@ -5694,8 +5521,8 @@ habituellement de procéder comme suit~:
     extern long int ctime () ;
     extern char *ctime () ;
 
-    horloge = time (0L) ;
-    strcpy (str, ctime (&horloge)) ;
+    horloge = time (NULL) ;
+    strncpy (str, ctime (&horloge), 26) ;
 }
 \end{verbatim}
 \end {quote}
@@ -5868,7 +5695,6 @@ char *argv [] ;
 #include <unistd.h>
 
 int isatty (int descripteur)
-
 char *ttyname (int descripteur)
 \end{verbatim}
 \end {quote}
@@ -5950,7 +5776,6 @@ premier caractère est \verb:\0:.
 #include <errno.h>
 
 void perror (const char *str)
-
 char *strerror (int numero)
 
 extern int errno ;
@@ -5991,7 +5816,6 @@ message correspondant à l'erreur détectée.
 #include <stdlib.h>
 
 int rand (void)
-
 void srand (unsigned int semence)
 \end{verbatim}
 \end {quote}
@@ -6016,7 +5840,6 @@ Par défaut, la valeur initiale de {\tt semence} est 1.
 #include <setjmp.h>
 
 int setjmp (jmp_buf env)
-
 void longjmp (jmp_buf env, int discriminant)
 \end{verbatim}
 \end {quote}
@@ -6059,7 +5882,6 @@ int sigemptyset (sigset_t *masque) ;
 int sigfillset (sigset_t *masque) ;
 int sigaddset (sigset_t *masque, int sig) ;
 int sigdelset (sigset_t *masque, int sig) ;
-
 int sigismember (const sigset_t *masque, int sig) ;
 \end{verbatim}
 \end {quote}
@@ -6188,7 +6010,6 @@ l'exécution du processus.
 
 char *tmpnam (char *adresse)
 char *tmpnam ((char *) 0)
-
 char *tempnam (const char *repertoire, const char *prefixe)
 \end{verbatim}
 \end {quote}
@@ -6438,6 +6259,30 @@ sera positionné lors de la création du nouveau thread. Le paramètre
 	créé dans l'état par défaut, qui autorise ce thread à être
 	la cible d'un appel à \verb|pthread_join|.
 \end {itemize}
+
+
+\section {Gestion des signaux}
+
+Si l'action associée à chaque signal (via \texttt {sigaction}) est
+partagée par tous les threads d'un processus, le masque de signaux est
+propre à chaque thread. Ceci permet, par exemple, de canaliser vers un
+thread la prise en compte d'un signal donné.
+
+\separation
+\primitive {pthread\_sigmask} --- initialise ou détruit un mutex
+    \index{{\tt pthread\_sigmask}}
+
+\begin {quote}
+\begin {verbatim}
+#include <signal.h>
+
+int pthread_sigmask (int comment, const sigset_t *nouveau, sigset_t *ancien)
+\end{verbatim}
+\end {quote}
+
+L'utilisation de cette fonction est similaire à celle de la primitive
+\texttt {sigprocmask} (voir page~\pageref {sigprocmask}), mais dans un
+contexte multi-threadé.
 
 
 \section {Verrous exclusifs (mutex)}
