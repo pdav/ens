@@ -1898,6 +1898,7 @@ précédente alarme.
 \separation
 \primitive {kill} --- envoie un signal à un processus
     \index{{\tt kill}}
+    \label {kill}
 
 \begin {quote}
 \begin {verbatim}
@@ -6056,7 +6057,7 @@ l'option \verb|-l pthread| pour inclure cette bibliothèque.
 
 Sauf exception, la valeur de retour des fonctions est 0 si l'opération
 s'est bien passée, ou un numéro d'erreur sinon (compatible avec les
-définitions de \texttt {errno.h}).
+définitions de la variable globale \texttt {errno.h}).
 
 Ce chapitre décrit les fonctions les plus couramment utilisées.
 
@@ -6156,22 +6157,6 @@ de threads sont identiques, ou 0 si elles sont différentes.
 
 
 \separation 
-\primitive {pthread\_kill} --- envoie un signal à un thread donné
-    \index{{\tt pthread\_kill}}
-
-\begin {quote}
-\begin {verbatim}
-int pthread_kill (pthread_t thread, int numsig)
-\end{verbatim}
-\end {quote}
-
-Cette fonction envoie le signal \texttt {numsig} au thread indiqué par le
-paramètre \texttt {thread}.  Si \texttt {numsig} vaut 0, aucun signal
-n'est envoyé au thread, cette fonction sert alors à tester l'existence
-du thread.
-
-
-\separation 
 \primitive {pthread\_detach} --- détache un thread
     \index{{\tt pthread\_detach}}
 
@@ -6268,8 +6253,25 @@ partagée par tous les threads d'un processus, le masque de signaux est
 propre à chaque thread. Ceci permet, par exemple, de canaliser vers un
 thread la prise en compte d'un signal donné.
 
+
+\separation 
+\primitive {pthread\_kill} --- envoie un signal à un thread donné
+    \index{{\tt pthread\_kill}}
+
+\begin {quote}
+\begin {verbatim}
+int pthread_kill (pthread_t thread, int signal)
+\end{verbatim}
+\end {quote}
+
+Cette fonction envoie le signal \texttt {signal} au thread indiqué par le
+paramètre \texttt {thread}.  Si \texttt {signal} vaut 0, aucun signal
+n'est envoyé au thread, cette fonction sert alors à tester l'existence
+du thread.
+
+
 \separation
-\primitive {pthread\_sigmask} --- initialise ou détruit un mutex
+\primitive {pthread\_sigmask} --- manipulation du masque de signaux
     \index{{\tt pthread\_sigmask}}
 
 \begin {quote}
@@ -6428,6 +6430,84 @@ suivant la valeur \texttt {val}~:
 	déconseillé de l'utiliser si on cherche un comportement
 	spécifique.
 \end {itemize}
+
+
+\section {Verrous actifs (spin locks)}
+
+Les verrous actifs (ou spin locks) sont similaires aux mutex dans le
+principe du verrouillage exclusif. La différence est que l'attente,
+dans le cas des verrous actifs, est réalisée de manière active sans
+libérer le processeur. Étant donné que l'attente active pénalise
+l'ensemble du système (les autres processus et threads), les verrous
+actifs ne doivent être utilisés que pour des très courtes périodes
+d'attente, lorsque le temps de mise en attente avec un mutex est
+incompatible avec les exigences de l'application et que le nombre de
+processeurs est suffisant.
+
+\separation
+\primitive {pthread\_spin\_init, pthread\_spin\_destroy} --- initialise ou détruit un verrou actif
+    \index{{\tt pthread\_spin\_init}}
+    \index{{\tt pthread\_spin\_destroy}}
+
+\begin {quote}
+\begin {verbatim}
+int pthread_spin_init (pthread_spinlock_t *verrou, int partage)
+int pthread_spin_destroy (pthread_spinlock_t *verrou)
+\end{verbatim}
+\end {quote}
+
+La fonction \verb|pthread_spin_init| initialise le verrou actif indiqué
+par le paramètre \texttt {spin}, et le place dans l'état «~non
+verrouillé~».  Le paramètre \texttt {partage} peut prendre les
+valeurs suivantes~:
+
+\begin {itemize}
+    \item \verb|PTHREAD_PROCESS_SHARED|~: le verrou
+	est partagé entre les threads de plusieurs processus (si la zone
+	de mémoire correspondant au verrou se situe par exemple dans un
+	segment de mémoire partagée)~;
+    \item \verb|PTHREAD_PROCESS_PRIVATE|~: le verrou n'est accessible
+	qu'au threads du processus courant.
+\end {itemize}
+
+La fonction \verb|pthread_spin_destroy| détruit le verrou spécifié.
+
+
+\separation
+\primitive {pthread\_spin\_lock, pthread\_spin\_trylock} --- verrouille un verrou actif
+    \index{{\tt pthread\_spin\_lock}}
+    \index{{\tt pthread\_spin\_trylock}}
+
+\begin {quote}
+\begin {verbatim}
+#include <time.h>
+
+int pthread_spin_lock (pthread_spinlock_t *spin)
+int pthread_spin_trylock (pthread_spinlock_t *spin)
+\end{verbatim}
+\end {quote}
+
+La fonction \verb|pthread_spin_lock| attend de manière active, si
+besoin est, que le verrou indiqué par le paramètre devienne libre,
+et le verrouille.
+
+La fonction \verb|pthread_spin_trylock| tente de verrouiller le verrou
+indiqué par le paramètre sans attendre. Si l'opération n'est pas
+possible, cette fonction retourne une erreur.
+
+
+
+\separation
+\primitive {pthread\_spin\_unlock} --- déverrouille un verrou actif
+    \index{{\tt pthread\_spin\_unlock}}
+
+\begin {quote}
+\begin {verbatim}
+int pthread_spin_unlock (pthread_spinlock_t *spin)
+\end{verbatim}
+\end {quote}
+
+Cette fonction déverrouille le spin passé en paramètre.
 
 
 \section {Conditions}
@@ -6698,6 +6778,113 @@ utilisé (i.e.  lorsque les verrous ont été initialisés avec
 \begin {verbatim}
 int pthread_rwlockattr_getpshared (const pthread_rwlockattr_t *attr, int *val)
 int pthread_rwlockattr_setpshared (pthread_rwlockattr_t *attr, int val)
+\end{verbatim}
+\end {quote}
+
+Ces fonctions récupèrent ou modifient l'attribut «~partage entre
+processus~» qui sera positionné lors de la création du nouveau
+verrou. Le paramètre \texttt {val} peut prendre les valeurs suivantes~:
+
+\begin {itemize}
+    \item \verb|PTHREAD_PROCESS_SHARED|~: le verrou lecteurs/écrivains
+	est partagé entre les threads de plusieurs processus (si la zone
+	de mémoire correspondant au verrou se situe par exemple dans un
+	segment de mémoire partagée)~;
+    \item \verb|PTHREAD_PROCESS_PRIVATE|~: le verrou n'est accessible
+	qu'au threads du processus courant.
+\end {itemize}
+
+
+\section {Barrières}
+
+Les barrières sont un mécanisme qui permet à $n$ threads d'attendre
+qu'ils soient tous arrivés à un point (la barrière) avant de le
+franchir.
+
+\separation
+\primitive {pthread\_barrier\_init, pthread\_barrier\_destroy} --- initialise ou détruit une barrière
+    \index{{\tt pthread\_barrier\_init}}
+    \index{{\tt pthread\_barrier\_destroy}}
+
+\begin {quote}
+\begin {verbatim}
+int pthread_barrier_init (pthread_barrier_t *barriere, const pthread_barrierattr_t *attr,
+                          unsigned int nb)
+int pthread_barrier_destroy (pthread_barrier_t *barriere)
+\end{verbatim}
+\end {quote}
+
+La fonction \verb|pthread_barrier_init| initialise la barrière
+spécifiée par le paramètre \texttt {barriere}.  Le paramètre \texttt
+{attr} indique les attributs éventuels de la barrière, ou vaut \texttt
+{NULL} si les attributs par défaut doivent être utilisés. Enfin,
+le paramètre \texttt {nb} indique le nombre de threads à synchroniser.
+
+La fonction \verb|pthread_barrier_destroy| détruit la barrière spécifiée.
+
+
+\separation
+\primitive {pthread\_barrier\_wait} --- attendre le franchissement de la barrière
+    \index{{\tt pthread\_barrier\_wait}}
+
+\begin {quote}
+\begin {verbatim}
+int pthread_barrier_wait (pthread_barrier_t *barriere)
+\end{verbatim}
+\end {quote}
+
+La fonction \verb|pthread_barrier_wait| met le thread en attente. Lorsque
+les $n$ (nombre indiqué lors de la création de la barrière) threads
+ont tous appelé cette fonction, elle cesse l'attente, et les $n$
+threads peuvent alors reprendre leur exécution. La barrière est alors
+réinitialisée et peut servir à nouveau.
+
+Lorsque tout se passe bien, la valeur de retour est
+\verb|PTHREAD_BARRIER_SERIAL_THREAD| pour l'un des threads et 0 pour
+les $n-1$ autres (ce qui permet à un des threads de jouer un rôle
+particulier comme celui de coordinateur par exemple). Sinon, un code
+d'erreur est renvoyé.
+
+
+\section {Attributs de barrière}
+
+Les attributs d'une barrière être spécifiés lors de son initialisation
+avec la fonction \verb|pthread_barrier_init|. Les fonctions ci-après
+servent à spécifier ces attributs.
+
+\separation
+\primitive {pthread\_barrierattr\_init, pthread\_barrierattr\_destroy} ---
+initialise ou détruit un attribut de barrière
+    \index{{\tt pthread\_barrierattr\_init}}
+    \index{{\tt pthread\_barrierattr\_destroy}}
+
+\begin {quote}
+\begin {verbatim}
+int pthread_barrierattr_init (pthread_barrierattr_t *attr)
+int pthread_barrierattr_destroy (pthread_barrierattr_t *attr)
+\end{verbatim}
+\end {quote}
+
+La fonction \verb|pthread_barrierattr_init| initialise un objet de type
+\verb|pthread_barrierattr_t| avec les attributs par défaut. Dès lors,
+les attributs peuvent être modifiés avec les autres fonctions de
+cette section.
+
+La fonction \verb|pthread_barrierattr_destroy| sert à détruire
+l'objet de type \verb|pthread_barrierattr_t| lorsqu'il n'est plus
+utilisé (i.e.  lorsque les barrières ont été initialisées avec
+\verb|pthread_barrier_init|).
+
+
+\separation
+\primitive {pthread\_barrierattr\_getpshared, pthread\_barrierattr\_setpshared} --- attribut de partage entre processus
+    \index{{\tt pthread\_barrierattr\_getpshared}}
+    \index{{\tt pthread\_barrierattr\_setpshared}}
+
+\begin {quote}
+\begin {verbatim}
+int pthread_barrierattr_getpshared (const pthread_barrierattr_t *attr, int *val)
+int pthread_barrierattr_setpshared (pthread_barrierattr_t *attr, int val)
 \end{verbatim}
 \end {quote}
 
