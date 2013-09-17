@@ -57,6 +57,24 @@ jusqu'à $m$ niveaux.
 
 Combien de processus sont générés au total ?
 
+\question
+% ajouté par Vincent, 12/9/13
+
+Écrivez un programme qui~:
+\begin {enumerate}
+	\item ouvre un fichier dont le nom est passé en argument (en
+	lecture)~;
+	\item créé un processus fils~;
+	\item puis les deux processus (père et fils) lisent les caractères
+	l'un après l'autre dans le fichier en utilisant la primitive système
+	{\tt read}, et les affichent à l'écran.
+\end {enumerate}
+Expérimentez ce programme avec un fichier texte de taille assez grande.
+Vérifiez que le bon nombre de caractères a été lu, ou non.
+
+Que se passe-t-il lorsque le fichier est ouvert {\em après} l'appel à
+{\tt fork}~?
+
 
 \question
 
