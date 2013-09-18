@@ -6889,15 +6889,15 @@ int pthread_barrierattr_setpshared (pthread_barrierattr_t *attr, int val)
 \end {quote}
 
 Ces fonctions récupèrent ou modifient l'attribut «~partage entre
-processus~» qui sera positionné lors de la création du nouveau
-verrou. Le paramètre \texttt {val} peut prendre les valeurs suivantes~:
+processus~» qui sera positionné lors de la création de la nouvelle
+barrière. Le paramètre \texttt {val} peut prendre les valeurs suivantes~:
 
 \begin {itemize}
-    \item \verb|PTHREAD_PROCESS_SHARED|~: le verrou lecteurs/écrivains
+    \item \verb|PTHREAD_PROCESS_SHARED|~: la barrière
 	est partagé entre les threads de plusieurs processus (si la zone
-	de mémoire correspondant au verrou se situe par exemple dans un
+	de mémoire correspondant à la barrière se situe par exemple dans un
 	segment de mémoire partagée)~;
-    \item \verb|PTHREAD_PROCESS_PRIVATE|~: le verrou n'est accessible
+    \item \verb|PTHREAD_PROCESS_PRIVATE|~: la barrière n'est accessible
 	qu'au threads du processus courant.
 \end {itemize}
 
