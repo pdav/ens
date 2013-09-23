@@ -9,6 +9,7 @@
 %   1996/09/10 : pda : réunion des signaux POSIX
 %   2007/04/19 : pda : séparation exercices 1 et 2
 %   2007/04/19 : pda : rédaction exercice envoyer/reception
+%   2013/09/23 : vincent : ajout exercice 5 (imbrication de signaux)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \td {Système~: Signaux}
@@ -53,6 +54,19 @@ clair et la valeur courante du compteur dans un fichier,
 Lorsque le signal {\tt SIGTERM} est reçu, le programme écrit
 le mot {\tt fin} dans le fichier, puis se termine. Vous utiliserez les
 primitives POSIX.
+
+
+\question
+
+Écrivez un programme composé d'une boucle sans fin qui affiche le
+message "traitement normal" à chaque seconde. Lorsqu'il reçoit un signal
+{\tt SIGINT} (envoyé par {\tt \^{ }c} dans un shell), il exécute une
+fonction qui affiche le message "traitement du signal de niveau 1", puis
+attend une seconde, cinq fois de suite. Lorsqu'il reçoit une nouvelle
+fois le signal SIGINT, il augmente la valeur du niveau affiché, puis
+revient au niveau précédent au bout de ses cinq affichages. Vous pouvez
+afficher des tabulations correspondant au niveau de traitement courant
+pour plus de lisibilité.
 
 
 \question

@@ -5,6 +5,7 @@
 %   1993/01/31 : pda : création
 %   1995/05/02 : pda : ajout des signaux POSIX
 %   1996/02/28 : pda : séparation des tubes
+%   2013/09/23 : vincent : ajout exercices 4 et 5 (pipes)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \td {Système~: Tubes}
@@ -43,6 +44,20 @@ nombre d'octets placés dans le tube, c'est à dire sa capacité.
 Faites un programe pour afficher la taille d'un tube avec la méthode
 ci-dessus.
 
+
+\question
+
+Écrivez un programme qui crée deux processus fils, redirige les
+entrées/sorties et appelle la fonction execlp, pour faire l'équivalent
+de ce que fait le shell lorsqu'on tape la commande~: {\tt ps |
+grep <nom> | wc -l}.
+
+Le nom sera donné par l'utilisateur en argument du programme, ou
+prendra la valeur de la variable d'environnement {\tt USER} par défaut.
+
+\question
+
+Reprenez l'exercice~\ref {q:minishell} en y ajoutant les pipes.
 
 \question
 
