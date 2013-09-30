@@ -38,7 +38,7 @@ int main (int argc, char *argv [])
             erreur ("pthread_create") ;
     for (i = 0 ; i < MAX ; i++)
         if (pthread_join (tid [i], NULL) == -1)
-            erreur ("pthread_create") ;
+            erreur ("pthread_join") ;
 }
 \end{verbatim}
 \end {quote}
