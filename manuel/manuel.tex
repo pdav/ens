@@ -4975,7 +4975,7 @@ La structure \texttt {addrinfo} contient les champs suivants~:
 \begin {verbatim}
     int ai_flags ;             /* flags pour le paramètre indic */
     int ai_family ;            /* famille de protocoles pour socket() */
-    int ai_sockettype ;        /* type de socket (SOCK_STREAM ou SOCK_DGRAM) */
+    int ai_socktype ;          /* type de socket (SOCK_STREAM ou SOCK_DGRAM) */
     int ai_protocol ;          /* protocole TCP, UDP, etc. trouvé */
     socklen_t ai_addrlen ;     /* taille de l'adresse trouvée */
     struct sockaddr *ai_addr ; /* adresse trouvée */
@@ -4997,7 +4997,7 @@ de recherche demandée~:
 	{PF\_INET6}) seulement, ou pour autoriser les deux (\texttt
 	{PF\_UNSPEC})~;
 
-    \item le champ \texttt {ai\_sockettype} est utilisé pour spécifier
+    \item le champ \texttt {ai\_socktype} est utilisé pour spécifier
 	si la communication est basée sur une connexion fiable
 	(\texttt {SOCK\_STREAM}, soit TCP) ou sur le mode datagramme
 	(\texttt {SOCK\_DGRAM}, soit UDP).
