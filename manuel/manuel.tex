@@ -6571,10 +6571,15 @@ pthread_mutex_unlock (&mtx) ;           /* fin de section critique */
 \end{verbatim}
 \end {quote}
 
-La fonction \verb|pthread_cond_timedwait| fonctionne de même, mais
-attend au plus jusqu'à l'heure spécifiée par \texttt {habs}, qui doit
-être une heure absolue (et non une durée relative à l'heure courante)
-de manière similaire à \verb|pthread_mutex_timedlock|.
+La boucle \texttt {while} est nécessaire car il peut arriver que
+\verb|pthread_cond_wait| se termine sans que la raison ayant provoqué
+l'attente soit satisfaite (\textit {spurious wakeup}).
+
+La fonction \verb|pthread_cond_timedwait| fonctionne de manière
+similaire à \verb|pthread_cond_wait|, mais attend au plus jusqu'à
+l'heure spécifiée par \texttt {habs}, qui doit être une heure absolue
+(et non une durée relative à l'heure courante) comme avec
+\verb|pthread_mutex_timedlock|.
 
 Si \verb|pthread_cond_timedwait| se termine à l'expiration du délai
 sans que la condition soit réalisée, l'erreur retournée est \texttt
