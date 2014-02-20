@@ -70,8 +70,13 @@ Quelle peut être la valeur numérique de la constante EOF~?
 
 
 \question
+    \label {getchar}
 
-Écrivez une version bufferisée de {\tt getchar}.
+Écrivez une version bufferisée de {\tt getchar}. Pour ce faire, votre
+version doit conserver un tampon en mémoire. Si le tampon est vide
+lorsque votre \texttt {getchar} est appelée, celle-ci doit remplir le
+tampon et en retourner le premier octet. Si le tampon contient déjà
+des octets, votre \texttt {getchar} doit retourner l'octet suivant.
 
 
 \question
@@ -89,11 +94,15 @@ et prendra en argument la taille du buffer utilisé pour la copie.
 Si cette taille égale 1, la copie sera effectuée caractère par
 caractère.
 
-Vous utiliserez la commande Unix \texttt {time} pour comparer les
-temps d'exécution, en considérant la somme des temps CPU en mode
-utilisateur et en mode système\footnote {Le temps «~réel~» correspond
-au temps réellement écoulé~: on nt'utilisera pas cette valeur car
-elle dépend de la charge du système.}.
+Vous utiliserez la commande Unix \texttt {time} pour comparer les temps
+d'exécution, en considérant la somme des temps CPU en mode utilisateur
+et en mode système\footnote {Le temps «~réel~» correspond au temps
+réellement écoulé~: on n'utilisera pas cette valeur car elle dépend
+de la charge du système.}.  Vous attacherez la plus grande importance à
+la qualité de vos mesures~: valeurs significatives (utilisez de grands
+fichiers en entrée), élimination des variations (moyenne de plusieurs
+valeurs), élimination des perturbations dues à la sortie sur votre
+écran (redirigez la sortie standard), etc.
 
 En prenant comme tailles de buffer les puissances successives de 2
 (2$^0$, 2$^1$, 2$^2$, 2$^3$, etc.), à partir de quelle taille de
@@ -119,11 +128,15 @@ d'entrées/sorties à l'aide des primitives système.
 	prévoir la bufferisation des entrées/sorties.
 
     \item Programmez la fonction {\tt my\_open}, analogue à {\tt fopen}.
+	Pour simplifier, on ne considérera que les modes d'ouverture
+	\verb|"r"| et \verb|"w"|.
 
-    \item Reprenez l'exercice précédent pour programmer {\tt my\_getc},
-	analogue à {\tt getc}.
+    \item Reprenez l'exercice~\ref {getchar} pour programmer {\tt
+	my\_getc}, analogue à {\tt getc}.
 
-    \item Programmez la fonction {\tt my\_putc}, analogue à {\tt putc}.
+    \item Programmez la fonction {\tt my\_putc}, analogue à {\tt putc}
+	(qui bufferise en sortie de la même manière que \texttt {getc}
+	bufferise en entrée).
 
     \item Programmez la fonction {\tt my\_close}, analogue à {\tt
 	fclose}.
