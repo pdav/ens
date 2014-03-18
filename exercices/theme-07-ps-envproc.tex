@@ -60,10 +60,13 @@ périphérique en mode caractère) ou 0 sinon.
 \question
 
 Les champs {\tt st\_dev} et {\tt st\_ino} de la structure {\tt stat}
-identifient de manière unique un fichier dans le système. Écrivez une
-fonction {\tt ttyname} qui prend en paramètre un descripteur de fichier,
-et renvoie un pointeur sur une chaîne (statique) contenant le nom
-complet du fichier (cherché dans {\tt /dev}) correspondant.
+identifient de manière unique un fichier dans le système. Écrivez
+une fonction {\tt my\_ttyname} analogue à la fonction de bibliothèque
+\texttt {ttyname} qui prend en paramètre un descripteur de fichier, et
+renvoie un pointeur sur une chaîne (statique) contenant le nom complet
+du fichier correspondant (cherché dans {\tt /dev}\footnote {Sur Linux,
+on cherchera dans \texttt {/dev/pts}.}), ou \texttt {NULL} si le fichier
+n'est pas trouvé.
 
 
 \question
