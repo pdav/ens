@@ -62,10 +62,10 @@ Combien de processus sont générés au total ?
 
 Écrivez un programme qui~:
 \begin {enumerate}
-	\item ouvre un fichier dont le nom est passé en argument (en
+    \item ouvre un fichier dont le nom est passé en argument (en
 	lecture)~;
-	\item créé un processus fils~;
-	\item puis les deux processus (père et fils) lisent les caractères
+    \item créé un processus fils~;
+    \item puis les deux processus (père et fils) lisent les caractères
 	l'un après l'autre dans le fichier en utilisant la primitive système
 	{\tt read}, et les affichent à l'écran.
 \end {enumerate}
@@ -81,9 +81,27 @@ Que se passe-t-il lorsque le fichier est ouvert {\em après} l'appel à
 Écrivez un programme qui~:
 
 \begin {enumerate}
+    \item affiche d'abord l'heure, sous forme de secondes et de
+	micro-secondes telles que retournées par \texttt {gettimeofday}~;
+
+    \item appelle ensuite (avec une des primitives \texttt {exec})
+	la commande \texttt {ls} avec l'option \texttt {-l} sur un
+	répertoire passé en paramètre~;
+
+    \item affiche enfin l'heure (comme précédemment) ainsi que le
+	temps écoulé pendant l'appel de \texttt {ls}.
+
+\end {enumerate}
+
+
+\question
+
+Écrivez un programme qui~:
+
+\begin {enumerate}
     \item lance la commande {\tt ls} sur un répertoire passé en
-        paramètre,
-    \item redirige la sortie standard de {\tt ls} sur {\tt /dev/null},
+        paramètre~;
+    \item redirige la sortie standard de {\tt ls} sur {\tt /dev/null}~;
     \item affiche le temps pris par la commande {\tt ls} (primitive
 	système {\tt times}).
 \end {enumerate}
