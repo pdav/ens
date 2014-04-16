@@ -59,14 +59,14 @@ primitives POSIX.
 \question
 
 Écrivez un programme composé d'une boucle sans fin qui affiche le
-message "traitement normal" à chaque seconde. Lorsqu'il reçoit un signal
-{\tt SIGINT} (envoyé par {\tt \^{ }c} dans un shell), il exécute une
-fonction qui affiche le message "traitement du signal de niveau 1", puis
-attend une seconde, cinq fois de suite. Lorsqu'il reçoit une nouvelle
-fois le signal SIGINT, il augmente la valeur du niveau affiché, puis
-revient au niveau précédent au bout de ses cinq affichages. Vous pouvez
-afficher des tabulations correspondant au niveau de traitement courant
-pour plus de lisibilité.
+message « traitement normal » à chaque seconde. Lorsqu'il reçoit
+un signal {\tt SIGINT} (envoyé par \texttt {\^{ }C} dans un shell),
+il exécute une fonction qui affiche le message « traitement du signal
+de niveau 1 », puis attend une seconde, cinq fois de suite. Lorsqu'il
+reçoit une nouvelle fois le signal \texttt {SIGINT}, il augmente la
+valeur du niveau affiché, puis revient au niveau précédent au bout de
+ses cinq affichages. Vous pouvez afficher des tabulations correspondant
+au niveau de traitement courant pour plus de lisibilité.
 
 
 \question
