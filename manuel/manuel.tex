@@ -1103,6 +1103,107 @@ Cette primitive renvoie le nombre d'octets écrits
 réussie, ou -1 en cas d'erreur.
 
 
+\separation
+\primitive {mmap} --- établit une correspondance entre fichier et mémoire
+    \index{{\tt mmap}}
+
+\begin {quote}
+\begin {verbatim}
+#include <sys/mman.h>
+
+void *mmap (void *adr, size_t lg, int prot, int flags, int fd, int offset)
+\end{verbatim}
+\end {quote}
+
+La primitive {\tt mmap} établit une correspondance entre un fichier
+ouvert et une zone de mémoire virtuelle : l'octet à l'offset $i$ du
+fichier est accessible en mémoire à l'adresse indiquée par \texttt
+{adr}$+i$. Toute lecture mémoire à cette adresse provoquera la lecture
+dans le fichier à l'offset correspondant, et toute écriture à cette
+adresse provoquera une écriture dans le fichier.
+
+Si le paramètre \texttt {adr} vaut \texttt {NULL}, le système choisit
+l'adresse où placer la zone de mémoire virtuelle et renvoie cette
+adresse comme valeur de retour. La longueur de la zone est spécifiée
+par le paramètre \texttt {lg}. Le fichier est référencé par son
+descripteur \texttt {fd}, et l'offset de début dans le fichier est
+indiqué par le paramètre \texttt {offset} (qui doit être un multiple
+de la taille d'une page, voir le paramètre \texttt {SC\_PAGE\_SIZE}
+de {\tt sysconf} page~\pageref {sysconf}). Si le paramètre \texttt {lg}
+n'est pas un multiple de la taille d'une page, le système peut étendre
+la zone jusqu'au plus prochain multiple.
+
+Le paramètre \texttt {prot} spécifie le type d'accès mémoire
+souhaité, par une combinaison des bits suivants~:
+
+\begin {quote}
+    \begin {tabular} {|ll|} \hline
+	\tt PROT\_NONE & aucun accès autorisé \\
+	\tt PROT\_READ & accès en lecture \\
+	\tt PROT\_WRITE & accès en écriture \\
+	\tt PROT\_EXEC & accès en exécution \\
+	\hline
+    \end {tabular}
+\end {quote}
+
+Le paramètre \texttt {flags} doit obligatoirement inclure l'un des deux
+bits suivants~:
+
+\begin {itemize}
+    \item \texttt {MAP\_SHARED}~: les modifications sont partagées entre
+	tous les processus ayant établi une correspondance avec le
+	fichier~;
+    \item \texttt {MAP\_PRIVATE}~: les modifications effectuées ne sont
+	pas propagées dans le fichier, et ne sont pas visibles par les
+	autres processus ayant établi une correspondance avec le fichier.
+
+\end {itemize}
+
+De plus, le comportement de \texttt {mmap} peut être modifié par des
+bits supplémentaires dans le paramètre \texttt {flags}, parmi lesquels~:
+
+\begin {itemize}
+    \item \texttt {MAP\_ANONYMOUS}~: la zone de mémoire n'est pas mise
+	en correspondance avec un fichier (et donc les paramètres
+	\texttt {fd} et \texttt {offset} doivent valoir respectivement
+	-1 et 0).  Ceci permet d'avoir une zone de mémoire partagée
+	entre plusieurs processus (ce qui implique l'utilisation du bit
+	\texttt {MAP\_SHARED})~;
+
+    \item \texttt {MAP\_FIXED}~: avec ce bit, \texttt {mmap} interprète
+	une adresse (paramètre \texttt {adr}) non nulle comme une
+	adresse impérative, et non comme une indication où placer la
+	zone de mémoire virtuelle.
+
+\end {itemize}
+
+L'utilisation de tout autre bit pour le paramètre \texttt {flag} est
+par essence non portable et doit donc être évitée (par exemple en
+ayant recours à d'autres primitives similaires).
+
+Cette primitive renvoie l'adresse de la zone de mémoire virtuelle, ou
+la valeur \texttt {MAP\_FAILED} (-1) en cas d'erreur.
+
+
+\separation
+\primitive {munmap} --- supprime une correspondance entre fichier et mémoire
+    \index{{\tt munmap}}
+
+\begin {quote}
+\begin {verbatim}
+#include <sys/mman.h>
+
+int munmap (void *adr, size_t lg)
+\end{verbatim}
+\end {quote}
+
+La primitive {\tt munmap} supprime une correspondance entre un fichier
+ouvert et une zone de mémoire virtuelle établie par \texttt {mmap}.
+
+Cette primitive renvoie 0 en cas de suppression réussie, ou -1 en
+cas d'erreur.
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Gestion des processus
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -3776,6 +3877,9 @@ donne quelques-uns des paramètres requis par la norme~:
 	\\
     \verb:_SC_OPEN_MAX:
 	& Nombre maximum de fichiers ouverts par utilisateur
+	\\
+    \verb:_SC_PAGE_SIZE:
+	& Taille d'une page de mémoire virtuelle
 	\\
     \verb:_SC_JOB_CONTROL:
 	& 1 si le {\em job control} est disponible, ou -1 sinon
