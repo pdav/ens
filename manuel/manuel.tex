@@ -694,7 +694,7 @@ pid_t   l_pid;      /* Processus ayant le verrou (F_GETLK) */
 \end {quote}
 
 La valeur retournée par {\tt flock} dépend de l'action, mais est
-toujours non négative en cas de succès, ou
+toujours non négative en cas de réussite, ou
 -1 en cas d'erreur.
 
 
@@ -7065,6 +7065,133 @@ int pthread_setspecific (pthread_key_t clef, const void *val)
 
 Ces fonctions récupèrent ou mémorisent la valeur associée au
 paramètre \texttt {clef}.
+
+
+\section {Sémaphores POSIX}
+
+La bibliothèque des threads POSIX abrite également un jeu de fonctions
+pour réaliser les opérations classiques sur des sémaphores\footnote
+{ Cette bibliothèque peut gérer des sémaphores \textit {nommés},
+mais seuls les sémaphores \textit {anonymes} sont décrits ici.}. Ces
+fonctions ne sont pas spécifiques aux threads et peuvent servir dans
+d'autres contextes comme par exemple pour synchroniser des processus
+distincts partageant une même zone mémoire allouée par \texttt {shmget}
+ou \texttt {mmap}.
+
+Toutes ces fonctions utilisent le type \texttt {sem\_t} pour représenter
+un sémaphore, et nécessitent l'inclusion du fichier suivant~:
+
+\begin {quote}
+\begin {verbatim}
+#include <semaphore.h>
+\end{verbatim}
+\end {quote}
+
+Comme pour les threads POSIX, l'utilisation des sémaphores nécessite
+que l'édition de liens soit réalisée avec l'option \verb|-l pthread|
+pour inclure la bibliothèque.
+
+
+\separation
+\primitive {sem\_init} --- initialise un sémaphore
+    \index{{\tt sem\_init}}
+
+\begin {quote}
+\begin {verbatim}
+int sem_init (sem_t *sem, int partage, unsigned int val)
+\end{verbatim}
+\end {quote}
+
+Cette fonction initialise un sémaphore (qui doit déjà être alloué
+avec le type \texttt {sem\_t}) avec la valeur \texttt {val}. Si le
+paramètre \texttt {partage} est nul, le sémaphore est partagé entre les
+différents threads du processus courant. Dans le cas contraire (\texttt
+{partage} $\neq$ 0), le sémaphore est partagé entre tous les processus
+pouvant accéder à la zone mémoire contenant le sémaphore.
+
+Cette fonction renvoie 0 si l'initialisation est réussie
+ou -1 en cas d'erreur.
+
+
+\separation
+\primitive {sem\_destroy} --- détruit un sémaphore
+    \index{{\tt sem\_destroy}}
+
+\begin {quote}
+\begin {verbatim}
+int sem_destroy (sem_t *sem)
+\end{verbatim}
+\end {quote}
+
+Cette fonction détruit le sémaphore indiqué (mais ne libère pas
+la zone mémoire correspondante). Elle retourne 0 en cas de réussite,
+et -1 en cas d'erreur.
+
+
+\separation
+\primitive {sem\_wait, sem\_trywait, sem\_timedwait} --- verrouille un sémaphore
+    \index{{\tt sem\_wait}}
+    \index{{\tt sem\_trywait}}
+    \index{{\tt sem\_timedwait}}
+
+\begin {quote}
+\begin {verbatim}
+int sem_wait (sem_t *sem)
+int sem_trywait (sem_t *sem)
+int sem_timedwait (sem_t *sem, const struct timespec *habs)
+\end{verbatim}
+\end {quote}
+
+La fonction \verb|sem_wait| réalise l'opération «~P~» (attente
+éventuelle si le compteur du sémaphore n'est pas strictement positif
+puis décrémentation du compteur).
+
+La fonction \verb|sem_trywait| fonctionne de manière similaire,
+mais échoue si le compteur n'est pas strictement positif.
+
+La fonction \verb|sem_timedwait| fonctionne de manière similaire à
+\verb|sem_wait|, mais attend au plus jusqu'à l'heure spécifiée par
+\texttt {habs}, qui doit être une heure absolue (et non une durée
+relative à l'heure courante) comme avec la fonction
+\verb|pthread_mutex_timedlock|.
+
+Ces fonctions renvoient 0 si tout s'est bien passé, ou -1 en cas d'erreur
+ou de sémaphore non verrouillé.
+
+
+\separation
+\primitive {sem\_post} --- déverrouille un sémaphore
+    \index{{\tt sem\_post}}
+
+\begin {quote}
+\begin {verbatim}
+int sem_post (sem_t *sem)
+\end{verbatim}
+\end {quote}
+
+La fonction \verb|sem_post| réalise l'opération «~V~» (incrémentation
+du compteur et libération des processus ou threads éventuellement
+en attente du sémaphore). Elle renvoie 0 en cas de réussite ou -1 en
+cas d'erreur.
+
+
+\separation
+\primitive {sem\_getvalue} --- récupère le compteur d'un sémaphore
+    \index{{\tt sem\_getvalue}}
+
+\begin {quote}
+\begin {verbatim}
+int sem_getvalue (sem_t *sem, int *cptval)
+\end{verbatim}
+\end {quote}
+
+Cette fonction récupère la valeur du compteur du sémaphore et la
+place à l'adresse indiquée par \texttt {cptval}. Il faut noter que
+POSIX ne spécifie pas, en cas de de processus ou de thread en attente
+sur un sémaphore, si la valeur doit être négative ou si elle doit
+être nulle : le choix appartient aux implémentations et peut donc
+varier d'un système à l'autre. La valeur de retour est soit 0 en cas
+de réussite ou -1 en cas d'erreur.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
