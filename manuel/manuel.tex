@@ -2259,6 +2259,27 @@ d'erreur.
 
 
 \separation
+\primitive {sigwait} --- attend un signal
+    \index{{\tt sigwait}}
+    \label {sigwait}
+
+\begin {quote}
+\begin {verbatim}
+#include <signal.h>
+
+int sigwait (const sigset_t *ensemble, int *recu)
+\end{verbatim}
+\end {quote}
+
+Cette primitive suspend le processus (ou le thread) courant en attendant
+l'un des signaux spécifiés par \texttt {ensemble}. Le numéro du signal
+reçu est placé en retour dans l'entier pointé par \texttt {recu}.
+
+La valeur de retour est soit 0 en cas d'attente réussie, soit une valeur
+strictement supérieure à 0 pour indiquer le numéro d'erreur.
+
+
+\separation
 \primitive {sigpending} --- consultation des signaux en attente
     \index{{\tt sigpending}}
 
