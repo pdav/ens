@@ -10,6 +10,7 @@
 #	cpudb-extract ../cpudb inc1-intro/cpu-
 #
 # Historique
+#   2014/11/04 : pda : conception
 #
 
 if [ $# != 2 ]
