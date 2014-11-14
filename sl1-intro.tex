@@ -1,0 +1,1162 @@
+\def\inc{inc1-intro}
+
+\def\cpudb{Stanford CPU database -- \url {http://cpudb.stanford.edu/}}
+
+\titreA {Introduction aux systèmes concurrents}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Introduction}
+
+\begin {frame} {Introduction}
+
+    Qu'est-ce qu'un système concurrent~?
+
+    \begin {quote}
+	Système dans lequel plusieurs programmes s'exécutent
+	simultanément tout en ayant des interactions les uns avec
+	les autres
+
+    \end {quote}
+
+    \vspace* {5mm}
+
+    Système concurrent \implique parallélisme
+
+\end {frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Motivations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Motivations}
+
+\begin {frame} {Motivations}
+    Pourquoi des systèmes concurrents (ou parallèles)~?
+
+    \begin {enumerate}
+	\item besoin de performances
+	\item besoin de \emph {scalabilité}
+	\item besoin de fiabilité
+	\item besoin de clarté
+    \end {enumerate}
+\end {frame}
+
+\begin {frame} {Motivations -- Performances}
+    Amélioration des performances~:
+    \begin {itemize}
+	\item pour diminuer le temps de calcul
+
+	    \vspace* {1mm}
+
+	    Ex~: prévision météo à 3 jours en moins de 3 jours
+	    de calcul...
+
+	\item pour traiter des problèmes plus grands
+
+	    \vspace* {1mm}
+
+	    Ex~: prévision météo plus précise signifie~:
+	    \begin {itemize}
+		\item maillage plus fin
+		\item plus de paramètres influant sur le calcul
+	    \end {itemize}
+	    \implique temps de calcul plus important
+
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Motivations -- Performances}
+
+    Pour aller plus vite, il faut :
+
+    \begin {enumerate}
+	\item améliorer le débit \implique récupérer les temps morts
+	\item améliorer le temps de réponse \implique partager la charge
+	\item améliorer le temps d'exécution \implique collaborer
+    \end {enumerate}
+\end {frame}
+
+\begin {frame} {Motivations -- Performances}
+    Récupérer les temps morts~:
+
+    \begin {center}
+	\includegraphics [width=.9\textwidth] {\inc/motiv-inact}
+    \end {center}
+
+    Récupération des temps morts \implique plusieurs processus
+
+    \vspace* {3mm}
+
+    \implique parallélisme entre  plusieurs processus dans un système
+    d'exploitation
+\end {frame}
+
+\begin {frame} {Motivations -- Performances}
+    Partager la charge~:
+
+    \begin {center}
+	\includegraphics [width=.9\textwidth] {\inc/motiv-part}
+    \end {center}
+
+\end {frame}
+
+\begin {frame} {Motivations -- Performances}
+    Collaborer~:
+
+    \begin {center}
+	\includegraphics [width=.9\textwidth] {\inc/motiv-collab}
+    \end {center}
+
+\end {frame}
+
+\begin {frame} {Motivations -- Performances}
+    En pratique, accroître les performances passe par~:
+    \begin {itemize}
+	\item le découplage des unités de traitement
+	\item le découplage de la mémoire
+	\item le découplage des entrées/sorties
+    \end {itemize}
+
+    \vspace* {3mm}
+    \implique multi-ordinateurs
+\end {frame}
+
+\begin {frame} {Motivations -- Performances}
+
+    Faut-il passer par le parallélisme~? \\
+    L'augmentation des performances du silicium ne suffit-elle pas~?
+
+    \vspace* {3mm}
+
+    Augmentation des fréquences d'horloge des processeurs~:
+
+    \begin {itemize}
+	\item réduction de la durée du cycle d'horloge
+	\item unités fonctionnelles du processeur plus
+	    rapides
+    \end {itemize}
+    \implique davantage d'instructions exécutées par seconde
+\end {frame}
+
+\begin {frame} {Motivations -- Performances}
+    Augmentation des fréquences d'horloge des processeurs~:
+
+    \begin {center}
+	\includegraphics [width=.9\textwidth] {\inc/cpu-freq}
+
+	\centerline {\tiny Données : \cpudb}
+    \end {center}
+
+\end {frame}
+
+\begin {frame} {Motivations -- Performances}
+    L'augmentation de la fréquence d'horloge entraîne~:
+    \begin {itemize}
+	\item interférences, notamment sur des «~longues~» distances \\
+	    \implique i.e. dès qu'il faut sortir du carré de silicium
+	\item consommation électrique
+	\item dissipation thermique
+    \end {itemize}
+    \vspace* {3mm}
+    \implique palier\footnote {Augmentation depuis le milieu des années
+    1980 : processeurs RISC} depuis le milieu des années 2000
+
+\end {frame}
+
+\begin {frame} {Motivations -- Performances}
+    Aller au delà de l'augmentation des fréquences \implique 2 pistes
+
+    \vspace* {3mm}
+
+    \begin {enumerate}
+	\item réduire les distances \implique augmenter la finesse de gravure
+	    \begin {itemize}
+		\item réduire les interférences
+		\item diminuer la tension (réduire les pertes électriques)
+	    \end {itemize}
+	\item augmenter le nombre de transistors \implique utiliser plus
+	    de place et/ou réduire leur taille
+
+	    \begin {itemize}
+		\item placer davantage de mémoire sur la puce
+		\item placer des unités fonctionnelles en parallèle
+	    \end {itemize}
+    \end {enumerate}
+\end {frame}
+
+\begin {frame} {Motivations -- Performances}
+    Finesse minimum de gravure des processeurs, par année :
+    \begin {center}
+	\includegraphics [width=.9\textwidth] {\inc/cpu-gravure}
+
+	{\tiny Données : \cpudb}
+    \end {center}
+\end {frame}
+
+\begin {frame} {Motivations -- Performances}
+    Peut-on augmenter encore la finesse de gravure ?
+
+    \vspace* {5mm}
+
+    \implique de plus en plus difficile~: proche de la taille
+    d'un atome
+
+\end {frame}
+
+\begin {frame} {Motivations -- Performances}
+    Loi de Moore (1975)~: \emph {le nombre de transistors dans les
+    microprocesseurs double tous les deux ans}
+    \\
+    \implique C'est une supposition...
+
+    \begin {center}
+	\includegraphics [width=.9\textwidth] {\inc/cpu-transist}
+
+	{\tiny Données : \cpudb}
+    \end {center}
+
+    % Limite de la loi de Moore~: on se rapproche également des dimensions
+    % atomiques
+
+\end {frame}
+
+\begin {frame} {Motivations -- Performances}
+    Conclusion~:
+    
+    \begin {itemize}
+	\item on ne peut plus tellement réduire le temps de cycle
+	\item on peut encore mettre davantage de transistors sur la
+	    même puce
+
+	\item d'où : parallélisme sur une même puce \\
+	    \implique processeurs multi-c{\oe}urs
+
+    \end {itemize}
+
+    Pour aller plus loin (i.e. plus vite) \implique davantage de parallélisme
+    \\
+    \implique architectures multi-processeurs
+
+\end {frame}
+
+\begin {frame} {Motivations -- Scalabilité}
+    «~\emph {scalability}~»~: augmenter les performances en cas
+    de besoin
+
+    \vspace* {3mm}
+
+    Exemples~:
+
+    \begin {itemize}
+	\item serveurs de noms sur Osiris
+	\item ferme de serveurs pour un moteur de recherche
+	\item etc.
+    \end {itemize}
+
+    \begin {center}
+	\includegraphics [width=.5\textwidth] {\inc/motiv-scal}
+    \end {center}
+
+\end {frame}
+
+\begin {frame} {Motivations -- Fiabilité}
+
+    Exemple~: ordinateurs de marque «~Tandem~» (1975--1985)
+
+    \begin {itemize}
+	\item société spécialisée dans les ordinateurs à tolérance
+	    de panne
+	\item un ordinateur Tandem = deux ordinateurs se surveillant
+	    en permanence
+
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Motivations -- Clarté}
+    Un programme parallèle peut être plus clair :
+
+    \begin {itemize}
+	\item structuration, décomposition en petits modules
+	\item expression du parallélisme inhérent au problème
+	    \begin {itemize}
+		\item tâches indépendantes
+		\item traitement d'événements multi-sources
+	    \end {itemize}
+    \end {itemize}
+
+    Un programme parallèle \emph {peut} être plus clair...
+    mais pas forcément !
+
+
+\end {frame}
+
+\begin {frame} {Motivations -- Difficultés}
+    Un programme parallèle~:
+
+    \begin {itemize}
+	\item n'est pas forcément déterministe \\
+	    \implique 2 exécutions différentes ne donnent pas
+	    forcément le même résultat
+	\item n'est pas toujours facile à programmer \\
+	    \implique problèmes de synchronisation difficiles
+	\item n'est pas facile à déboguer \\
+	    \implique conséquence des deux premiers points
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Motivations -- Synthèse}
+    En synthèse, le parallélisme :
+    \begin {itemize}
+	\item est indispensable pour obtenir de meilleures
+	    performances
+
+	    \begin {itemize}
+		\item l'augmentation des performances du silicium
+		    ne suffit pas toujours...
+
+		\item ... et l'augmentation des performances du silicium
+		    passe par davantage de parallélisme
+		    \\
+		    \implique tous les ordinateurs actuels contiennent
+		    du parallélisme
+
+	    \end {itemize}
+
+	\item est une voie naturelle d'expression de certains problèmes
+
+    \end {itemize}
+
+    \vspace* {3mm}
+
+    Ce cours a pour objectif de vous apprendre à déjouer les erreurs
+    de programmation et pour vous donner des méthodes
+
+\end {frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Notions d'architectures parallèles
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Notions d'architectures parallèles}
+
+\begin {frame} {Notion d'architectures parallèles}
+    Stabilisation des ordinateurs séquentiels autour de~:
+
+    \begin {itemize}
+	\item Architecture de Von Neumann (EDVAC, 1945)\\
+	    Mémoire commune pour les instructions et les données
+	\item Architecture Harvard (Mark I de l'U Harvard, 1944) \\
+	    Mémoire séparée pour les instructions et les données
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Notion d'architectures parallèles}
+    Plusieurs niveaux de parallélisme possibles~:
+
+    \begin {itemize}
+	\item job~: capacity computing
+
+	\item programme~: plusieurs CPU pour un problème unique
+
+	\item instruction~: pipeline, unités fonctionnelles multiples,
+	    architectures superscalaires, etc
+
+	\item bit~: conception interne des unités fonctionnelles (ex: ALU)
+    \end {itemize}
+    \implique implémentations différentes du parallélisme
+    \\
+    \implique foisonnement d'architectures parallèles
+
+    \vspace* {3mm}
+
+    Tous les ordinateurs actuels comportent du parallélisme
+\end {frame}
+
+\begin {frame} {Classification de Flynn}
+    Classification de Flynn (1972)~:
+
+    \begin {quote}
+	\begin {tabular} {|l|l|c|c|} \cline {3-4}
+	    \multicolumn {2} {c|} {~} &
+	    		\multicolumn {2} {|c|} {Flot de données} \\ \cline {3-4}
+	    \multicolumn {2} {c|} {~} &
+			Simple & Multiple \\ \hline
+	    Flot & Simple &
+	    		\textbf {SISD} & \textbf {SIMD} \\ \cline {2-4}
+	    d'instructions & Multiple &
+			\textbf {MISD} & \textbf {MIMD} \\ \hline
+	\end {tabular}
+    \end {quote}
+
+    \begin {itemize}
+	\item Flot d'instructions~: les unités de traitement
+	    exécutent toutes la même instruction, ou des instructions
+	    différentes
+
+	\item Flot de données~: chaque unité de traitement travaille
+	    sur la même donnée, ou sur des données différentes
+
+    \end {itemize}
+    \vspace* {3mm}
+    Beaucoup d'autres tentatives de classification depuis \\
+    \implique peu convaincantes
+\end {frame}
+
+\begin {frame} {Classification de Flynn -- SISD}
+    Single Instruction Stream, Single Data Stream
+
+    \begin {itemize}
+	\item une instruction unique...
+	\item ... qui travaille sur une donnée unique...
+	\item ... c'est l'ordinateur séquentiel classique !
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Classification de Flynn -- SIMD}
+    Single Instruction Stream, Multiple Data Stream
+
+    \vspace* {3mm}
+
+    Appliquer la même opération sur un ensemble de données~:
+    \begin {itemize}
+	\item calcul matriciel \\
+	    Ex: en Fortran 90~: \code {A(1,1:10) = B(:) + C(1:20:2)}
+	\item traitement d'images
+	\item traitement audio
+	\item etc.
+    \end {itemize}
+
+    \vspace* {2mm}
+
+    Mise en {\oe}uvre~:
+    \begin {itemize}
+	\item MasPar MP-1 (1990), MP-2 (1992)
+	\item Connection Machine CM-1 (64k proc, 1985), CM-2 (1987)
+	\item etc.
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Classification de Flynn -- SIMD}
+    Plus récemment~: extensions vectorielles pour architecture x86
+
+    \begin {center}
+	\small
+	\begin {tabular} {|c|l|c|} \hline
+	    \textbf {Nom} & \textbf {Signification} & \textbf {Date} \\ \hline
+	    MMX & MultiMedia eXtension & 1997 \\ \hline
+	    SSE & Streaming SIMD Extension & 1999 \\ \hline
+	    SSE2 & & 2001 \\ \hline
+	    SSE3 & & 2004 \\ \hline
+	    SSSE3 & Supplemental Streaming SIMD Extension & 2006 \\ \hline
+	    SSE4 & & 2007 \\ \hline
+	    AVE & Advanced Vector Extensions & 2011 \\ \hline
+	\end {tabular}
+    \end {center}
+
+    \vspace* {3mm}
+    \implique évolutions successives (et non changement radical)
+    
+\end {frame}
+
+\begin {frame} {Classification de Flynn -- SIMD}
+    Exemple : extension SSE sur x86
+
+    \begin {itemize}
+	\item 8 registres de 128 bits (XMM0 à XMM7)
+	\item chaque registre = 4 flottants sur 32 bits
+	\item opérations sur des registres = opérations sur 4 flottants
+	\item ex~: l'instruction ADDPS additionne 2 registres :
+
+	    \begin {center}
+		\includegraphics [width=.6\textwidth] {\inc/intel-sse}
+	    \end {center}
+
+	    \implique addition des 4 valeurs de XMM1 avec les 4 de XMM5
+	    en une seule instruction du processeur
+	    \\
+	    (ADDPS = Add Packed Single precision)
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Classification de Flynn -- MISD}
+    Multiple Instruction Stream, Single Data Stream
+
+    \vspace* {3mm}
+
+    Plusieurs instructions sur la même donnée~?
+
+    \begin {itemize}
+	\item pas d'exemple réellement mis en {\oe}uvre
+	\item cas d'école~: les \emph {pipelines} internes de processeurs
+
+	    \begin {itemize}
+		\item souvent vu comme une approximation de MISD
+
+		\item pas vraiment MISD, car la donnée change entre
+		    les unités fonctionnelles
+
+		\item mais intéressant à étudier \implique alors,
+		    pourquoi pas ici ?
+
+	    \end {itemize}
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Zoom sur le \emph {pipeline}}
+    Exemple~: pipeline du processeur Intel 486 (1989)
+
+    \vspace* {3mm}
+
+    Cinq unités fonctionnelles travaillent en parallèle~:
+
+    \begin {itemize}
+	\item FI~: Fetch Instructions \\
+	    {\small \implique lit une ligne (16 octets) depuis le cache
+	    d'instructions}
+
+	\item D1~: Main Instruction Decode \\
+	    {\small \implique première partie du décodage d'une instruction
+	    et préparation des actions de D2}
+
+	\item D2~: Secondary Instruction Decode \\
+	    {\small \implique fin du décodage d'instruction et calcul des
+	    adresses des opérandes en mémoire}
+
+	\item EX~: Execute \\
+	    {\small \implique exécution d'une instruction (une instruction
+	    complexe peut requérir plusieurs cycles de EX)}
+
+	\item WB~: Write Back \\
+	    {\small \implique écrit le résultat dans un registre ou
+	    dans le cache}
+
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Zoom sur le \emph {pipeline}}
+    Exécution d'une instruction~: chaque étage du \emph {pipeline}
+    prend un cycle d'horloge
+
+    \begin {center}
+	\includegraphics [width=.7\textwidth] {\inc/pipe-486a}
+    \end {center}
+
+    \vspace* {3mm}
+
+    Lorsque le \emph {pipeline} est plein, une nouvelle instruction
+    finit de s'exécuter à chaque cycle
+
+    \begin {center}
+	\includegraphics [width=.7\textwidth] {\inc/pipe-486b}
+    \end {center}
+
+\end {frame}
+
+\begin {frame} {Zoom sur le \emph {pipeline}}
+    Dans la réalité~:
+
+    \begin {itemize}
+	\item la lecture d'une ligne du cache n'est pas systématiquement
+	    nécessaire
+	\item certaines instructions nécessitent plusieurs EX \\
+	    (ex: \code {ADD mem,reg} \implique plusieurs accès à la mémoire)
+
+    \end {itemize}
+
+    \begin {center}
+	\includegraphics [width=.7\textwidth] {\inc/pipe-486c}
+    \end {center}
+
+\end {frame}
+
+\begin {frame} {Zoom sur le \emph {pipeline}}
+    Exemples de \emph {pipelines}~:
+
+    \begin {itemize}
+	\item Intel 486 (1989)~: cf précédemment
+	\item Intel Pentium Pro (1995)~: 3 instructions par cycle \\
+	    \implique 3 \emph {pipelines} en parallèle
+	\item ARM A8~: 2 \emph {pipelines} de 13 étages chacun \\
+	    (4 fetch + 4 decode + 5 ALU)
+	\item Intel Core i7 (2008)~: 14 étages
+
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Zoom sur le \emph {pipeline}}
+    Enjeux des \emph {pipelines}~: conserver le \emph {pipeline}
+    plein
+
+    \vspace* {5mm}
+
+    Exemples d'optimisations (Pentium Pro, 1995)~:
+
+    \begin {itemize}
+	\item \textbf {exécution spéculative}~: simuler l'exécution
+	    d'instructions, et sauver les résultats en fonction
+	    d'un test précédent
+	\item \textbf {prédiction de branchement}~: prédire le cas
+	    courant \\
+	    \implique exemple~: test de contrôle d'une boucle \code {while}
+	\item \textbf {\emph {out of order execution}}~: changer l'ordre
+	    des instructions dans le \emph {pipeline} pour optimiser son
+	    rendement
+	    \\
+	    \implique en conservant la sémantique du programme
+
+    \end {itemize}
+
+    \implique optimisations internes au processeur (en matériel)
+\end {frame}
+
+\begin {frame} {Classification de Flynn -- MIMD}
+    Multiple Instruction Stream, Multiple Data Stream
+
+    \vspace* {3mm}
+
+    Regroupe la plupart des architectures parallèles~:
+
+    \begin {itemize}
+	\item stations de travail en réseau (clusters, grilles de calcul)
+	\item ordinateurs massivement parallèles
+	\item serveurs multi-processeurs
+	\item etc.
+    \end {itemize}
+
+    \implique besoin d'une «~sous-classification~»
+
+    \vspace* {3mm}
+
+    Deux modèles extrêmes~:
+
+    \begin {itemize}
+	\item architectures à mémoire distribuée
+	\item architectures à mémoire partagée (ou mémoire globale)
+    \end {itemize}
+
+\end {frame}
+
+
+\begin {frame} {Classification de Flynn -- MIMD}
+    Architectures à mémoire distribuée~:
+
+    \begin {center}
+	\includegraphics [width=.6\textwidth] {\inc/mem-dist}
+    \end {center}
+
+    \begin {itemize}
+	\item chaque processeur dispose de sa propre mémoire
+	\item le réseau d'interconnexion peut être~:
+	    \begin {itemize}
+		\item un réseau spécialisé pour machine parallèle \\
+		    (cross-bar, grille, full-mesh, hypercube, Myrinet, etc.)
+		\item un réseau généraliste de type Ethernet \\
+		    \implique grilles de calcul, cluster de calcul
+	    \end {itemize}
+	\item communication par passage de messages
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Classification de Flynn -- MIMD}
+    Architectures à mémoire partagée~:
+
+    \begin {center}
+	\includegraphics [width=.6\textwidth] {\inc/mem-glob}
+    \end {center}
+
+    \begin {itemize}
+	\item la mémoire est partagée par tous les processeurs
+	    \begin {itemize}
+		\item un seul espace d'adressage pour tous les processeurs
+		\item éventuellement plusieurs bancs mémoire (performances)
+	    \end {itemize}
+	\item le réseau d'interconnexion peut être le bus de la machine
+	\item communication par l'intermédiaire de la mémoire
+	\item modèle non extensible au delà de quelques dizaines de
+	    processeurs
+	\item ordinateurs SMP = \emph {Symmetric Multi-Processing}
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Classification de Flynn -- MIMD}
+    Architecture hybride~: mémoire partagée distribuée
+
+    \begin {itemize}
+	\item DSM~: \emph {Distributed shared memory}
+	\item chaque processeur a sa propre mémoire \\
+	    \implique mémoire physiquement distribuée
+	\item mécanisme (logiciels / matériels) pour donner
+	    au programme l'illusion d'une mémoire unique \\
+	    \implique mémoire logiquement partagée
+
+	\item temps d'accès non uniforme \\
+	    NUMA~: \emph {Non-Uniform Memory Access}
+
+	    (par opposition aux architectures à mémoire partagée qui
+	    ont un temps d'accès uniforme~: UMA)
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Classification de Flynn -- MIMD}
+    Objet de ce cours~: architectures à mémoire partagée
+
+    \vfill
+
+    Architectures à mémoire distribuée~: cf cours de Systèmes
+    Distribués au semestre 6
+
+\end {frame}
+
+\begin {frame} {Classification de Flynn -- MIMD}
+    Composants d'un ordinateur à mémoire partagée~:
+
+    \begin {center}
+	\includegraphics [width=.6\textwidth] {\inc/arch-shm}
+    \end {center}
+
+    \begin {itemize}
+	\item arbitre de bus~:
+	    \begin {itemize}
+		\item arbitre l'accès au bus \\
+		    \implique un seul processeur a accès au bus
+		    à un instant donné
+		\item peut être embarqué dans les processeurs \\
+		    \implique arbitrage distribué
+	    \end {itemize}
+	\item cache~:
+	    \begin {itemize}
+		\item chaque processeur a son propre cache
+		\item chaque cache «~écoute~» le bus et invalide
+		    une donnée si un autre processeur modifie la
+		    case correspondante
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Classification de Flynn -- MIMD}
+    Et les processeurs multi-c{\oe}urs~?
+
+    \vspace* {3mm}
+    Intel a introduit deux termes~:
+    \begin {itemize}
+	\item \emph {hyperthreading} (Pentium 4, 2000)
+	\item \emph {multicore} (à partir du Pentium Extreme Edition, 2005)
+    \end {itemize}
+
+    \vspace* {3mm}
+
+    \implique technologies permises par l'augmentation du nombre de
+    transistors sur la puce (Loi de Moore)
+
+\end {frame}
+
+
+\begin {frame} {Classification de Flynn -- MIMD}
+    Hyperthreading~:
+
+    \vspace* {3mm}
+
+    \begin {minipage} {.40\textwidth}
+	\includegraphics [width=\textwidth] {\inc/intel-ht}
+    \end {minipage}
+    \begin {minipage} {.58\textwidth}
+	\begin {itemize}
+	    \item deux (ou plus) ensembles de registres contiennent l'état
+		du processeur «~virtuel~»
+
+	    \item les unités fonctionnelles (UF = additionneur, pipeline, etc.)
+		sont communes
+
+	    \item illusion de deux (ou plus) processeurs sur le même
+		carré de silicium
+
+	\end {itemize}
+
+    \end {minipage}
+
+    \vspace* {3mm}
+
+    Si une instruction du processeur virtuel 1 requiert l'UF
+    «~additionneur~», qui est utilisé par le processeur virtuel 2,
+    le 1 attend.
+
+\end {frame}
+
+\begin {frame} {Classification de Flynn -- MIMD}
+    Multic{\oe}urs~:
+
+    \vspace* {3mm}
+
+    \begin {minipage} {.40\textwidth}
+	\includegraphics [width=\textwidth] {\inc/intel-mc}
+    \end {minipage}
+    \begin {minipage} {.58\textwidth}
+	\begin {itemize}
+	    \item unités fonctionnelles (regroupées dans le
+		«~moteur d'exécution~») propres à chaque
+		c{\oe}ur
+
+	    \item certains composants restent uniques sur le
+		processeur physique
+
+	\end {itemize}
+
+    \end {minipage}
+
+    \vspace* {3mm}
+
+    Moins bonne utilisation du silicium (des unités fonctionnelles
+    peuvent être inutilisées à certains moments), mais meilleures
+    performances
+
+\end {frame}
+
+\begin {frame} {Classification de Flynn -- MIMD}
+    Exemple du processeur Intel Core i7 (2011)~:
+
+    \begin {center}
+	\includegraphics [width=.9\textwidth] {\inc/intel-i7}
+
+	\centerline {\tiny D'après «~Intel 64 and IA-32 Architectures Software Developer's Manual, vol 1~»}
+    \end {center}
+
+    \begin {itemize}
+	\item 4 c{\oe}urs sur le processeur physique
+	\item chaque c{\oe}ur est hyperthreadé avec 2 processeurs virtuels
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Classification de Flynn -- MIMD}
+    Cas courant~: un ordinateur parallèle, c'est~:
+
+    \begin {itemize}
+	\item une carte mère supportant plusieurs processeurs physiques
+	\item chaque processeur physique comporte plusieurs processeurs
+	    virtuels (hyperthreadés et/ou multic{\oe}urs)
+    \end {itemize}
+
+    De plus, on peut combiner ce type d'ordinateurs avec un réseau
+    d'interconnexion pour réaliser une grille de calcul
+\end {frame}
+
+\begin {frame} {Synthèse}
+    Les architectures parallèles présentent une grande diversité
+
+    \vfill
+
+    Le cours de systèmes concurrents est centré sur les architectures
+    disposant d'une mémoire partagée, quelque soit le contexte
+    (multic{\oe}urs, processeurs distincts, etc.)
+
+\end {frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Quantification
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Quantification}
+
+\begin {frame} {Quantification}
+    Comment quantifier les aspects liés au parallélisme~?
+
+    \begin {itemize}
+	\item grain
+	\item latence
+	\item accélération (\emph {speedup\/})
+	\item rendement
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Quantification -- Grain}
+    Grain = taille des actions s'exécutant en parallèle \\
+    \implique limitées par des communications ou des synchronisations
+
+    \begin {itemize}
+	\item grain fin (1 à 10 instructions)
+
+	    \begin {itemize}
+		\item Ex: \code {A(1,1:10) = B(:) + C(1:20:2)}
+		\item Les 10 cases de \code {A} peuvent être calculées en
+		    parallèle
+	    \end {itemize}
+	    \implique facile à gérer (matériel)
+
+	\item gros grain (au delà d'un millier d'instructions environ)
+
+	    \begin {itemize}
+		\item Ex: \code {send\_page\_web (request)}
+		\item Traitement de plusieurs requêtes Web en parallèle
+	    \end {itemize}
+	    \implique gestion par le programmeur
+
+	% \item grain ultra-fin (< 1 instruction)~: \emph {pipeline}
+
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Quantification -- Latence}
+    Latence de communication / de synchronisation~: temps nécessaire pour
+    réaliser une communication (de taille nulle) ou une synchronisation
+    entre processeurs
+
+    \vspace* {3mm}
+
+    La latence est une caractéristique de l'architecture matérielle~:
+
+    \begin {itemize}
+	\item les architectures à mémoire distribuée ont en général
+	    une latence de communication importante
+	    \\
+	    (une synchronisation consiste en une communication)
+
+	\item les architectures à mémoire centralisée ont en général
+	    une faible latence de synchronisation
+	    \\
+	    communication = accès mémoire \implique latence minime
+
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Quantification -- Grain et latence}
+    Grain et latence sont liés~:
+
+    \begin {itemize}
+	\item plus la latence est élevée :
+	    \begin {itemize}
+		\item plus on cherche à rendre les tâches indépendantes
+		\item moins on communique de données / moins on synchronise
+	    \end {itemize}
+	    \implique plus le grain est gros
+
+	\item à l'inverse, moins la latence est élevée~:
+
+	    \begin {itemize}
+		\item moins ça coûte cher de synchroniser les actions
+	    \end {itemize}
+	    \implique plus on peut se permettre d'affiner le grain
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Quantification -- Grain et latence}
+
+    Le grain est à la fois~:
+
+    \begin {itemize}
+	\item une caractéristique de l'architecture matérielle
+	    \\
+	    \implique dépend de la latence
+
+	\item une caractéristique du problème
+	    \\
+	    \implique structuration en actions indépendantes
+
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Quantification -- Accélération / \emph {Speedup}}
+    Comment quantifier le gain de performances résultant de l'utilisation
+    du parallélisme~?
+
+    \vspace* {3mm}
+
+    \begin {quote}
+	Accélération (\emph {Speedup\/}) : $S(n)=T_s / T_p(n)$
+    \end {quote}
+
+    Explication~:
+    \begin {itemize}
+	\item $T_s$ = temps de la version séquentielle du programme
+	\item $T_p (n)$ = temps de la version parallèle du programme
+	    sur $n$ processeurs
+
+    \end {itemize}
+
+    \vspace* {3mm}
+    \small
+    Note~: le \emph {speedup} peut s'appliquer à d'autres
+    domaines.
+    \\
+    Exemple~: $S=T_m / T_c$ mesure l'accélération entre $T_m$ (temps
+    mis pour parcourir une certaine distance en marchant) et $T_c$ (temps
+    mis pour cette même distance en courant).
+    \\
+    $S = 2$ \implique je vais 2 fois plus vite en courant qu'en marchant
+
+\end {frame}
+
+\begin {frame} {Quantification -- Accélération / \emph {Speedup}}
+    Exemple~:
+    soit un programme composé de 3 actions ($a_1$, $a_2$, $a_3$) de 10
+    ms chacune
+
+    \begin {itemize}
+	\item $T_s = 30$ ms
+	\item sur 2 processeurs, $T_p (2) = 20$ ms
+	    \begin {itemize}
+		\item processeur $P_1$ exécute $a_1$ et $a_3$
+		\item processeur $P_2$ exécute $a_2$
+	    \end {itemize}
+	\item donc, $S(2) = 30/20 = 1,5$
+	\item sur 4 processeurs, $T_p(3) = 10$ ms, donc $S(3) = 30/10 = 3$
+    \end {itemize}
+
+    \vspace* {3mm}
+
+    Dans cet exemple, on suppose qu'on n'a pas d'\emph {overhead} de
+    synchronisation entre les actions (rarement le cas...)
+
+\end {frame}
+
+\begin {frame} {Quantification -- Accélération / \emph {Speedup}}
+    \begin {minipage} {.53\textwidth}
+	\small
+	\begin {itemize}
+	    \item $S(n) = n$ : \emph {speedup} linéaire, cas optimal
+	    \item $S(n) \in [1..n]$ : cas standard
+	    \item $S(n) < 1$ : version parallèle plus
+		lente que version séquentielle
+		\\
+		\implique problème !
+	    \item $S(n) > n$ : exceptionnel !
+		\begin {itemize}
+		    \item algorithmes séquentiel et parallèle
+			différents
+
+		    \item effet de cache
+		    \item ...
+		\end {itemize}
+
+	\end {itemize}
+    \end {minipage}
+    \hfill
+    \begin {minipage} {.45\textwidth}
+	\includegraphics [width=\textwidth] {\inc/speedup}
+    \end {minipage}
+\end {frame}
+
+\begin {frame} {Quantification -- Loi d'Amdahl}
+    Loi d'Amdahl~: borne supérieure de l'accélération
+
+    \begin {quote}
+	Si un programme comporte une fraction $f$ (avec $0 \leq f \leq
+	1$) de son temps d'exécution séquentiel qui ne peut être
+	parallélisée, alors $\forall n > 0, S(n) \leq 1/f$
+
+    \end {quote}
+\end {frame}
+
+\begin {frame} {Quantification -- Loi d'Amdahl}
+
+    Exemple~:
+    \begin {center}
+	\includegraphics [width=.6\textwidth] {\inc/amdahl}
+    \end {center}
+
+    D'où $S(4) = 5/2 = 2,5$ \\
+    La loi d'Amdahl prédit que $S(n) \leq 5, \forall n$
+
+\end {frame}
+
+\begin {frame} {Quantification -- Efficacité}
+    Est-ce qu'il est intéressant d'utiliser un ordinateur parallèle~?
+
+    \vspace* {3mm}
+
+    \begin {quote}
+	Efficacité (ou rendement) : $E(n)=\frac {T_s} {n T_p(n)}$
+    \end {quote}
+
+    \implique taux d'utilisation des processeurs
+
+    \vspace* {3mm}
+
+    Exemple précédent~: $E(4) = 5 / (4 \times 2) = 5/8 = 0,625$
+
+    \small
+    \begin {itemize}
+	\item normalement, $E(n) \in [0..1]$
+	\item plus $E(n)$ est proche de 1, meilleure est l'utilisation
+	    des processeurs
+	\item plus $E(n)$ est proche de 0, moins les processeurs sont
+	    utilisés
+	\item $E(n) > 1$ : \emph {speedup} superlinéaire
+    \end {itemize}
+
+\end {frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Parallélisme caché
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Parallélisme caché}
+
+\begin {frame} {Parallélisme caché}
+    Le matériel \emph {cache} souvent le parallélisme~:
+
+    \begin {itemize}
+	\item architectures superscalaires
+	\item bancs mémoire
+	\item \emph {pipeline}
+	\item multiples unités fonctionnelles pour l'exécution d'une
+	    instruction
+    \end {itemize}
+
+    Cacher le parallélisme \implique préserver la sémantique
+    «~séquentielle~» exprimée dans le programme
+
+\end {frame}
+
+\begin {frame} {Parallélisme apparent}
+    Si on souhaite exploiter du parallélisme à plus haut niveau,
+    il faut l'expliciter~:
+
+    \begin {itemize}
+	\item avec le système~: mémoire partagée, processus, threads, etc.
+	\item avec un langage~: Fortran 90, OpenMP, etc.
+    \end {itemize}
+
+    ... ou alors recourir à la parallélisation automatique...
+\end {frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Parallélisme virtuel
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Parallélisme réel/virtuel}
+
+\begin {frame} {Parallélisme réel/virtuel}
+    Deux sortes de parallélisme~:
+    \begin {itemize}
+	\item réel~: offert par le matériel
+	\item virtuel~: offert par le système d'exploitation \\
+	    (multiples processus, multiples threads)
+    \end {itemize}
+
+    \vspace* {3mm}
+
+    \implique problèmes de concurrence identiques dans les
+    deux cas \\
+    Condition~: partage de mémoire entre fils d'exécution distincts
+
+\end {frame}

@@ -1,0 +1,160 @@
+%
+% Historique
+%   2014/08/30 : pda : conception
+%
+
+\def\inc{inc6-thsync}
+
+\titreA {Autres mécanismes de synchronisation de threads}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Introduction}
+
+\begin {frame} {Introduction}
+    Mécanismes de synchronisation de threads déjà rencontrés~:
+
+    \begin {enumerate}
+	\item \emph {mutex}~: mécanisme de base
+	\item \emph {spin}~: analogue au \emph {mutex}, mais avec
+	    attente active
+	\item sémaphore POSIX (non spécifique aux threads)
+    \end {enumerate}
+
+    Les threads offrent deux autres mécanismes~:
+    
+    \begin {enumerate}
+	\addtocounter {enumi} {3}
+	\item conditions (\emph {condition variables\/})
+	\item verrous lecteur/écrivain
+    \end {enumerate}
+
+\end {frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Conditions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Conditions}
+
+\begin {frame} {Conditions}
+    Problème de synchronisation fréquent~:
+
+    \begin {itemize}
+	\item un thread attend un événement ou une condition
+	\item la condition est matérialisée par une variable
+	\item un autre thread signale que l'événement est arrivé
+	    ou que la condition est remplie
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Conditions}
+    Exemple de solution~:
+
+    \begin {itemize}
+	\item le premier thread attend que la condition soit réalisée~:
+
+	    \begin {tabbing}
+		\hspace* {10mm} \= \hspace* {5mm} \= \kill
+		\> cond $\leftarrow$ 0 \\
+		\> tant que cond = 0 \\
+		\> \> ;
+	    \end {tabbing}
+
+	\item lorsque la condition est réalisée, le deuxième thread 
+	    fait~:
+
+	    \begin {tabbing}
+		\hspace* {10mm} \= \hspace* {5mm} \= \kill
+		\> cond $\leftarrow$ 1 \\
+	    \end {tabbing}
+
+    \end {itemize}
+
+    \vspace* {3mm}
+
+    \implique cette solution utilise l'attente active !
+
+    \vspace* {3mm}
+
+    Exercice~: implémenter cela avec des \emph {mutex} POSIX pour
+    réaliser une attente passive...
+
+\end {frame}
+
+\begin {frame} [fragile] {Conditions}
+    Solution simple~: utiliser les conditions POSIX
+
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle, firstline=4, lastline=21] {\inc/cond.c}
+\end{frame}
+
+\begin {frame} {Conditions}
+    \begin {itemize}
+	\item une condition est forcément associée à un \emph {mutex} \\
+	    \implique l'accès à la variable est protégé par le \emph {mutex}
+
+	\item le \emph {mutex} n'est pas déverrouillé lors de l'attente
+
+	    \begin {itemize}
+		\item déverrouillage implicite pendant
+		    \code {pthread\_cond\_wait}
+		\item re-verrouillage implicite à la sortie de
+		    \code {pthread\_cond\_wait}
+		\item \implique évite les sections critiques
+
+	    \end {itemize}
+
+	\item le réveil peut être provoqué par un autre événément \\
+	    \implique toujours vérifier la variable (cf \code {while}
+	    dans l'exemple)
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Conditions}
+    \begin {itemize}
+	\item \code {\small int pthread\_cond\_init (pthread\_cond\_t *, pthread\_condattr\_t *)}
+	    \\
+	    ou utilisation de \code {\small {PTHREAD\_COND\_INITIALIZER}}
+	\item \code {\small int pthread\_cond\_destroy (pthread\_cond\_t *)}
+	\item \code {\small int pthread\_cond\_wait (pthread\_cond\_t *, pthread\_mutex\_t *)}
+	\item \code {\small int pthread\_cond\_timedwait (pthread\_cond\_t *, pthread\_mutex\_t *, struct timespec *habs)}
+
+	    Avec \code {\small struct timespec \{ time\_t tv\_sec; long tv\_nsec; \}}
+	\item \code {\small int pthread\_cond\_signal (pthread\_cond\_t *)}
+	\item \code {\small int pthread\_cond\_broadcast (pthread\_cond\_t *)}
+    \end {itemize}
+\end {frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Lecteurs/écrivains
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Verrous lecteurs/écrivains}
+
+\begin {frame} [fragile] {Lecteurs/écrivains}
+    Problème classique de synchronisation lecteurs/écrivains~: \\
+    \implique solution simple avec les threads POSIX
+
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle, firstline=4] {\inc/rw.c}
+
+    \begin {itemize}
+	\item implémentation : priorité aux écrivains
+    \end {itemize}
+\end{frame}
+
+\begin {frame} {Verrous lecteurs/écrivains}
+    \begin {itemize}
+	\item \code {\small int pthread\_rwlock\_init (pthread\_rwlock\_t *, pthread\_rwlockattr\_t *)}
+	\item \code {\small int pthread\_rwlock\_destroy (pthread\_rwlock\_t *)}
+	\item \code {\small int pthread\_rwlock\_rdlock (pthread\_rwlock\_t *, pthread\_mutex\_t *)}
+	\item \code {\small int pthread\_rwlock\_wrlock (pthread\_rwlock\_t *, pthread\_mutex\_t *)}
+	\item \code {\small int pthread\_rwlock\_tryrdlock (pthread\_rwlock\_t *, pthread\_mutex\_t *)}
+	\item \code {\small int pthread\_rwlock\_trywrlock (pthread\_rwlock\_t *, pthread\_mutex\_t *)}
+	\item versions avec \code {timedrdlock} et \code {timedwrlock}
+	\item \code {\small int pthread\_rwlock\_unlock (pthread\_rwlock\_t *)}
+    \end {itemize}
+\end {frame}

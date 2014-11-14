@@ -1,0 +1,184 @@
+#!/bin/sh
+
+#
+# Extrait des informations de la CPUDB et génère les sources GNUPLOT
+# correspondants.
+# cf http://cpudb.stanford.edu/
+#
+# Nécessite une base PostgreSQL active, ainsi que les moyens
+#	export PGUSER=machin PGPASSWORD=truc
+#	cpudb-extract ../cpudb inc1-intro/cpu-
+#
+# Historique
+#
+
+if [ $# != 2 ]
+then
+    echo "usage: $0 <cpudb-dir> <gen-prefix>" >&2
+    echo "	ex: $0 ../cpudb/ inc1-intro/cpu-" >&2
+    exit 1
+fi
+
+CPUDBDIR=$1
+PREFIX=$2
+PROCCSV=$CPUDBDIR/processor.csv
+TECHNOCSV=$CPUDBDIR/technologie.csv
+PGDATABASE=cpudb
+
+PSQLFMT="--no-align --field-separator=, -t"
+
+export PGDATABASE
+
+destroy_database ()
+{
+    dropdb $PGDATABASE 2> /dev/null
+}
+
+load_database ()
+{
+    destroy_database
+
+    createdb $PGDATABASE
+
+    psql $PSQLFMT -q <<EOF
+	CREATE TABLE proc
+	(
+	    id				INT,
+	    created_at			TIMESTAMP,
+	    updated_at			TIMESTAMP,
+	    manufacturer_id		INT,
+	    processor_family_id		INT,
+	    microarchitecture_id	INT,
+	    code_name_id		INT,
+	    technology_id		INT,
+	    cache_on_id			INT,
+	    cache_off_id		INT,
+	    die_photo_id		INT,
+	    model			TEXT,
+	    date			DATE,		-- date introduction
+	    clock			REAL,		-- freq en MHz
+	    max_clock			INT,
+	    hw_nthreadspercore		INT,
+	    hw_ncores			INT,
+	    tdp				REAL,		-- thermal dissip en W
+	    source			TEXT,
+	    bus_width			INT,
+	    transistors			REAL,		-- nb de transistors
+	    die_size			INT,
+	    vdd_low			REAL,
+	    vdd_high			REAL,
+	    PRIMARY KEY (id)
+	) ;
+
+	\copy proc FROM '$PROCCSV' WITH ( FORMAT CSV, HEADER true)
+
+	-- ajouter colonne year
+	ALTER TABLE proc ADD COLUMN year INT ;
+	UPDATE proc SET year = EXTRACT (YEAR FROM date)
+				WHERE date IS NOT NULL ;
+
+	SELECT COUNT(*) || ' processors loaded' FROM proc ;
+	SELECT COUNT(*) || ' with a date' FROM proc WHERE date IS NOT NULL ;
+
+	CREATE TABLE techno
+	(
+	    id				INT,
+	    created_at			TIMESTAMP,
+	    updated_at			TIMESTAMP,
+	    manufacturer_id		INT,
+	    name			TEXT,
+	    year			INT,
+	    technology			TEXT,
+	    feature_size		REAL,		-- en microns
+	    channel_length		REAL,
+	    metal_layers		INT,
+	    metal			TEXT,
+	    gate_type			TEXT,
+	    vdd_nom			REAL,
+	    vth				REAL,
+	    source			TEXT,
+	    PRIMARY KEY (id)
+	) ;
+
+	\copy techno FROM '$TECHNOCSV' WITH ( FORMAT CSV, HEADER true)
+
+	SELECT COUNT(*) || ' technologies loaded' FROM techno ;
+EOF
+}
+
+extract_max_frequency ()
+{
+    psql $PSQLFMT -c "SELECT year, MAX (clock) FROM proc
+    				WHERE year IS NOT NULL
+				GROUP BY year
+				ORDER BY year"
+}
+
+extract_all_frequencies ()
+{
+    psql $PSQLFMT -c "SELECT year, clock FROM proc
+    				WHERE year IS NOT NULL
+				ORDER BY year"
+}
+
+extract_max_transistors ()
+{
+    psql $PSQLFMT -c "SELECT year, MAX (transistors) FROM proc
+    				WHERE year IS NOT NULL
+				GROUP BY year
+				ORDER BY year"
+}
+
+extract_min_gravure ()
+{
+    psql $PSQLFMT -c "SELECT proc.year, MIN (feature_size) FROM proc, techno
+    				WHERE proc.technology_id = techno.id
+				    AND proc.year IS NOT NULL
+				GROUP BY proc.year
+				ORDER BY proc.year"
+}
+
+convert_csv_to_dat ()
+{
+    sed 's/,/ /g'
+}
+
+# $1 = ylabel (sans apostrophe)
+# $2 = fonction associee
+convert_dat_to_gnuplot ()
+{
+    echo "set terminal pdfcairo font 'Arial,12' linewidth 2"
+    echo "set logscale y 10"
+    echo "set grid x y mx my"
+    echo "set pointsize 0.5"
+    echo "set key off"
+    echo "set ylabel '$1'"
+    f=""
+    if [ $# = 2 ]
+    then
+	echo "f(x)=2**((x-1989)/2)"
+	f=", f(x)"
+    fi
+    echo "plot '-' using 1:2 with points $f"
+    cat
+    echo "e"
+}
+
+load_database
+# extract_all_frequencies | convert_csv_to_dat > ${PREFIX}freq.dat
+# extract_max_transistors | convert_csv_to_dat > ${PREFIX}transist.dat
+# extract_min_gravure | convert_csv_to_dat > ${PREFIX}gravure.dat
+
+extract_all_frequencies | convert_csv_to_dat | \
+	convert_dat_to_gnuplot "Frequence (MHz)" \
+	> ${PREFIX}freq.gnu
+extract_max_transistors | convert_csv_to_dat | \
+	convert_dat_to_gnuplot "Nombre max de transistors (millions)" \
+		"2**((x-1989)/2)" \
+	> ${PREFIX}transist.gnu
+extract_min_gravure | convert_csv_to_dat | \
+	convert_dat_to_gnuplot "Finesse de gravure (micros)" \
+	> ${PREFIX}gravure.gnu
+
+destroy_database
+exit 0
