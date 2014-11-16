@@ -48,6 +48,7 @@ FIGintro = \
 	inc1-intro/cpu-transist.pdf \
 	inc1-intro/cpu-gravure.pdf \
 	inc1-intro/motiv-scal.pdf \
+	inc1-intro/arbre-exec.pdf \
 	inc1-intro/intel-sse.pdf \
 	inc1-intro/pipe-486a.pdf \
 	inc1-intro/pipe-486b.pdf \
