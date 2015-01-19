@@ -1,0 +1,120 @@
+%
+% Fichier de style pour les exercices de TD et de TP
+%
+% Utilisation :
+%	\usepackage [corrections,latin9] {tdpda}
+%		- corrections : inclure les corrections dans le texte
+%			(par defaut : pas de corrections)
+%		- latin9 : utilise le jeu de caracteres ISO 8859-15
+%			(par defaut : utilise UTF-8)
+%
+%	\titrequestions {Exercice}
+%		- change le titre des questions (par defaut : "Exercice")
+%
+%	\begin {qcm}
+%	    \item ...
+%	\end {qcm}
+%		- itemize avec des cases a cocher
+%
+% Historique
+%   2011/11/30 : pda : conception
+%   2014/12/03 : pda : ajout commande \titrequestions (v1.2)
+%   2014/12/03 : pda : ajout env qcm (v1.2)
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Identification
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NeedsTeXFormat {LaTeX2e}
+
+\ProvidesPackage {tdpda} [2014/12/03 1.2 (pda)]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Options
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\@corrections{}	% par defaut : pas de corrections
+\def\@inputenc{utf8}	% par defaut : encodage UTF-8
+
+\DeclareOption {corrections} {\def\@corrections{nosolutionfiles}}
+\DeclareOption {correction}  {\def\@corrections{nosolutionfiles}}
+\DeclareOption {utf8}    {\def\@inputenc{utf8}}
+\DeclareOption {latin9}  {\def\@inputenc{latin9}}
+
+\ProcessOptions
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Packages utiles
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage [francais] {babel}
+\RequirePackage [\@inputenc] {inputenc}
+\RequirePackage [T1] {fontenc}
+\raggedbottom   % par defaut, babel aligne les bas de page. Pas booooo !
+
+\RequirePackage [a4paper, margin=20mm] {geometry}
+
+\frenchspacing
+\parskip=2mm
+\parindent=0mm
+
+\RequirePackage {graphicx}
+\RequirePackage {epsfig}
+\RequirePackage {palatino}
+\RequirePackage {moreverb}
+\RequirePackage {marvosym}		% \EUR
+\RequirePackage {synttree}
+\RequirePackage {listings}
+\RequirePackage {amssymb}		% pour $\Box$ dans l'env qcm
+
+\lstset {language=c, basicstyle=\footnotesize\ttfamily, keywordstyle=}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Traitement des corrections
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newenvironment {corexo} {\begin {quote}\small\sf\em} {\end {quote}}
+
+\RequirePackage [\@corrections] {answers}
+
+\Newassociation {correction} {corexo} {corrige}
+
+\Opensolutionfile {corrige} [ignore]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% L'en-tete
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% #1 : matiere enseignee
+% #2 : diplome et semestre
+% #3 : annee
+% #4 : numero et intitule du TD
+
+\newcommand {\entete} [4] {
+    Universit\'e de Strasbourg \hfill #1 \\	% pas de caracteres iso ou utf
+    #2 \hfill #3
+    \par
+    \begin {center} \bf\huge #4 \end {center}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Questions/Exercices
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand {\titrequestions} [1] {\def\@titrequestion{#1}}
+\titrequestions {Exercice}
+
+\newcounter {question}
+\newcommand {\question} {
+    \refstepcounter {question}
+    \section* {{\@titrequestion} \thequestion}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Environnement QCM
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newenvironment {qcm}
+    {\begin {itemize} \renewcommand {\labelitemi} {$\Box$}}
+    {\end {itemize}}
