@@ -109,6 +109,40 @@ Que se passe-t-il lorsque le fichier est ouvert {\em après} l'appel à
 
 \question
 
+Écrivez un programme admettant les arguments suivants~:
+
+\begin {quote}
+    \texttt {parexec \textit {n cmd arg ...}}
+\end {quote}
+
+Votre programme doit appeller $n$ fois (avec \texttt {fork} et \texttt
+{execvp}) la commande spécifiée en paramètre en lui passant les
+arguments (en nombre non connu) fournis, en ajoutant le rang d'appel $i$
+($0 \leq i < n$) comme argument supplémentaire à la fin.
+
+Ainsi, l'appel~:
+
+\begin {quote}
+    \texttt {parexec 5 sh tester toto}
+\end {quote}
+
+doit provoquer l'exécution de~:
+
+\begin {itemize}
+    \item \texttt {sh tester toto 0}
+    \item \texttt {sh tester toto 1}
+    \item ...
+    \item \texttt {sh tester toto 4}
+\end {itemize}
+
+Les $n$ commandes doivent être lancées en parallèle, et le code de
+retour de \texttt {parexec} doit être égal à 0 si toutes les commandes
+réussissent (i.e. renvoient un code de retour nul), ou 1 si au moins
+l'une des commandes échoue (i.e. renvoie un code de retour non nul).
+
+
+\question
+
 Écrivez un programme qui~:
 
 \begin {enumerate}
