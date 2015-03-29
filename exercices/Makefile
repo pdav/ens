@@ -11,6 +11,7 @@
 # Historique
 #   1993/01/25 : pda : conception
 #   2013/08/27 : pda : nettoyage pour svnpeda
+#   2015/03/29 : pda : ajout theme mem
 #
 
 THEMES = \
@@ -23,9 +24,10 @@ THEMES = \
 	theme-07-ps-envproc.tex \
 	theme-08-ps-signaux.tex \
 	theme-09-ps-tubes.tex \
-	theme-10-ps-ipc-sysv.tex msg.pdf \
-	theme-11-threads.tex \
-	theme-12-sockets.tex
+	theme-10-ps-mem.tex \
+	theme-11-ps-ipc-sysv.tex msg.pdf \
+	theme-12-threads.tex \
+	theme-13-sockets.tex
 
 INCLUDES = ue.tex annee.tex $(THEMES)
 

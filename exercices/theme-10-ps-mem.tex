@@ -1,0 +1,54 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% GESTION MEMOIRE
+%
+% Historique
+%   2015/03/29 : pda : création
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\td {Système~: Gestion mémoire}
+
+
+\question
+
+Quelles sont, sur \texttt {turing}, les tailles des types suivants~:
+\begin {itemize}
+    \item \texttt {int}
+    \item \texttt {char}
+    \item \texttt {char *}
+    \item \verb|struct { char c ; char *pc ; int i ; }|
+    \item \verb|struct { char c ; char *pc ; int i ; } *|
+\end {itemize}
+
+Expliquez ce que vous constatez pour la taille de la structure.
+
+
+\question
+
+Donnez la définition d'une macro \verb|ADRESSE_RELATIVE_DE(s,c)|
+permettant d'obtenir l'adresse du champ \texttt {c} d'une structure
+\texttt {s} relativement au début de la structure. L'adresse relative
+renvoyée par votre macro doit être exprimée en octets.
+
+
+\question
+
+Pour détecter les corruptions mémoire, on propose d'utiliser la
+technique dite du «~canari~»~: à chaque fois qu'une zone mémoire est
+allouée, \texttt {malloc} initialise un espace avant et un espace après
+avec des valeurs convenues\footnote {On prendra par exemple les 8 octets
+\texttt {0x01}, \texttt {0x23} ... \texttt {0xef}.}
+(fixes).  Lorsqu'on libère la zone, \texttt {free} vérifie que ces
+valeurs convenues sont toujours présentes. Si elles ne le sont pas,
+\texttt {free} signale l'erreur.
+
+Écrivez les fonctions \texttt {mon\_malloc} et \texttt {mon\_free}
+qui fonctionnent comme décrit ci-dessus. Vos fonctions appelleront
+les vraies \texttt {malloc} et \texttt {free} pour allouer et libérer
+effectivement la mémoire.
+
+
+\question
+
+À l'aide de la primitive système \texttt {mmap}, écrivez un programme
+qui prend en argument un nom de fichier et compte le nombre de lignes
+qui s'y trouvent.
