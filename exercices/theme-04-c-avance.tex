@@ -22,14 +22,15 @@
 \question
 %%%% Dependances: stdarg
 
-Écrivez en C ANSI une fonction {\tt afficher\_couples}~:
+Écrivez en C une fonction {\tt afficher\_couples}~:
 
 \begin {quote}
     \verb|void afficher_couples (int nbcouples, ...)|
 \end {quote}
 
 qui prend un nombre de couples, puis une suite de couples
-(chaîne, entier) à afficher sur la sortie standard.
+(chaîne, entier) à afficher sur la sortie standard. Votre fonction
+doit prendre un nombre variable d'arguments (voir \texttt {stdarg.h})
 
 
 \question
@@ -152,6 +153,13 @@ seul symbole ou en ne le définissant pas.
 
 \question
 
+Sur Linux, la page de manuel {\em p} du chapitre {\em n} est localisée
+dans le fichier de nom
+{\tt /usr/share/man/man{\em n}.gz/{\em p}.{\em n}}. Cette page est
+compressée, et la commande pour la formatter est~:
+\verb:gunzip | nroff -man: en supposant que le fichier est présenté sur
+l'entrée standard.
+
 Sur HP-UX, la page de manuel {\em p} du chapitre {\em n} est localisée
 dans le fichier de nom
 {\tt /usr/share/man/man{\em n}.Z/{\em p}.{\em n}}. Cette page est
@@ -167,9 +175,9 @@ compressée, et la commande pour la formatter est~:
 l'entrée standard.
 
 Écrivez une commande {\tt man}. Votre programme doit être portable
-sur HP-UX ou sur SunOS, en utilisant le symbole {\tt hpux} ou {\tt sun}
-du préprocesseur. Vous utiliserez la fonction {\tt popen} pour formatter
-la page de manuel.
+sur Linux, HP-UX ou sur SunOS, en utilisant le symbole {\tt linux},
+{\tt hpux} ou {\tt sun} du préprocesseur. Vous utiliserez la fonction
+{\tt popen} pour formatter la page de manuel.
 
 Rappel~: la vraie commande  {\tt man} admet 1 ou 2 paramètres~:
 
@@ -182,89 +190,68 @@ est cherchée dans l'ensemble des chapitres. On supposera que le chapitre
 est un entier entre 1 et 8.
 
 
-\question
-
-Analysez les fichiers {\tt Makefile} ci-après (voir pages~\pageref
-{makefile} à~\pageref {makefile-fin}), et répondez aux questions
-suivantes~:
-
-\begin {enumerate}
-    \item Si on appelle {\tt make} à partir du répertoire {\tt demo/lib},
-	quel est le fichier créé~? Même question pour les répertoires
-	{\tt demo/src} et {\tt demo/doc}.
-
-    \item Expliquez l'enchaînement des appels à {\tt make} lors de
-	l'appel initial à {\tt make} dans le répertoire {\tt demo}.
-
-    \item Dans le fichier {\tt demo/Makefile}, pourquoi les {\tt
-	antislashes} (\verb:\:) sont-ils nécessaires dans la cible {\tt
-	subdirs}~?
-
-    \item Expliquez l'action effectuée lors de la construction de la
-	cible {\tt pcc.o} si {\tt make} est appelé depuis le répertoire
-	{\tt demo/src}. Même question si {\tt make} est appelé depuis le
-	répertoire {\tt demo}.
-
-    \item Comment fait-on pour adapter l'ensemble du programme à une
-	autre version de système d'exploitation~? Où sont concentrées
-	les modifications à apporter~? Pourquoi~?
-
-    \item Expliquez les actions effectuées lors de la construction de la
-	cible {\tt manuel.ps}.
-
-    \item Pourquoi le fichier {\tt demo.o} (répertoire {\tt demo/src}) est
-	construit avec une méthode différente des autres fichiers~?
-
-\end {enumerate}
-
-
-
-\question
-%%%% Dependances: malloc, sbrk, gestion mémoire
-
-\`A l'aide de la primitive système {\tt sbrk}, écrivez une version
-des fonctions de librairie {\tt malloc} et {\tt free}.
-
-Votre version doit tenir à jour une liste de blocs mémoire, triée
-selon les adresses. Chaque bloc
-est soit alloué, soit libre. Cette liste est gérée selon l'algorithme
-du ``{\em First Fit\/}'', c'est à dire que lors d'une demande
-d'alloction, le premier emplacement libre suffisamment grand est
-choisi. S'il n'y a pas assez de mémoire, une page de 4096 octets
-est demandée au système avec {\tt sbrk}. Lorsqu'un emplacement est
-libéré avec {\tt free}, on fusionne cet emplacement avec les
-emplacements adjacents s'ils étaient eux-mêmes libres.
-
-Pour simplifier, on ne tiendra pas compte des contraintes
-d'alignement.
-
-
-\cleardoublepage
-    \label {makefile}
-
-\subsection* {Fichier demo/Makefile}
-
-{\small
-\listing {mf1}
-}
-
-\clearpage
-\subsection* {Fichier demo/lib/Makefile}
-
-{\small
-\listing {mf2}
-}
-
-\clearpage
-\subsection* {Fichier demo/src/Makefile}
-
-{\small
-\listing {mf3}
-}
-
-\subsection* {Fichier demo/doc/Makefile}
-
-{\small
-\listing {mf4}
-}
-\label {makefile-fin}
+%\question
+%
+%Analysez les fichiers {\tt Makefile} ci-après (voir pages~\pageref
+%{makefile} à~\pageref {makefile-fin}), et répondez aux questions
+%suivantes~:
+%
+%\begin {enumerate}
+%    \item Si on appelle {\tt make} à partir du répertoire {\tt demo/lib},
+%	quel est le fichier créé~? Même question pour les répertoires
+%	{\tt demo/src} et {\tt demo/doc}.
+%
+%    \item Expliquez l'enchaînement des appels à {\tt make} lors de
+%	l'appel initial à {\tt make} dans le répertoire {\tt demo}.
+%
+%    \item Dans le fichier {\tt demo/Makefile}, pourquoi les {\tt
+%	antislashes} (\verb:\:) sont-ils nécessaires dans la cible {\tt
+%	subdirs}~?
+%
+%    \item Expliquez l'action effectuée lors de la construction de la
+%	cible {\tt pcc.o} si {\tt make} est appelé depuis le répertoire
+%	{\tt demo/src}. Même question si {\tt make} est appelé depuis le
+%	répertoire {\tt demo}.
+%
+%    \item Comment fait-on pour adapter l'ensemble du programme à une
+%	autre version de système d'exploitation~? Où sont concentrées
+%	les modifications à apporter~? Pourquoi~?
+%
+%    \item Expliquez les actions effectuées lors de la construction de la
+%	cible {\tt manuel.ps}.
+%
+%    \item Pourquoi le fichier {\tt demo.o} (répertoire {\tt demo/src}) est
+%	construit avec une méthode différente des autres fichiers~?
+%
+%\end {enumerate}
+%
+%
+%\cleardoublepage
+%    \label {makefile}
+%
+%\subsection* {Fichier demo/Makefile}
+%
+%{\small
+%\listing {mf1}
+%}
+%
+%\clearpage
+%\subsection* {Fichier demo/lib/Makefile}
+%
+%{\small
+%\listing {mf2}
+%}
+%
+%\clearpage
+%\subsection* {Fichier demo/src/Makefile}
+%
+%{\small
+%\listing {mf3}
+%}
+%
+%\subsection* {Fichier demo/doc/Makefile}
+%
+%{\small
+%\listing {mf4}
+%}
+%\label {makefile-fin}

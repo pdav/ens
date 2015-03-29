@@ -18,7 +18,7 @@ THEMES = \
 	theme-01-c-base.tex \
 	theme-02-c-stdio.tex \
 	theme-03-c-pointeurs.tex \
-	theme-04-c-avance.tex mf1.tex mf2.tex mf3.tex mf4.tex \
+	theme-04-c-avance.tex \
 	theme-05-ps-fichiers.tex \
 	theme-06-ps-proc.tex \
 	theme-07-ps-envproc.tex \

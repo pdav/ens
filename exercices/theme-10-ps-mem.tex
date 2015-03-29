@@ -52,3 +52,23 @@ effectivement la mémoire.
 À l'aide de la primitive système \texttt {mmap}, écrivez un programme
 qui prend en argument un nom de fichier et compte le nombre de lignes
 qui s'y trouvent.
+
+
+\question
+%%%% Dependances: malloc, sbrk, gestion mémoire
+
+\`A l'aide de la primitive système {\tt sbrk}, écrivez une version
+des fonctions de librairie {\tt malloc} et {\tt free}.
+
+Votre version doit tenir à jour une liste de blocs mémoire, triée
+selon les adresses. Chaque bloc
+est soit alloué, soit libre. Cette liste est gérée selon l'algorithme
+du ``{\em First Fit\/}'', c'est à dire que lors d'une demande
+d'alloction, le premier emplacement libre suffisamment grand est
+choisi. S'il n'y a pas assez de mémoire, une page de 4096 octets
+est demandée au système avec {\tt sbrk}. Lorsqu'un emplacement est
+libéré avec {\tt free}, on fusionne cet emplacement avec les
+emplacements adjacents s'ils étaient eux-mêmes libres.
+
+Pour simplifier, on ne tiendra pas compte des contraintes
+d'alignement.
