@@ -139,8 +139,14 @@ commande \texttt {set tabstop=4} (ou \texttt {set ts=4}). Il ne faut
 pas utiliser cette commande, et laisser la valeur 8 par défaut. À
 la place, vous pouvez utiliser \texttt {set shiftwidth=4} (ou \texttt
 {set sw=4}) et utiliser les touches \texttt {CTRL-T} et \texttt {CTRL-D}
-pour indenter ou «~dés-indenter~».}~: c'est une mauvaise pratique à
-éviter absolument pour au moins deux raisons~:
+pour indenter ou «~dés-indenter~».}\footnote {Les utilisateurs de
+\texttt {Geany} doivent configurer l'indentation comme suit~: menu
+Éditer $\rightarrow$ Préférences, puis onglet Éditeur $\rightarrow$
+Indentation~: Largeur=«~4~», Type=«~Tabulations et espaces~», Largeur
+des tabulations=«~8~» et Indentation par la touche Tab=«~oui~».}~:
+c'est une mauvaise pratique à éviter absolument pour au moins deux
+raisons~:
+
 \begin {itemize}
     \item la personne qui va vous relire n'a pas forcément les mêmes
 	réglages que vous~;
@@ -148,7 +154,10 @@ pour indenter ou «~dés-indenter~».}~: c'est une mauvaise pratique à
 	des tabulations de longueur 8.
 \end {itemize}
 Dans ces deux cas, votre programme apparaîtra alors au lecteur avec
-des décalages fantaisistes et la lisibilité s'en ressentira.
+des décalages fantaisistes et la lisibilité s'en ressentira. Une bonne
+manière de vérifier votre indentation est d'afficher votre programme à
+l'écran (avec \texttt {more} par exemple)~: ce que vous voyez correspond
+à ce qui sera imprimé.
 
 
 \subsection {Les lignes ne doivent pas dépasser 80 colonnes}
