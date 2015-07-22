@@ -15,15 +15,58 @@
     Qu'est-ce qu'un système concurrent~?
 
     \begin {quote}
-	Système dans lequel plusieurs programmes s'exécutent
-	simultanément tout en ayant des interactions les uns avec
+	Système dans lequel plusieurs activités s'exécutent
+	simultanément tout en ayant des interactions les unes avec
 	les autres
 
     \end {quote}
 
-    \vspace* {5mm}
+    \vspace* {3mm}
 
-    Système concurrent \implique parallélisme
+    Exemples~:
+
+    \begin {itemize}
+	\item serveur (Web, base de données, jeu, etc.) répondant à
+	    des requêtes de plusieurs clients «~simultanés~»
+	\item système de contrôle d'un véhicule effectuant des actions
+	    (débit d'essence) en fonction d'informations provenant de
+	    capteurs (tachymètre)
+	\item application de commerce en ligne affichant l'état du
+	    stock en fonction des commandes en cours
+
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Introduction}
+
+    Système concurrent \implique plusieurs activités logicielles
+    partagent une ou plusieurs ressources matérielles
+
+    \vspace* {3mm}
+
+    Deux approches~:
+
+    \begin {enumerate}
+	\item Sérialiser les traitements
+	    \begin {itemize}
+		\item Sérialiser en bloc \implique pas de
+		    concurrence
+		\item Découper les traitements et sérialiser chaque élément \\
+		    Exemple~: module \texttt {asyncio} avec Python
+
+	    \end {itemize}
+	    \implique performances médiocres pour des systèmes complexes
+
+	\item Utiliser le parallélisme sous-jacent
+	    \begin {itemize}
+		\item parallélisme matériel
+		\item parallélisme offert par le système d'exploitation
+	    \end {itemize}
+	    \implique meilleure utilisation du matériel
+    \end {enumerate}
+
+    Dans la suite, on s'intéressera à la deuxième approche
 
 \end {frame}
 

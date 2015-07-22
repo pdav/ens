@@ -239,7 +239,10 @@ print: all tout.pdf
 	done
 
 gencpu:
-	@echo "Avez-vous pensé à initialiser PGUSER et PGDATABASE ?"
+	@test -d $(CPUDBDIR)  -a -f $(CPUDBDIR)/processor.csv \
+		|| (echo "Telecharger la DB depuis http://cpudb.stanford.edu/" dans $(CPUDBDIR) ; exit 1)
+	@test "x$$PGUSER" != x -a "x$$PGPASSWORD" != x \
+		|| (echo "Il faut initialiser PGUSER et PGPASSWORD" ; exit 1)
 	$(GENCPU) $(CPUDBDIR) inc1-intro/cpu-
 
 clean:
