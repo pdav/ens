@@ -3,7 +3,7 @@ set logscale y 10
 set grid x y mx my
 set pointsize 0.5
 set key off
-set ylabel 'Finesse de gravure (micros)'
+set ylabel 'Finesse de gravure (microns)'
 plot '-' using 1:2 with points 
 1971 10
 1972 10

@@ -178,7 +178,7 @@ extract_max_transistors | convert_csv_to_dat | \
 		"2**((x-1989)/2)" \
 	> ${PREFIX}transist.gnu
 extract_min_gravure | convert_csv_to_dat | \
-	convert_dat_to_gnuplot "Finesse de gravure (micros)" \
+	convert_dat_to_gnuplot "Finesse de gravure (microns)" \
 	> ${PREFIX}gravure.gnu
 
 destroy_database
