@@ -955,12 +955,11 @@ int fstat (int desc, struct stat *buf)
 \end{verbatim}
 \end {quote}
 
-Les primitives {\tt stat} et {\tt fstat} lisent la partie
-système d'un fichier (son {\it inode}) et la renvoie
-sous forme d'une structure pointée par {\tt buf}. Le
-fichier peut être spécifié par son nom ({\tt stat})
-ou par le descripteur de fichier qui lui est
-associé ({\tt fstat}).
+Les primitives {\tt stat} et {\tt fstat} lisent la partie système d'un
+fichier (son {\it inode}) et placent ces informations dans la structure
+pointée par {\tt buf}. Le fichier peut être spécifié par son nom
+({\tt stat}) ou par le descripteur de fichier qui lui est associé
+({\tt fstat}).
 
 Le contenu de la structure {\tt buf} est défini
 comme suit~:
@@ -2444,9 +2443,9 @@ clock_t times (struct tms *buf)
 \end{verbatim}
 \end {quote}
 
-La primitive {\tt times} renvoie les temps d'unité centrale du processus
-et de ses fils dans une structure pointée par le paramètre.  Cette
-structure possède les champs suivants~:
+La primitive {\tt times} place dans la structure pointée par le
+paramètre \texttt {buf} les temps d'unité centrale du processus et de
+ses fils. La structure possède les champs suivants~:
 
 \begin {quote}
 \begin {verbatim}
