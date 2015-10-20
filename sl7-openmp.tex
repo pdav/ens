@@ -559,16 +559,13 @@
 \begin {frame} {Exécution unique -- Clauses}
     La directive \code {\#pragma omp single} admet les clauses suivantes~:
     \begin {itemize}
-	\item \code {\#pragma omp sections ... private (...)}
-	\item \code {\#pragma omp sections ... firstprivate (...)}
-	\item \code {\#pragma omp sections ... copyprivate (...)}
-	\item \code {\#pragma omp sections ... nowait}
+	\item \code {\#pragma omp single ... private (...)}
+	\item \code {\#pragma omp single ... firstprivate (...)}
+	\item \code {\#pragma omp single ... copyprivate (...)}
+	\item \code {\#pragma omp single ... nowait}
     \end {itemize}
 
     \vspace* {3mm}
-
-    La directive \code {\#pragma omp section} (délimiteur de section)
-    n'admet aucune clause
 \end {frame}
 
 
