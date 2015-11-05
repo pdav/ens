@@ -3384,8 +3384,8 @@ int msgrcv (int msqid, void *msgp, size_t taille, long type, int flags)
 \end {quote}
 
 Un message (pointé par {\tt msgp}) est constitué d'un champ de type {\tt
-long} qui permet à l'utilisateur de spécifier un type de message
-(positif) et d'une suite de caractères (entre 0 et une limite imposée
+long} qui permet à l'utilisateur de spécifier un type ($\geq$ 1) de message
+et d'une suite d'octets (entre 0 et une limite imposée
 par le système) formant la donnée du message.
 
 La primitive {\tt msgsnd} est utilisée pour envoyer un message.  Lorsque
