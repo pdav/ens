@@ -1,5 +1,5 @@
 %
-% Fichier de style pour les exercices de TD et de TP
+% Fichier de style pour les exercices de TD, de TP ou d'examen
 %
 % Utilisation :
 %	\usepackage [corrections,latin9] {tdpda}
@@ -11,15 +11,43 @@
 %	\titrequestions {Exercice}
 %		- change le titre des questions (par defaut : "Exercice")
 %
+%	\entete {matiere} {diplome/semestre} {annee} {numero et intitutle du TD}
+%		- en debut de document, definit le titre du document
+%			ex: \entete {Bricolage} {Licence d'info} {2015-2016}
+%				{TP 5 -- Faire dans l'apeupres}
+%
+%	\question [titre]
+%		- ajoute le titre optionnel à la question (defaut : rien)
+%			ex: \question
+%			ex: \question [la question qui tue (15 pt)]
+%
 %	\begin {qcm}
 %	    \item ...
 %	\end {qcm}
 %		- itemize avec des cases a cocher
 %
+%	\begin {qcmn} {3}
+%	    \item ...
+%	\end {qcmn}
+%		- idem qcm, mais en 3 colonnes
+%
+%	\fichierexo [titre] {reservoir/de/questions/enonce.tex}
+%		- inclut le fichier.tex qui contient une question, en
+%			remplacant le titre (titreexo) par celui fourni
+%
+%	\titreexo {titre de l'exo}
+%		- analogue a \question, mais pour utilisation dans un
+%			fichier inclus par \fichierexo. Definit en
+%			meme temps le titre (obligatoire) de l'exercice,
+%			qui peut etre modifie lors de l'appel de \fichierexo
+%
 % Historique
 %   2011/11/30 : pda : conception
 %   2014/12/03 : pda : ajout commande \titrequestions (v1.2)
-%   2014/12/03 : pda : ajout env qcm (v1.2)
+%   2014/12/03 : pda : env qcm (v1.2)
+%   2015/10/11 : pda : env qcmn (v1.3)
+%   2015/10/30 : pda : \fichierexo/\titreexo et param opt de \question
+%   2015/11/19 : pda : nettoyage et commentaires (v1.4)
 %
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -28,7 +56,7 @@
 
 \NeedsTeXFormat {LaTeX2e}
 
-\ProvidesPackage {tdpda} [2014/12/03 1.2 (pda)]
+\ProvidesPackage {tdpda} [2015/11/19 1.4 (pda)]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Options
@@ -67,6 +95,7 @@
 \RequirePackage {synttree}
 \RequirePackage {listings}
 \RequirePackage {amssymb}		% pour $\Box$ dans l'env qcm
+\RequirePackage {multicol}		% pour l'env qcmn
 
 \lstset {language=c, basicstyle=\footnotesize\ttfamily, keywordstyle=}
 
@@ -102,19 +131,47 @@
 % Questions/Exercices
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% \titrequestion {Exercice} ou \titrequestion {Question} ou ...
 \newcommand {\titrequestions} [1] {\def\@titrequestion{#1}}
 \titrequestions {Exercice}
 
 \newcounter {question}
-\newcommand {\question} {
+
+% Macros internes pour identifier :
+% - fvide : marqueur utilise pour identifier un parametre optionnel non fourni
+% - ftitre : titre (optionnel) de l'exo fourni avec \fichierexo
+\def\@fvide{@}
+\def\@ftitre{}
+
+% \question
+% \question [titre de la question]
+\newcommand {\question} [1] [\@fvide] {
     \refstepcounter {question}
-    \section* {{\@titrequestion} \thequestion}
+    \section* {{\@titrequestion} \thequestion \if#1\@fvide {} \else {} -- #1\fi}
+}
+
+% \titreexo {Un titre qui claque}
+\newcommand {\titreexo} [1] {
+    \question [\if\@ftitre\@fvide #1 \else \@ftitre \fi]
+}
+% \fichierexo [Titre de remplacement] {fichier.tex}
+\newcommand {\fichierexo} [2] [\@fvide] {%
+    \def\@ftitre{#1}%
+    \input {#2} %
+    \def\@ftitre{}%
+    \par
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Environnement QCM
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% \begin {qcm} \item ... \end {qcm}
 \newenvironment {qcm}
     {\begin {itemize} \renewcommand {\labelitemi} {$\Box$}}
     {\end {itemize}}
+
+% \begin {qcmn} {25} => 25 cols
+\newenvironment {qcmn} [1]
+    {\begin{multicols}{#1}\begin{itemize}\renewcommand{\labelitemi}{$\Box$}}
+    {\end{itemize}\end {multicols}}
