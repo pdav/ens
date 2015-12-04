@@ -143,6 +143,30 @@ l'une des commandes échoue (i.e. renvoie un code de retour non nul).
 
 \question
 
+Écrivez un programme C équivalent au script shell suivant, qui prend
+en argument un nom d'utilisateur :
+
+\begin {quote}
+    \verb:ps eaux | grep "^$1 " > /dev/null && echo "$1 est connecté":
+\end {quote}
+
+Votre programme devra :
+
+\begin {itemize}
+    \item réaliser effectivement les exécutions de \texttt {ps} et
+	\texttt {grep} en utilisant la primitive \texttt {execlp} ;
+
+    \item mettre en place les redirections des entrées/sorties
+	nécessaires grâce à la primitive \texttt {dup} (ou \texttt
+	{dup2}) ;
+
+    \item réaliser l'affichage final avec la primitive \texttt {write}.
+
+\end {itemize}
+
+
+\question
+
 Écrivez un programme qui~:
 
 \begin {enumerate}
