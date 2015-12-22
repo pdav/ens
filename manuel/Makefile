@@ -17,7 +17,7 @@
 #   2013/08/21 : pda : conversion pdflatex
 #
 
-INCLUDES = recom.tex debug.tex ue.tex annee.tex
+INCLUDES = debug.tex ue.tex annee.tex
 
 all:	manuel.pdf
 
