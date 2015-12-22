@@ -944,6 +944,7 @@ ou -1 en cas d'erreur.
 \primitive {stat, fstat} --- consulte le descripteur d'un fichier
     \index{{\tt stat}}
     \index{{\tt fstat}}
+    \label {stat}
 
 \begin {quote}
 \begin {verbatim}
@@ -4374,12 +4375,16 @@ laquelle elle place l'entrée suivante du répertoire. Cette structure
 contient les champs suivants~:
 
 \begin {itemize}
-    \item {\tt char d\_name [MAXNAMLEN+1]}~: nom de l'entrée dans le
-	répertoire ({\tt MAXNAMLEN} vaut 255 dans la plupart des
-	implémentations d'origine Berkeley)~;
-    \item {\tt short d\_namlen}~: longueur du nom en caractères~;
+    \item {\tt char d\_name []}~: nom de l'entrée dans le
+	répertoire, terminé par un octet nul~;
     \item {\tt ino\_t d\_ino}~: numéro d'inode du fichier~;
 \end {itemize}
+
+Note~: certaines implémentations comportent un champ \texttt {d\_type}
+indiquant le type (fichier, répertoire, etc.) de l'entrée. Ce champ
+n'est pas spécifié par POSIX, aussi son utilisation est \textbf
+{déconseillée} pour obtenir des programmes portables. On utilisera à
+la place la primitive \texttt {stat} (voir page~\pageref {stat}).
 
 Le résultat est {\tt NULL} en cas d'erreur ou lorsque la fin du
 répertoire est rencontrée.
