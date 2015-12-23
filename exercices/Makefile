@@ -31,6 +31,8 @@ THEMES = \
 
 INCLUDES = ue.tex annee.tex $(THEMES)
 
+FIGS = msg.pdf
+
 #
 # Les règles par défaut
 #
