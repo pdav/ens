@@ -2677,48 +2677,6 @@ réussi, ou -1 en cas d'erreur.
 
 
 
-\separation
-\primitive {ustat} --- statistiques sur le système de fichiers
-    \index{{\tt ustat}}
-
-\begin {quote}
-\begin {verbatim}
-#include <sys/types.h>
-#include <ustat.h>
-
-int ustat (dev_t peripherique, struct ustat *buf)
-\end{verbatim}
-\end {quote}
-
-La primitive {\tt ustat} renvoie des informations
-sur un système de fichiers monté. Le paramètre
-{\tt périphérique} est le numéro de périphérique
-identifiant le périphérique contenant le système
-de fichiers. Le paramètre {\tt buf} est un pointeur
-vers une structure dont les champs sont~:
-
-\begin {quote}
-\begin {verbatim}
-daddr_t f_tfree ;
-ino_t   f_tinode ;
-char    f_fname [6] ;
-char    f_fname [6] ;
-int     f_blksize ;
-\end{verbatim}
-\end {quote}
-
-\begin {itemize}
-    \item {\tt f\_tfree} est le nombre total de blocs libres,
-    \item {\tt f\_tinode} est le nombre total d'inodes libres,
-    \item {\tt f\_fname} est le nom du système de fichiers,
-    \item {\tt f\_fpack} est le nom du volume, et
-    \item {\tt f\_blksize} est la taille des blocs en octets.
-\end {itemize}
-
-Cette primitive renvoie 0 en cas de lecture
-réussie, ou -1 en cas d'erreur.
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Sockets Berkeley
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -3049,12 +3007,21 @@ il y a eu erreur.
 \separation
 \primitive {select} --- attente d'un évènement
     \index{{\tt select}}
+    \index{{\tt FD\_ZERO}}
+    \index{{\tt FD\_CLR}}
+    \index{{\tt FD\_SET}}
+    \index{{\tt FD\_ISSET}}
 
 \begin {quote}
 \begin {verbatim}
-#include <time.h>
+#include <sys/select.h>
 
-int select (int ndescs, int *rdesc, int *wdesc, int *xdesc, struct timeval *delai)
+int select (int ndescs, fd_set *rdesc, fd_set *wdesc, fd_set *xdesc, struct timeval *delai)
+void FD_ZERO fd_set *ensemble)
+void FD_CLR (int fd, fd_set *ensemble)
+void FD_SET (int fd, fd_set *ensemble)
+void FD_ISSET (int fd, fd_set *ensemble)
+
 \end{verbatim}
 \end {quote}
 
@@ -3065,9 +3032,15 @@ recevoir des données, qu'un des descripteurs spécifiés par
 {\tt xdesc} exhibe une condition exceptionnelle, ou
 que la durée spécifiée par {\tt delai} soit écoulée.
 
-La spécification des descripteurs est réalisée par un champ
-de bits commençant à l'adresse fournie. Le descripteur $f$
-est représenté par le bit \verb|1<<f|.
+La spécification des descripteurs est réalisée par des ensembles
+de bits. Le descripteur $f$ est représenté par le bit \verb|1<<f|.
+Pour faciliter la manipulation de ces ensembles, il faut utiliser les
+macros \texttt {FD\_ZERO} (positionner tous les bits de l'ensemble à 0),
+\texttt {FD\_CLR} et \texttt {FD\_SET} (positionner le bit correspondant
+au descripteur \texttt {fd} respectivement à 0 ou 1) ou \texttt
+{FD\_ISSET} (tester la valeur du bit correspondant au descripteur \texttt
+{fd}).
+
 Le nombre de bits à surveiller dans les descripteurs est
 indiqué par \texttt {ndesc} (autrement dit, \texttt {ndesc}
 est égal au maximum des descripteurs + 1, les descripteurs
