@@ -34,4 +34,4 @@ manuel.pdf: manuel.tex $(INCLUDES)
 
 clean:
 	rm -f *.pdf *.bak
-	rm -f *.aux *.idx *.ilg *.ind *.log *.toc
+	rm -f *.aux *.idx *.ilg *.ind *.log *.toc *.out

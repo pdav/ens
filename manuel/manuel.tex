@@ -22,10 +22,12 @@
 %   1997/09/23 : pda : intégration des docs de purify et purecoverage
 %   2012/04/20 : pda : obsolescence des fonctions gets/strcpy/etc.
 %   2012/04/20 : pda : obsolescence des fonctions inet_ntoa/etc seulement IPv4
+%   2015/12/23 : pda : ajout hyperref
+%   2015/12/23 : pda : ajout strftime & co
 %
 
 \documentclass [twoside] {report}
-    \usepackage {makeidx}		% à charger avant my2e
+    \usepackage {makeidx}
 
     \usepackage [francais] {babel}
     \usepackage [utf8] {inputenc}
@@ -34,6 +36,7 @@
     \renewcommand {\ttdefault}{cmtt}
     \usepackage {supertabular}
     \usepackage [a4paper, margin=20mm] {geometry}
+    \usepackage {hyperref}
 
     \raggedbottom	% par défaut, babel aligne les bas de page. Pas bôôôôô !
 
@@ -366,7 +369,7 @@ les principaux types utilisés~:
     \item {\tt sigset\_t} (tableau)~: bitmap utilisée pour les signaux POSIX
     \item {\tt size\_t} (entier non signé)~: nombre d'octets
     \item {\tt ssize\_t} (entier)~: nombre d'octets signé
-    \item {\tt time\_t} (entier long)~: nombre de secondes
+    \item {\tt time\_t} (entier long)~: nombre de secondes écoulées
 	depuis le premier janvier 1970.
     \item {\tt uid\_t} (entier long)~: identificateur d'utilisateur
 \end {itemize}
@@ -2363,7 +2366,7 @@ système.
 L'heure est stockée dans un entier long à
 l'adresse pointée par le paramètre {\tt adresse}. Cet
 entier représente le nombre de secondes écoulées
-depuis 00:00:00 GMT January 1, 1970.
+depuis 00:00:00 UTC January 1, 1970.
 
 Cette primitive renvoie 0 en cas de modification
 réussie, ou -1 en cas d'erreur.
@@ -2373,6 +2376,7 @@ réussie, ou -1 en cas d'erreur.
 
 \separation
 \primitive {time} --- renvoie la date et l'heure
+    \label {time}
     \index{{\tt time}}
 
 \begin {quote}
@@ -2386,7 +2390,7 @@ time_t time (time_t *adresse)
 
 La primitive {\tt time} renvoie l'heure et la date
 courante en secondes écoulées depuis
-00:00:00 GMT, January 1, 1970.
+00:00:00 UTC, January 1, 1970.
 
 Si le paramètre {\tt adresse} est non nul, la valeur
 de retour est aussi stockée à l'adresse
@@ -2395,9 +2399,14 @@ indiquée.
 La primitive \texttt {time} renvoie l'heure courante, ou -1 (ou plus
 exactement \verb|((time_t)-1)|) en cas d'erreur.
 
+Les fonctions de bibliothèque décrites en~\ref {gestion-temps} (voir
+page~\pageref {gestion-temps}) assurent la conversion entre un \texttt
+{time\_t} et une chaîne de caractères.
+
 
 \separation
 \primitive {gettimeofday} --- renvoie la date et l'heure précises
+    \label {gettimeofday}
     \index{{\tt gettimeofday}}
 
 \begin {quote}
@@ -2481,6 +2490,10 @@ Il y a {\tt CLK\_TCK} (voir {\tt sysconf} page~\pageref {sysconf}) tops
 d'horloge par seconde sur les systèmes POSIX. Sur les systèmes anciens,
 il y a {\tt HZ} tops par seconde, avec {\tt HZ} défini dans le fichier
 {\tt param.h}.
+
+Note~: \texttt {times} est redondante avec \texttt {getrusage} (voir
+page~\pageref {getrusage}) qui est plus générale et devrait être
+privilégiée.
 
 Cette primitive renvoie le temps réel écoulé ({\it elapsed}) depuis un
 repère dans le passé (typiquement l'heure de boot), ou -1 en cas
@@ -3054,7 +3067,11 @@ que la durée spécifiée par {\tt delai} soit écoulée.
 
 La spécification des descripteurs est réalisée par un champ
 de bits commençant à l'adresse fournie. Le descripteur $f$
-est représenté par le bit $1<<f$.
+est représenté par le bit \verb|1<<f|.
+Le nombre de bits à surveiller dans les descripteurs est
+indiqué par \texttt {ndesc} (autrement dit, \texttt {ndesc}
+est égal au maximum des descripteurs + 1, les descripteurs
+débutant à 0).
 
 Si un descripteur remplit une des conditions ci-dessus, le
 bit correspondant est laissé à 1 dans le masque
@@ -3942,6 +3959,64 @@ donne quelques-uns des paramètres requis par la norme~:
 
 Cette primitive renvoie la valeur du paramètre demandé,
 ou -1 en cas d'erreur.
+
+
+
+\separation
+\primitive {getrusage} --- récupère des informations sur l'utilisation des ressources
+    \label {getrusage}
+    \index{{\tt getrusage}}
+
+\begin {quote}
+\begin {verbatim}
+#include <sys/resource.h>
+
+int getrusage (int qui, struct rusage *res)
+\end{verbatim}
+\end {quote}
+
+La primitive {\tt getrusage} récupère les informations sur les
+resssources utilisées par le processus courant (paramètre \texttt {qui}
+= \texttt {RUSAGE\_SELF}), par ses processus fils terminés (\texttt {qui}
+= \texttt {RUSAGE\_CHILDREN}) ou par le thread courant (\texttt {qui}
+= \texttt {RUSAGE\_THREAD}).
+
+Les champs de la structure \texttt {rusage} sont~:
+
+\begin {itemize}
+    \item \texttt {ru\_utime}~: temps CPU en mode utilisateur (\texttt
+	{struct timeval}, voir \texttt {gettimeofday}, page~\pageref
+	{gettimeofday})
+    \item \texttt {ru\_stime}~: temps CPU en mode système (\texttt
+	{struct timeval}, voir \texttt {gettimeofday}, page~\pageref
+	{gettimeofday})
+    \item \texttt {ru\_maxrss}~: capacité maximum utilisée en mémoire
+	physique
+    \item \texttt {ru\_minflt}~: nombre de défauts de page n'entraînant
+	pas d'entrée/sortie
+    \item \texttt {ru\_majflt}~: nombre de défauts de page entraînant
+	des entrées/sorties
+    \item \texttt {ru\_inblock}~: nombre de lectures disque effectuées
+	par le processus
+    \item \texttt {ru\_oublock}~: nombre d'écritures disque effectuées
+	par le processus
+    \item \texttt {ru\_msgsnd}~: nombre de messages IPC System V envoyés
+    \item \texttt {ru\_msgrcv}~: nombre de messages IPC System V reçus
+    \item \texttt {ru\_nsignals}~: nombre de signaux reçus \item \texttt
+    {ru\_nvcsw}~: nombre de changements volontaires de
+	processus (suite à une attente de ressource, par exemple)
+    \item \texttt {ru\_nivcsw}~: nombre de changements involontaires
+	de processus (du fait d'un processus plus prioritaire, par
+	exemple)
+
+\end {itemize}
+
+La norme POSIX ne définit que les deux premiers champs (\texttt
+{ru\_utime} et \texttt {ru\_stime}), la présence des autres n'est pas
+garantie sur toutes les architectures ou toutes les versions de système.
+De même, POSIX ne définit pas \texttt {RUSAGE\_THREAD}.
+
+Cette primitive renvoie 0 en cas de succès, ou -1 en cas d'erreur.
 
 
 
@@ -5044,6 +5119,219 @@ caractère n'est pas trouvé.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Gestion du temps
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section {Gestion du temps}
+    \label {gestion-temps}
+
+En complément de \texttt {time} et \texttt {gettimeofday} (voir
+page~\pageref {time}), les fonctions suivantes permettent d'assurer des
+conversions entre des dates au format numérique (comme par exemple le
+type \texttt {time\_t}) et des chaînes de caractères.
+
+
+\separation 
+\primitive {ctime} --- conversion simple de \texttt {time\_t} vers une chaîne
+    \index{{\tt ctime}}
+
+\begin {quote}
+\begin {verbatim}
+include <time.h>
+
+char *ctime (const time_t *horloge)
+\end{verbatim}
+\end {quote}
+
+La fonction {\tt ctime} renvoie une chaîne de 26 caractères
+(non traduite) ayant la forme suivante~:
+\begin {quote}
+\begin {verbatim}
+Sun Sep 16 01:03:52 1973\n\0
+\end{verbatim}
+\end {quote}
+L'argument de {\tt ctime} est la valeur de l'horloge telle
+que renvoyée par l'appel système {\tt time}. Le plus simple est
+habituellement de procéder comme suit~:
+
+\begin {quote}
+\begin {verbatim}
+{
+    time_t horloge ;
+
+    horloge = time (NULL) ;
+    strncpy (str, ctime (&horloge), 26) ;
+}
+\end{verbatim}
+\end {quote}
+
+
+\separation
+\primitive {localtime, gmtime} --- décomposition d'une date en éléments simples (\texttt {struct tm})
+    \index{{\tt localtime}}
+    \index{{\tt gmtime}}
+
+\begin {quote}
+\begin {verbatim}
+include <time.h>
+
+struct tm *localtime (const time_t *horloge)
+struct tm *gmtime (const time_t *horloge)
+\end{verbatim}
+\end {quote}
+
+
+Les fonctions {\tt localtime} et {\tt gmtime} décomposent une date (au
+format \texttt {time\_t}) en éléments simples (heure, minute, jour,
+mois, etc.) et renvoient un pointeur sur une structure définie dans {\em
+time.h}.  {\tt localtime} corrige l'heure en fonction du fuseau horaire,
+alors que {\tt gmtime} donne l'heure en «~temps universel coordonné~»
+(UTC).  Les structures {\tt tm} ont la forme suivante~:
+    \label {struct-tm}
+
+\begin {quote}
+\begin {verbatim}
+struct tm
+{
+    int tm_sec ;        /* secondes [0..60] */
+    int tm_min ;        /* minutes [0..59] */
+    int tm_hour ;       /* heures [0..23] */
+    int tm_mday ;       /* jour dans le mois [1..31] */
+    int tm_mon ;        /* mois [0..11] */
+    int tm_year ;       /* année (année - 1900) */
+    int tm_wday ;       /* jour de la semaine [0..6] */
+    int tm_yday ;       /* jour dans l'année [0..365] */
+    int tm_isdst ;      /* 1 si heure d'ete */
+} ;
+\end{verbatim}
+\end {quote}
+
+
+\separation
+\primitive {asctime} --- conversion de \texttt {struct tm} vers une chaîne
+    \index{{\tt asctime}}
+
+\begin {quote}
+\begin {verbatim}
+include <time.h>
+
+char *asctime (const struct tm *tm)
+\end{verbatim}
+\end {quote}
+
+
+La fonction {\tt asctime} traduit une structure \texttt {tm} (telle que
+retournée par la fonction~\texttt {localtime} par exemple) en une chaîne
+de 26 caractères, de manière analogue à \texttt {ctime}.
+
+
+\separation
+\primitive {strftime} --- conversion d'une date en une chaîne de caractères
+    \index{{\tt strftime}}
+
+\begin {quote}
+\begin {verbatim}
+include <time.h>
+
+size_t strftime (char *s, size_t max, const char *format, const struct tm *tm)
+\end{verbatim}
+\end {quote}
+
+Cette fonction convertit une date fournie sous forme d'une structure
+\texttt {tm} (voir \texttt {localtime}, page~\pageref {struct-tm}) en
+une chaîne de caractères \texttt {s} (de taille \texttt {max} octets),
+suivant les conversions indiquées par \texttt {format}.
+Comme avec \texttt {printf}, le format est une chaîne de caractères
+qui contient deux sortes d'objets~:  les caractères simples, qui sont
+affichés normalement, et les formats de conversion commençant par un
+caractère {\tt \%}, régis par la syntaxe suivante (les éléments entre
+crochets sont optionnels)~:
+
+{\tt \%} [{\tt 0}] [{\tt +}] [<nombre>] [\texttt {E}\texttt {O}] \textit {conversion}\texttt {\%}
+
+\begin {itemize}
+    \item le caractère {\tt 0} indique que le caractère «~0~»
+	doit être utilisé pour atteindre le nombre de caractères
+	minimum spécifié~;
+
+    \item le caractère {\tt +} indique comme précédemment que
+	le caractère «~0~» doit être utilisé pour atteindre le
+	nombre de caractères minimum spécifié, mais également que
+	si le nombre converti dépasse la limite (4 pour une année,
+	ou 2 pour une année dans le siècle), un «~+~» ou un «~-~»
+	doit être ajouté suivant la valeur~;
+
+    \item vient ensuite le nombre de caractères minimum de la valeur
+	convertie, un ajout de «~0~» ou d'espaces étant effectué si
+	la valeur ne remplit pas ce nombre de caractères~;
+
+    \item un argument optionnel «~\texttt {E}~» ou «~\texttt {O}~»
+	permet de requérir une représentation alternative de la valeur
+	convertie (dépendant de la localisation)~;
+
+    \item enfin, le dernier caractère indique la conversion demandée,
+	parmi lesquelles~: \\
+	{\tt a}~: jour de la semaine (abrégé) \\
+	{\tt A}~: jour de la semaine (complet) \\
+	{\tt b}~: mois (abrégé) \\
+	{\tt B}~: mois (complet) \\
+	{\tt c}~: date et heure \\
+	{\tt d}~: jour du mois [01..31] (sur 2 chiffres) \\
+	{\tt H}~: heure [00..23] (sur 2 chiffres) \\
+	{\tt m}~: mois [01..12] (sur 2 chiffres) \\
+	{\tt M}~: minute [00..59] (sur 2 chiffres) \\
+	{\tt S}~: seconde [00..60] (sur 2 chiffres) \\
+	{\tt T}~: équivalent à \verb|%H:%M:%S| \\
+	{\tt Y}~: année (sur 4 chiffres) \\
+	{\tt \%}~: affichage d'un caractère {\tt \%}
+
+\end {itemize}
+
+Par exemple, pour afficher la date et l'heure courante, on peut utiliser~:
+\begin {quote}
+\begin {verbatim}
+time_t horloge ;
+struct tm *tm ;
+char date [256] ;
+size_t n ;
+
+horloge = time (NULL) ;
+tm = localtime (&horloge) ;
+n = strftime (date, sizeof date, "Aujourd'hui : %d/%m/%Y %T", tm) ;
+if (n > 0)
+    printf ("%s\n", date) ;
+\end{verbatim}
+\end {quote}
+
+La valeur de retour correspond au nombre d'octets (non compris l'octet
+nul terminal) placés dans la chaîne résultat, ou 0 si la conversion
+n'est pas possible (format invalide ou pas assez de place).
+
+
+\separation
+\primitive {strptime} --- conversion d'une chaîne de caractères en une date
+    \index{{\tt strptime}}
+
+\begin {quote}
+\begin {verbatim}
+include <time.h>
+
+char *strptime (const char *chaine, const char *format, struct tm *tm)
+\end{verbatim}
+\end {quote}
+
+La fonction \texttt {strptime} convertit une date (telle que saisie par
+l'utilisateur) de la chaîne de caractères \texttt {chaine} vers une
+date représentée par la structure \texttt {tm} (voir définition de
+la fonction \texttt {localtime}, page~\pageref {struct-tm}), suivant le
+format indiqué (voir \texttt {strftime} pour les principaux formats).
+
+Si la conversion réussit, la fonction renvoie un pointeur vers le
+caractère suivant la date convertie (dans \texttt {chaine}). Sinon,
+elle renvoie un pointeur nul.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fonctions associées aux sockets Berkeley
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -5613,72 +5901,6 @@ rejeter automatiquement un ou plusieurs niveaux de priorité.
 Les fonctions ci-après sont orientées vers l'utilisation du
 système.
 
-
-
-\separation 
-\primitive {ctime, localtime, gmtime, asctime} --- date et heure
-    \index{{\tt ctime}}
-    \index{{\tt localtime}}
-    \index{{\tt gmtime}}
-    \index{{\tt asctime}}
-
-\begin {quote}
-\begin {verbatim}
-include <time.h>
-
-char *ctime (const time_t *horloge)
-struct tm *localtime (const time_t *horloge)
-struct tm *gmtime (const time_t *horloge)
-char *asctime (const struct tm *tm)
-\end{verbatim}
-\end {quote}
-
-La fonction {\tt ctime} renvoie une chaîne de 26 caractères
-(non traduite) ayant la forme suivante~:
-\begin {quote}
-\begin {verbatim}
-Sun Sep 16 01:03:52 1973\n\0
-\end{verbatim}
-\end {quote}
-L'argument de {\tt ctime} est la valeur de l'horloge telle
-que renvoyée par l'appel système {\tt time}. Le plus simple est
-habituellement de procéder comme suit~:
-
-\begin {quote}
-\begin {verbatim}
-{
-    long int horloge ;
-    extern long int ctime () ;
-    extern char *ctime () ;
-
-    horloge = time (NULL) ;
-    strncpy (str, ctime (&horloge), 26) ;
-}
-\end{verbatim}
-\end {quote}
-
-Les fonctions {\tt localtime} et {\tt gmtime} renvoient des
-pointeurs sur des structures définies dans {\em time.h}.
-{\tt localtime} corrige l'heure en fonction du fuseau horaire,
-alors que {\tt gmtime} donne l'heure au méridien de Greenwich.
-Les structures {\tt tm} ont la forme suivante~:
-
-\begin {quote}
-\begin {verbatim}
-struct tm
-{
-    int tm_sec ;        /* secondes (0..59) */
-    int tm_min ;        /* minutes (0..59) */
-    int tm_hour ;       /* heures (0..23) */
-    int tm_mday ;       /* jour dans le mois (1..31) */
-    int tm_mon ;        /* mois (0..11) */
-    int tm_year ;       /* annee (annee - 1900) */
-    int tm_wday ;       /* jour de la semaine (0..6) */
-    int tm_yday ;       /* jour dans l'annee (0..365) */
-    int tm_isdst ;      /* 1 si heure d'ete */
-} ;
-\end{verbatim}
-\end {quote}
 
 
 \separation 
@@ -7234,8 +7456,10 @@ de réussite ou -1 en cas d'erreur.
 %%%%%%%%%%%%% INDEX
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\appendix
 \cleardoublepage
-
+\phantomsection			% pour hyperref
+\addcontentsline {toc} {chapter} {\indexname}
 \printindex
 
 
