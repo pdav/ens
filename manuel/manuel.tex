@@ -51,14 +51,14 @@
 
     \newcommand {\primitive} [1]
     {
+	\phantomsection
 	{\large \bf #1}
 	\addcontentsline {toc} {subsection} {#1}
     }
 
     \newcommand {\separation}
     {
-	\vspace {7mm}
-%	\samepage
+	\vspace {5mm}
 	\nopagebreak
 	\hrule
     }
@@ -90,18 +90,6 @@
 
 \cleardoublepage
 \tassertoc
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%% RECOMMANDATIONS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% \cleardoublepage
-% 
-% \chapter {Recommandations pour les projets}
-% 
-% \input {recom.tex}
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -168,20 +156,18 @@ La déclaration de la variable {\tt errno} est~:
 \begin {quote}
 \begin {verbatim}
 #include <errno.h>
-
 extern int errno ;
 \end{verbatim}
 \end {quote}
 
 L'accès à la signification en clair de ces
 messages d'erreur se fait souvent par
-l'intermédiaire de la routine {\tt perror} de la
-librairie standard, ou de la variable externe
-{\tt sys\_errlist} (également définie dans la
-librairie).
+l'intermédiaire des fonctions {\tt perror}
+ou \texttt {strerror} de la
+librairie standard.
 
 La liste suivante est la description
-des erreurs pouvant intervenir. Il faut noter que
+des principales erreurs pouvant intervenir. Il faut noter que
 la variable {\tt errno} n'est pas remise à 0 avant un
 appel système. Ceci implique donc que sa valeur ne
 doit être testée que si l'appel signale une
@@ -579,7 +565,6 @@ réussies, ou -1 en cas d'erreur.
 #include <unistd.h>
 
 int dup (int ancien)
-
 int dup2 (int ancien, int nouveau)
 \end{verbatim}
 \end {quote}
@@ -709,9 +694,9 @@ toujours non négative en cas de réussite, ou
 
 \begin {quote}
 \begin {verbatim}
-#include <ndir.h>
+#include <dirent.h>
 
-int getdirentries (int fd, struct direct *buf, int taille, off_t offset)
+int getdirentries (int fd, struct direct *buf, int taille, off_t *offset)
 \end{verbatim}
 \end {quote}
 
@@ -726,7 +711,7 @@ chacune de ces structures contenant~:
 	local)~;
     \item {\tt unsigned short d\_reclen}~: longueur en octets de l'entrée
 	dans le répertoire~;
-    \item {\tt unsigned short d\_namelen}~: longueur en octets du nom, y
+    \item {\tt unsigned short d\_namlen}~: longueur en octets du nom, y
 	compris le caractère nul terminal~;
     \item {\tt char d\_name}~: tableau de caractères de longueur {\tt
 	MAXNAMELEN+1} contenant le nom, terminé par un caractère nul.
@@ -738,15 +723,15 @@ octets {\tt taille} de l'ensemble du tableau {\tt buf}. Cette taille
 doit être supérieure ou égale à la taille du bloc du système de
 fichiers.
 
-La variable {\tt offset} contient en retour la position courante du bloc
+Le paramètre {\tt offset} contient en retour la position courante du bloc
 lu.
 
 La valeur de retour est le nombre d'octets transférés en cas d'opération
 réussie, -1 sinon.
 
-Note~:  cette primitive n'étant pas disponible dans toutes les
-implémentations, les fonctions {\tt opendir}, {\tt readdir} etc.  de la
-librairie doivent être utilisées de préférence.
+Note~:  cette primitive n'étant pas spécifiée par POSIX, les
+fonctions {\tt opendir}, {\tt readdir} etc.  de la librairie doivent
+être utilisées de préférence (voir page~\pageref {opendir}).
 
 
 \separation
@@ -809,7 +794,6 @@ en cas d'erreur.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <sys/stat.h>
 
 int mkdir (const char *nom, mode_t mode)
@@ -832,7 +816,6 @@ ou -1 en cas d'erreur.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 
@@ -930,6 +913,8 @@ réussie, ou -1 en cas d'erreur.
 
 \begin {quote}
 \begin {verbatim}
+#include <unistd.h>
+
 int rmdir (const char *nom)
 \end{verbatim}
 \end {quote}
@@ -951,7 +936,6 @@ ou -1 en cas d'erreur.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <sys/stat.h>
 
 int stat (const char *nom, struct stat *buf)
@@ -993,6 +977,7 @@ time_t st_ctime ;
     \item {\tt st\_rdev}~: identification du périphérique dans le cas
 	d'un fichier spécial (bloc ou caractère),
     \item {\tt st\_size}~: taille du fichier en octets,
+    \item {\tt st\_blksize}~: taille optimale des entrées/sorties
     \item {\tt st\_atime}~: date du dernier accès ({\tt creat},
 	{\tt mknod}, {\tt pipe}, {\tt utime} et {\tt read}).
     \item {\tt st\_mtime}~: date de la dernière modification
@@ -1463,7 +1448,7 @@ retour...
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
+#include <unistd.h>
 
 pid_t fork (void)
 \end{verbatim}
@@ -1522,7 +1507,7 @@ En cas d'erreur, la valeur -1 est renvoyée.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
+#include <unistd.h>
 
 pid_t getpid (void)
 pid_t getpgrp (void)
@@ -1552,7 +1537,7 @@ du processus père du processus appelant.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
+#include <unistd.h>
 
 uid_t getuid (void)
 uid_t geteuid (void)
@@ -1654,7 +1639,7 @@ ou déverrouillage réussi, ou -1 en cas d'erreur.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
+#include <unistd.h>
 
 pid_t setpgrp (void)
 pid_t setsid (void)
@@ -1715,7 +1700,6 @@ réussie, ou -1 en cas d'erreur.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <sys/wait.h>
 
 pid_t wait (int *statut)
@@ -2006,7 +1990,6 @@ précédente alarme.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <signal.h>
 
 int kill (pid_t pid, int signal)
@@ -2446,7 +2429,6 @@ primitive renvoie 0 si tout s'est bien passé, ou -1 en cas d'erreur.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <sys/times.h>
 
 clock_t times (struct tms *buf)
@@ -2742,7 +2724,6 @@ par l'Université de Berkeley dans le domaine du réseau sont~:
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <sys/socket.h>
 
 int accept (int s, struct sockaddr *adresse, int *longueur)
@@ -2770,7 +2751,6 @@ socket, ou -1 en cas d'erreur.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 
@@ -2809,7 +2789,6 @@ La primitive {\tt close} est étendue aux connexions IP.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 
@@ -2866,7 +2845,6 @@ cas d'erreur.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <sys/socket.h>
 
 int getpeername (int s, struct sockaddr *adresse, int *longueur)
@@ -2889,7 +2867,6 @@ cas d'erreur.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <sys/socket.h>
 
 int getsockname (int s, struct sockaddr *adresse, int *longueur)
@@ -2911,7 +2888,6 @@ cas d'erreur.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <sys/socket.h>
 
 int getsockopt (int s, int niveau, int option, void *valeur, int *longueur)
@@ -2978,7 +2954,6 @@ La primitive {\tt read} est étendue aux connexions IP.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <sys/socket.h>
 
 int recv (int s, void *buf, int longueur, int flags)
@@ -3068,7 +3043,6 @@ d'erreur.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <sys/socket.h>
 
 int send (int s, void *buf, int longueur, int flags)
@@ -3110,7 +3084,6 @@ La primitive {\tt sethostname} permet, si l'utilisateur est
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <sys/socket.h>
 
 int setsockopt (int s, int niveau, int option, const void *valeur, int longueur)
@@ -3190,7 +3163,6 @@ cas d'erreur.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <sys/socket.h>
 
 int socket (int famille, int type, int protocole)
@@ -3999,7 +3971,6 @@ Cette primitive renvoie 0 en cas de succès, ou -1 en cas d'erreur.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <sys/stat.h>
 
 mode_t umask (mode_t masque)
@@ -4063,7 +4034,6 @@ cas de réussite, ou -1 en cas d'erreur.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <utime.h>
 
 int utime (const char *nom, const struct utimbuf *buf)
@@ -4376,7 +4346,7 @@ char *fgets (char *str, int max, FILE *flux)
 \end{verbatim}
 \end {quote}
 
-Attention : la fonction \texttt {gets} est obsolète, car elle ne
+Attention : la fonction \texttt {gets} est \textbf {obsolète}, car elle ne
 vérifie pas le débordement de la chaîne fournie en paramètre. Il
 faut utiliser \texttt {fgets} à la place.
 
@@ -4394,6 +4364,7 @@ rencontrée sans qu'aucun caractère n'ait été lu.
 
 \separation
 \primitive {opendir, readdir, closedir} --- accès aux informations d'un répertoire
+    \label {opendir}
     \index{{\tt opendir}}
     \index{{\tt readdir}}
     \index{{\tt closedir}}
@@ -4402,7 +4373,6 @@ rencontrée sans qu'aucun caractère n'ait été lu.
 
 \begin {quote}
 \begin {verbatim}
-#include <sys/types.h>
 #include <dirent.h>
 
 DIR *opendir (const char *nom)
@@ -4495,7 +4465,7 @@ int snprintf (char *str, size_t taille, const char *format, ...)
 \end{verbatim}
 \end {quote}
 
-Attention : la fonction \texttt {sprintf} est obsolète, car elle ne
+Attention : la fonction \texttt {sprintf} est \textbf {obsolète}, car elle ne
 vérifie pas le débordement de la chaîne fournie en paramètre. Il faut
 utiliser \texttt {snprintf} à la place.
 
@@ -4533,16 +4503,16 @@ lettre au choix)~:
 	pour les formats {\tt d}, {\tt o}, {\tt x} ou {\tt u}.
 
     \item le caractère suivant indique enfin le type de l'argument~:\\
-	{\tt d}~: conversion en décimal\\
-	{\tt o}~: conversion en octal\\
-	{\tt x}~: conversion en hexadécimal\\
-	{\tt u}~: conversion en décimal non signé\\
-	{\tt f}~: conversion en flottant sans exposant\\
-	{\tt e}~: conversion en flottant avec exposant\\
-	{\tt g}~: conversion d'un flottant en {\tt \%d}, {\tt \%e} ou {\tt \%f}\\
-	{\tt c}~: conversion en caractère\\
-	{\tt s}~: conversion en chaîne de caractères\\
-	{\tt \%}~: affichage d'un caractère {\tt \%}
+	\texttt {d} ou \texttt {i}~: conversion en décimal\\
+	\texttt {o}~: conversion en octal\\
+	\texttt {x}~: conversion en hexadécimal\\
+	\texttt {u}~: conversion en décimal non signé\\
+	\texttt {f}~: conversion en flottant sans exposant\\
+	\texttt {e}~: conversion en flottant avec exposant\\
+	\texttt {g}~: conversion d'un flottant en {\tt \%d}, {\tt \%e} ou {\tt \%f}\\
+	\texttt {c}~: conversion en caractère\\
+	\texttt {s}~: conversion en chaîne de caractères\\
+	\texttt {\%}~: affichage d'un caractère {\tt \%}
 
 \end {itemize}
 
@@ -4989,7 +4959,7 @@ char *strncat (char *str1, const char *str2, size_t n)
 \end{verbatim}
 \end {quote}
 
-Attention : la fonction \texttt {strcat} est obsolète, car elle ne
+Attention : la fonction \texttt {strcat} est \textbf {obsolète}, car elle ne
 vérifie pas le débordement de la chaîne \texttt {str1}. Il faut
 utiliser \texttt {strncat} à la place.
 
@@ -5042,7 +5012,7 @@ char *strncpy (char *str1, const char *str2, size_t n)
 \end{verbatim}
 \end {quote}
 
-Attention : la fonction \texttt {strcpy} est obsolète, car elle ne
+Attention : la fonction \texttt {strcpy} est \textbf {obsolète}, car elle ne
 vérifie pas le débordement de la chaîne \texttt {str1}. Il faut
 utiliser \texttt {strncpy} à la place.
 
@@ -5130,12 +5100,10 @@ habituellement de procéder comme suit~:
 
 \begin {quote}
 \begin {verbatim}
-{
-    time_t horloge ;
+time_t horloge ;
 
-    horloge = time (NULL) ;
-    strncpy (str, ctime (&horloge), 26) ;
-}
+horloge = time (NULL) ;
+strncpy (str, ctime (&horloge), 26) ;
 \end{verbatim}
 \end {quote}
 
@@ -5465,7 +5433,7 @@ int endhostent (void)
 \end{verbatim}
 \end {quote}
 
-Attention : ces fonctions sont obsolètes car elles ne gèrent que
+Attention : ces fonctions sont \textbf {obsolètes} car elles ne gèrent que
 des adresses IPv4. Il faut utiliser \texttt {getaddrinfo} et \texttt
 {getnameinfo} à la place.
 
@@ -5523,7 +5491,7 @@ int endnetent (void)
 \end{verbatim}
 \end {quote}
 
-Attention : ces fonctions sont obsolètes car elles ne gèrent que
+Attention : ces fonctions sont \textbf {obsolètes} car elles ne gèrent que
 des adresses IPv4.
 
 La fonction {\tt getnetbyname} ouvre le fichier {\tt /etc/networks} et
@@ -5644,12 +5612,12 @@ La fonction {\tt endservent} ferme le fichier {\tt /etc/services}.
 
 \begin {quote}
 \begin {verbatim}
-#include <netinet/in.h>
+#include <arpa/inet.h>
 
-unsigned long htonl (unsigned long l)
-unsigned short htons (unsigned short s)
-unsigned long ntohl (unsigned long l)
-unsigned short ntohs (unsigned short s)
+uint32_t htonl (uint32_t l)
+uint16_t htons (uint16_t s)
+uint32_t ntohl (uint32_t l)
+uint16_t ntohs (uint16_t s)
 \end{verbatim}
 \end {quote}
 
@@ -5725,7 +5693,7 @@ int inet_netof (struct in_addr in)
 \end{verbatim}
 \end {quote}
 
-Attention : ces fonctions sont obsolètes car elles ne gèrent que
+Attention : ces fonctions sont \textbf {obsolètes} car elles ne gèrent que
 des adresses IPv4. Il faut utiliser \texttt {inet\_ntop} et \texttt
 {inet\_pton} à la place.
 
@@ -6070,7 +6038,7 @@ char *mktemp (char *modele)
 \end{verbatim}
 \end {quote}
 
-Cette fonction est obsolète. Il vaut mieux utiliser {\tt tmpfile} et
+Cette fonction est \textbf {obsolète}. Il vaut mieux utiliser {\tt tmpfile} et
 {\tt tmpnam} (voir page~\pageref {tmpfile}).
 
 La fonction {\tt mktemp} remplace le contenu de la chaîne de
@@ -6090,11 +6058,9 @@ premier caractère est \verb:\0:.
 
 
 \separation 
-\primitive {perror, strerror, sys\_errlist, sys\_nerr} --- messages d'erreur du système
+\primitive {perror, strerror} --- messages d'erreur du système
     \index{{\tt perror}}
     \index{{\tt strerror}}
-    \index{{\tt sys\_errlist}}
-    \index{{\tt sys\_nerr}}
 
 \begin {quote}
 \begin {verbatim}
@@ -6104,13 +6070,11 @@ void perror (const char *str)
 char *strerror (int numero)
 
 extern int errno ;
-extern int sys_nerr ;
-extern char *sys_errlist [] ;
 \end{verbatim}
 \end {quote}
 
 Lorsqu'une erreur survient dans un appel système (les
-appels systèmes sont utilisés par les routines de la
+appels systèmes sont utilisés par les fonctions de la
 librairie), la variable exerne {\tt errno} est initialisée avec
 le numéro de l'erreur.
 
@@ -6121,13 +6085,6 @@ courant).
 La fonction {\tt strerror} retourne un pointeur sur une chaîne de
 caractères contenant le message correspond à l'erreur de numéro {\tt
 numero}. Cette chaîne ne doit pas être modifiée.
-
-Le message correspondant à l'erreur est stocké dans le
-tableau de chaînes {\tt sys\_errlist}, dont les indices varient
-de 0 à {\tt sys\_nerr} - 1. La variable {\tt errno} est l'indice du
-message correspondant à l'erreur détectée.
-
-
 
 
 
