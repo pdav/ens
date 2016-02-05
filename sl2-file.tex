@@ -1,0 +1,1119 @@
+\def\inc{inc2-file}
+
+\titreA {Gestion des fichiers}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Accès aux fichiers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Accès aux fichiers}
+
+\begin {frame} {Accès aux fichiers}
+    Un fichier :
+    \begin {itemize}
+	\item a un nom (en fait, plusieurs...)
+	\item est accessible via un chemin (absolu, relatif)
+	\item possède des attributs :
+	    \begin {itemize}
+		\item type
+		\item propriétaire, groupe, permissions
+		\item taille
+		\item dates
+		    \begin {itemize}
+			\item de dernière modification des données
+			\item date de dernière modification des attributs
+			\item date de dernier accès
+		    \end {itemize}
+		\item emplacement des données sur le disque
+	    \end {itemize}
+	\item 2 types de fichiers
+	    \begin {itemize}
+		\item fichiers « réguliers »
+		\item répertoires
+		\item ... en réalité, il y en a d'autres (plus tard...)
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Accès aux fichiers}
+    Un fichier a une structure simple : suite linéaire d'octets
+    \begin {center}
+	\includegraphics [width=.6\linewidth] {\inc/str-fich}
+    \end {center}
+
+    \begin {itemize}
+	\item innovation d'Unix
+	    \begin {itemize}
+		\item dans les systèmes antérieurs : les fichiers avaient
+		    un type (texte, base de données, etc.)
+		\item pas de type \implique simplification du noyau
+	    \end {itemize}
+
+	\item la structure dépend de l'application qui accède au fichier
+
+	    \begin {itemize}
+		\item texte : suite de caractères séparés par l'octet
+		    de code 10
+		\item binaire exécutable : contient un en-tête qui
+		    décrit les différentes parties (code, données,
+		    infos de debug, etc.)
+		\item document LibreOffice : cf application LibreOffice
+		\item etc.
+	    \end {itemize}
+
+	\item notion de « \textit {magic number} » :
+	    \begin {itemize}
+		\item suite d'octets au début d'un fichier pour l'identifier
+		\item ex: \code {\#!} (script), \code {\%PDF} (fichier PDF),
+		    \code {0xffd8} (JPEG), etc.
+		\item commande \code {file}
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Accès aux fichiers}
+
+    \begin {itemize}
+	\item nom de fichier : aucune signification pour le noyau
+	    \begin {itemize}
+		\item je peux appeler mon exécutable \code {toto.titi.tata}
+		    si j'en ai envie
+		\item je peux appeler un fichier texte \code {toto.xls}
+		    si j'en ai envie
+		    \vspace* {0.6mm}
+		\item certaines applications attendent un suffixe
+		    \begin {itemize}
+			\item ex : l'application « compilateur C »
+			    suppose que les sources C finissent par «
+			    \code {.c} »
+			\item ce n'est pas le cas général
+		    \end {itemize}
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Ouverture de fichier}
+
+    \prototype {
+	\code {int open (const char *path, int flags)} \\
+	\code {int open (const char *path, int flags, mode\_t mode)}
+    }
+
+    \begin {itemize}
+	\item 2 formes pour cette primitive (exception qui confirme...)
+	    \begin {itemize}
+		\item première forme : ouverture «~simple~»
+		\item deuxième forme : ouverture avec création du fichier
+		    \\
+		    \implique \code {mode} est la permission initiale du fichier
+		    (avec application du masque de création, voir
+		    plus tard)
+	    \end {itemize}
+
+	\item résultat : descripteur d'ouverture (ou -1)
+
+	    \begin {itemize}
+		\item utilisé par les autres primitives
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Ouverture de fichier}
+    \begin {itemize}
+	\item \code {flags} : mode d'ouverture
+	    \begin {center}
+		\vspace* {-5mm}
+		\includegraphics [width=.5\linewidth] {\inc/flags-open}
+
+		{\fD Position des bits purement imaginaire...}
+	    \end {center}
+
+	\item Exemples~:
+
+	    \begin {itemize}
+		\item \code {open ("toto", O\_RDONLY)}
+
+		    Ouverture en lecture seule (le fichier doit exister)
+
+		\item \code {open ("toto", O\_WRONLY | O\_CREAT | O\_TRUNC, 0666)}
+
+		    Création d'un nouveau fichier (ou remise à 0 d'un
+		    fichier existant) et ouverture en écriture seule
+
+		\item \code {open ("toto", O\_RDWR | O\_CREAT | O\_APPEND, 0666)}
+
+		    Création d'un nouveau fichier (s'il n'existait
+		    pas déjà) et ouverture en lecture/écriture avec
+		    ajout à la fin
+
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Ouverture de fichier}
+    \begin {itemize}
+	\item Quelles permissions mettre lors d'une création ?
+	    \begin {itemize}
+		\item règle de base : \code {mode = 0666}
+
+		    \begin {itemize}
+			\item si pas de contrainte de sécurité particulière
+			\item si pas exécutable (sauf si vous écriviez
+			    un éditeur de liens)
+		    \end {itemize}
+		\item laisser faire le masque de création de fichiers
+		    (plus tard)
+	    \end {itemize}
+
+	\item Attention : si \code {mode} non fourni, \code {open} prendra
+	    ce qu'il y a sur la pile à l'endroit attendu \\
+	    \implique vraisemblablement n'importe quoi
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Ouverture de fichier}
+    Trois ouvertures par défaut :
+    \ctableau {} {|l|l|l|} {
+	\rca 0 & entrée standard \\
+	\rcb 1 & sortie standard \\
+	\rca 2 & sortie d'erreur standard \\
+    }
+
+    \vspace* {3mm}
+    Ces descripteurs sont ouverts par le Shell
+    \begin {itemize}
+	\item Par défault : le terminal
+	\item Redirection possible depuis/vers un fichier
+	    \\
+	    \implique ne jamais supposer que l'entrée standard est
+	    forcément le clavier (ou la sortie standard l'écran)
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Fermeture de fichier}
+    Ne pas oublier de fermer les fichiers après utilisation
+    \prototype {
+	\code {int close (int fd)}
+    }
+
+    \begin {itemize}
+	\item fermeture automatique à la terminaison du processus
+	\item bonne pratique : fermer dès que possible
+	\item plus tard (tubes) : fermer dès que possible est \textbf
+	    {crucial}...
+	\item autant s'habituer à le faire dès maintenant !
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Accès au fichier}
+    Une fois le fichier ouvert, on peut lire et écrire~:
+
+    \prototype {
+	\code {ssize\_t read (int fd, void *buf, size\_t nb)} \\
+	\code {ssize\_t write (int fd, const void *buf, size\_t nb)}
+    }
+
+    \begin {itemize}
+	\item retourne le nombre d'octets transférés (ou -1)
+	    \begin {itemize}
+		\item 0 en fin de fichier
+	    \end {itemize}
+	\item \code {fd} : descripteur d'ouverture (retourné par \code {open})
+	\item \code {buf} : emplacement où le noyau écrit (pour \code {read})
+	    ou lit (pour \code {write}) les données à transférer
+	\item \code {nb} : nombre d'octets à transférer
+	    \begin {itemize}
+		\item nb d'octets transférés : pas forcément celui demandé
+		\item exemple : \code {read (fd, buf, 500)} alors
+		    que le fichier ne fait que 10 octets
+		    \implique retour = 10
+		\item exemple : \code {write (fd, buf, 500)} alors
+		    que le disque est à 10 octets de la saturation
+		    \implique retour = 10
+	    \end {itemize}
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Accès au fichier}
+    Accès aléatoire~:
+    \begin {center}
+	\fB
+	\code {off\_t lseek (int fd, off\_t offset, int apartir)}
+    \end {center}
+
+    \begin {itemize}
+	\item Chaque ouverture de fichier possède un \textit {offset} \\
+	    \begin {itemize}
+		\item position courante dans le fichier ($\geq$ 0)
+		\item avancée automatiquement avec \code {read} et
+		    \code {write}
+
+	    \end {itemize}
+
+	\item \code {lseek} permet de modifier l'offset en fonction de \code {apartir}
+
+	    \ctableau {\fC} {|l|l|} {
+		\rca \code {SEEK\_SET}
+		    & déplacer à la position absolue \\
+		\rcb \code {SEEK\_CUR}
+		    & avancer à partir de la position actuelle \\
+		\rca \code {SEEK\_END}
+		    & avancer à partir de la fin du fichier \\
+	    }
+
+	\item code de retour de \code {lseek} : offset avant modification
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Accès au fichier}
+    Exemples~:
+    \begin {itemize}
+	\item \code {lseek (fd, 1000000, SEEK\_SET)}
+
+	    Se déplacer à l'offset = 1 million d'octets
+
+	\item \code {lseek (fd, -20, SEEK\_CUR)}
+
+	    Revenir en arrière de 20 octets avant la position
+	    actuelle
+
+	\item \code {lseek (fd, 300000, SEEK\_END)}
+
+	    Se déplacer 300$\thinspace$000 octets après la fin
+	    actuelle du fichier
+	    \begin {itemize}
+		\item \code {read} renverra alors 0
+		\item \code {write} pourra écrire de nouveaux octets.
+		    Dans ce cas :
+		    \begin {itemize}
+			\item le système laisse un « trou » dans
+			    le fichier
+			\item en cas de lecture dans le « trou », tout
+			    se passe comme si on avait écrit
+			    300$\thinspace$000 fois l'octet 0
+			\item la taille du fichier n'est pas la place
+			    occupée sur le disque !
+
+		    \end {itemize}
+	    \end {itemize}
+
+	\item \code {lseek (fd, 0, SEEK\_CUR)}
+
+	    Où suis-je ?
+
+    \end {itemize}
+\end {frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Primitives systèmes et fonctions de bibliothèque
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Primitives systèmes et fonctions de bibliothèque}
+
+\begin {frame} {Primitives et fonctions de bibliothèque}
+    Deux séries de fonctions pour accéder aux fichiers ?
+
+    \begin {itemize}
+	\item primitive systèmes : \code {open}, \code {close},
+	    \code {read}, \code {write}, \code {close}, \code {lseek}
+
+	\item fonctions de bibliothèque : \code {fopen}, \code {fclose},
+	    \code {getc}, \code {scanf}, \code {fread}, \code {putc},
+	    \code {printf}, \code {fwrite}, \code {fseek}, etc.
+
+    \end {itemize}
+
+    \vspace* {3mm}
+
+    Duplication de fonctionnalités ?
+
+    \vspace* {3mm}
+
+    Pourquoi ?
+\end {frame}
+
+\begin {frame} {Exemple avec primitives systèmes}
+    \lstinputlisting [basicstyle=\fD\lstmonstyle] {\inc/lib-open.c}
+\end {frame}
+
+\begin {frame} {Exemple avec fonctions de bibliothèque}
+    \lstinputlisting [basicstyle=\fD\lstmonstyle] {\inc/lib-fopen.c}
+\end {frame}
+
+\begin {frame} {Primitives et fonctions de bibliothèque}
+    Jeu des différences
+
+    \ctableau {\fD} {|p{.45\linewidth}|p{.45\linewidth}|} {
+	\rca \multicolumn {1} {|c|} {\textbf {primitives systèmes}}
+	    & \multicolumn {1} {c|} {\textbf {fonctions de bibliothèque}}
+	    \\ \hline
+	\rcb descripteur = \code {int} & descripteur = \code {FILE *}
+	    \\
+	\rca paramètres de \code {read}/\code {write} moins simples
+	    & utilisation de \code {getc}/\code {putc} simple
+	    \\
+	\rcb uniquement \code {read} ou \code {write} &
+	    possibilité d'utilisation d'autres fonctions
+	    (\code {printf}, \code {puts}, etc.)
+	    \\
+	\rca but = sécuriser les données
+	    & but = aide à la programmation
+	    \\
+	\rcb interface de plus bas niveau
+	    & les fonctions de bibliothèque utilisent les
+		primitives système (\implique haut niveau)
+	    \\
+	\rca code dans le noyau
+	    & code ajouté au programme lors de l'édition de liens
+	    \\
+    }
+\end {frame}
+
+\begin {frame} {Efficacité}
+    Qu'est-ce qui est le plus efficace ?
+
+    \begin {itemize}
+	\item approche naïve : les fonctions de bibliothèque appelant
+	    les primitives systèmes « équivalentes », elles sont plus
+	    lentes
+	\item la réponse est plus complexe...
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Efficacité}
+
+    Rappel : déroulement d'une primitive système (exemple \code {read})
+
+    \begin {itemize}
+	\item instruction spéciale (TRAP, SVC, INT, etc. suivant le
+	    processeur)
+	\item provoque (entre autres) :
+	    \begin {itemize}
+		\item basculement en mode privilégié
+		\item déroutement du programme vers une adresse spécifique
+	    \end {itemize}
+	\item vérifications
+	    \begin {itemize}
+		\item le descripteur d'ouverture est-il ouvert ?
+		\item l'adresse du buffer est-elle valide ?
+		\item l'adresse de la fin du buffer est-elle valide ?
+		\item le nombre à transférer est-il valide ?
+	    \end {itemize}
+	\item faire l'entrée/sortie (logique)
+	\item recopier les données dans l'espace mémoire du processus
+	\item revenir à l'instruction suivant \code {read}
+    \end {itemize}
+    Bilan : beaucoup de vérifications, \textbf {surtout pour un seul octet}
+\end {frame}
+
+\begin {frame} {Bufferisation}
+
+    Les fonctions d'entrées/sorties de la bibliothèque font de la
+    «~\textbf {bufferisation}~»
+
+    \begin {minipage} [c] {.38\linewidth}
+    \begin {center}
+	\vspace* {2mm}
+	\includegraphics [width=\linewidth] {\inc/bufferisation}
+    \end {center}
+    \end {minipage}
+    \hfill
+    \begin {minipage} [c] {.60\linewidth}
+	\begin {itemize}
+	    \item buffer = tableau en mémoire
+	    \item premier appel à \code {getc} : remplissage du buffer
+		\\
+		\implique appel à \code {read} \implique vérifications
+	    \item après : simple appel de fonction + lecture en mémoire
+		\\
+		\implique très efficace
+	    \item buffer de taille $n$
+		\implique appel à \code {read} une fois sur $n$
+
+	    \item en pratique, $n = 4096$ (p. ex.)
+
+	\end {itemize}
+    \end {minipage}
+\end {frame}
+
+\begin {frame} {Bufferisation}
+
+    Bilan :
+    \begin {itemize}
+	\item si lecture de peu d'octets, les fonctions d'entrées/sorties
+	    de la bibliothèque sont plus efficaces que les primitives
+	    systèmes
+
+	    \begin {itemize}
+		\item moins de vérifications
+		\item davantage d'appels de fonctions simples
+	    \end {itemize}
+
+	\item si lecture de beaucoup d'octets à la fois, les primitives
+	    systèmes sont plus efficaces que les fonctions de
+	    bibliothèque
+
+	    \begin {itemize}
+		\item pas d'overhead dû à une surcouche
+		\item pas de temps passé pour une bufferisation superflue
+	    \end {itemize}
+    \end {itemize}
+
+    \vspace* {3mm}
+
+    À partir de quelle taille de lecture les primitives systèmes
+    sont-elles moins efficaces que \code {getc} ? \implique exercice
+
+\end {frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Attributs des fichiers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Attributs des fichiers}
+
+\begin {frame} {Attributs des fichiers}
+    À chaque fichier sont associés des attributs~:
+
+    \begin {itemize}
+	\item type
+	\item propriétaire et groupe
+	\item permissions
+	\item taille
+	\item dates
+	    \begin {itemize}
+		\item de dernière modification des données
+		\item de dernière modification des attributs
+		\item de dernière accès
+	    \end {itemize}
+	\item nombre de liens (voir plus tard)
+	\item numéro de périphérique, numéro de fichier
+	\item emplacement des données sur le disque
+    \end {itemize}
+    \vspace* {2mm}
+    Le nom n'est pas un attribut du fichier (voir plus tard)
+\end {frame}
+
+\begin {frame} {Permissions}
+    Permissions : 12 bits
+
+    \begin {center}
+	\includegraphics [width=.6\linewidth] {\inc/perm}
+    \end {center}
+
+    \begin {itemize}
+	\item 9 bits habituels (3 bits pour propriétaire, groupe, autres)
+	\item bit « sticky » : pour les répertoires, interdit la suppression
+	    des fichiers qui s'y trouvent, sauf pour le propriétaire du
+	    fichier ou du répertoire
+	    (utile pour \code {/tmp} par exemple)
+	\item bits « set-user-id-on-exec~» et «~set-group-id-on-exec~» \\
+	    \implique plus tard (chapitre sur la gestion des processus)
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Consultation des attributs}
+    Récupération de tous les attributs en une seule opération :
+
+    \prototype {
+	\code {int stat (const char *path, struct stat *stbuf)} \\
+	\code {int fstat (int fd, struct stat *stbuf)}
+    }
+
+    \begin {itemize}
+	\item la structure \code {stat} contient, en retour, l'ensemble
+	    des attributs, parmi lesquels :
+
+	    \ctableau {\fD} {|l|l|} {
+		\rca \code {st\_mode}
+		    & type et permissions \\
+		\rcb \code {st\_uid}
+		    & propriétaire \\
+		\rca \code {st\_gid}
+		    & groupe \\
+		\rcb \code {st\_size}
+		    & taille en octets \\
+		\rca \code {st\_atime}
+		    & date de dernier accès \\
+		\rcb \code {st\_mtime}
+		    & date de dernière modification des données \\
+		\rca \code {st\_ctime}
+		    & date de dernière modification des attributs \\
+		\hline
+	    }
+	\item d'autres attributs sont dans cette structure
+	\item ... mais pas tous (localisation des données sur le disque
+	    inutile hors du noyau \implique pas remontée)
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Consultation des attributs}
+    \code {st\_mode} : type et permissions dans le même champ ?
+
+    \begin {center}
+	\includegraphics [width=.6\linewidth] {\inc/st-mode}
+    \end {center}
+
+    \begin {itemize}
+	\item 12 bits de permissions (ex: \code {00752} = \code {rwxr-x-w-})
+	    \begin {itemize}
+		\item POSIX définit des constantes : \\
+		    \code {S\_IRWXU | S\_IRGRP | S\_IXGRP | S\_IWOTH}
+		\item ... mais POSIX définit aussi les valeurs numériques
+		    \\
+		    (très rare... elles sont plus pratiques à utiliser)
+	    \end {itemize}
+	\item 4 bits : type
+
+	    \begin {minipage} [c] {.40\linewidth}
+		\ctableau {\fD} {|l|l|} {
+		    \rca 1 & répertoire \\
+		    \rcb 2 & fichier régulier \\
+		    \rca ... & ... \\
+		}
+	    \end {minipage}
+	    \hfill
+	    \begin {minipage} [c] {.58\linewidth}
+		Exemple
+		(valeurs imaginaires)
+	    \end {minipage}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Consultation des attributs}
+    Comment utiliser \code {st\_mode} ?
+
+    \begin {itemize}
+	\item Récupérer les permissions : \code {stbuf.st\_mode \& 0777}
+	\item Récupérer le type : \code {stbuf.st\_mode \& 0xf000}
+	    \begin {itemize}
+		\item pour tester...
+		    {
+		    \fC
+		    \begin {tabular} {ll}
+			... si répertoire
+			    & \code {if ((stbuf.st\_mode \& 0xf000) == 0x1000)}
+			    \\
+			... si fichier
+			    & \code {if ((stbuf.st\_mode \& 0xf000) == 0x2000)}
+			    \\
+		    \end {tabular}
+		    }
+		\item Utilisation des constantes POSIX
+		    {
+		    \fC
+		    \begin {tabular} {ll}
+			... si répertoire
+			    & \code {if ((stbuf.st\_mode \& S\_IFMT) == S\_IFDIR)}
+			    \\
+			... si fichier
+			    & \code {if ((stbuf.st\_mode \& S\_IFMT) == S\_IFREG)}
+			    \\
+		    \end {tabular}
+		    }
+		\item Encore mieux...
+		    {
+		    \fC
+		    \begin {tabular} {ll}
+			... si répertoire
+			    & \code {if (S\_ISDIR (stbuf.st\_mode))}
+			    \\
+			... si fichier
+			    & \code {if (S\_ISREG (stbuf.st\_mode))}
+			    \\
+		    \end {tabular}
+		    }
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Consultation des attributs}
+    Comment répondre à « puis-je lire/écrire/exécuter le fichier » ?
+
+    \begin {itemize}
+	\item \code {stat} ne permet pas de répondre à la question
+	    \begin {itemize}
+		\item tester les permissions ne suffit pas
+		\item il faut d'abord savoir si on est le propriétaire,
+		    un membre du groupe, ou un « autre »
+	    \end {itemize}
+
+	\item solution :
+
+	    \prototype {\code {int access (const char *path, int mode)}}
+
+	\item le paramètre \code {mode} vaut :
+
+	    \ctableau {\fC} {|l|l|} {
+		\rca \code {F\_OK} & teste si le fichier existe \\
+		\rcb \code {X\_OK} & teste l'accès en exécution \\
+		\rca \code {W\_OK} & teste l'accès en écriture \\
+		\rcb \code {R\_OK} & teste l'accès en lecture \\
+	    }
+
+	\item accès autorisé : retour = 0, interdit : retour = 1
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Modification des attributs}
+    Pour modifier certains attributs :
+    \begin {itemize}
+	\item modifier les permissions
+	    \prototype {
+		\code {int chmod (const char *path, mode\_t mode)} \\
+		\code {int fchmod (int fd, mode\_t mode)}
+	    }
+
+	\item modifier le propriétaire ou le groupe
+	    \prototype {
+		\code {int chown (const char *path, uid\_t uid)} \\
+		\code {int fchown (int fd, uid\_t uid)} \\
+		\code {int chgrp (const char *path, gid\_t gid)} \\
+		\code {int fchgrp (int fd, gid\_t gid)} \\
+	    }
+	    \vspace* {-4mm}
+	    \implique primitives restreintes à l'administrateur
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Modification des attributs}
+    \begin {itemize}
+	\item modifier les dates :
+	    \prototype {
+		\code {int utime (const char *path, const struct utimbuf *buf)}
+	    }
+
+	    \begin {itemize}
+		\item Champs de \code {struct utimbuf} :
+
+		    \ctableau {\fD} {|l|l|} {
+			\rca \code {actime} & dernier accès \\
+			\rcb \code {modtime} & dernière modification \\
+		    }
+
+		\item pas de troisième date (modification des
+		    attributs)
+		    \\
+		    \implique modifiée par \code {utime} elle-même
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Répertoires
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Répertoires}
+
+\begin {frame} {Qu'est-ce qu'un répertoire ?}
+
+    Un répertoire est un fichier sur le disque
+    \begin {itemize}
+	\item type particulier : ce n'est pas un fichier régulier
+
+	    \begin {itemize}
+		\item certaines opérations sont interdites
+		    \\
+		    Exemple : \code {\alert {open ("repertoire", O\_WRONLY)}}
+		    \vspace {0.5mm}
+
+		\item \implique utilisation de primitives spécialisées
+
+	    \end {itemize}
+
+	\item structure particulière
+
+	    \begin {itemize}
+		\item c'est toujours une suite linéaire d'octets
+		\item mais le noyau y met sa propre structure
+
+	    \end {itemize}
+
+	\item contenu : des références à des fichiers (réguliers
+	    ou répertoires ou ...)
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Qu'est-ce qu'un répertoire}
+
+    Structure originelle des répertoires Unix (V7, 1977)~:
+
+    \begin {center}
+	\includegraphics [width=.6\linewidth] {\inc/rep-fmt-v7}
+    \end {center}
+
+    \begin {itemize}
+	\item nom : limité à 14 caractères
+	\item numéro d'inode : numéro de fichier sur le disque
+	\item 2 entrées spéciales : « . » et « .. »
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Numéro d'inode}
+    Qu'est-ce qu'un numéro de fichier ?
+
+    \begin {itemize}
+	\item chaque fichier (régulier, répertoire) a un \textbf {inode}
+	\item l'inode rassemble les attributs d'un fichier \\
+	    ($\approx$ ce que retourne \code {stat} + localisation des
+	    données)
+	\item inodes rangés séquentiellement sur une portion
+	    du disque \\
+	    \implique un inode est donc repéré par son numéro
+	    \begin {itemize}
+		\item convention : inode du répertoire racine = 2
+	    \end {itemize}
+	\item un numéro d'inode identifie donc un fichier \\
+	    \implique attributs et contenu
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Qu'est-ce qu'un répertoire}
+    \begin {center}
+	\includegraphics [width=.9\linewidth] {\inc/arbo}
+    \end {center}
+
+    \begin {itemize}
+	\item vision logique : arborescence
+	\item vision physique : série d'inodes sur le disque \\
+	    \implique répertoires et fichiers
+	\item le nom ne fait pas partie des attributs de fichier \\
+	    \implique un nom n'est qu'une entrée dans un répertoire
+	\item \code {ls -i} : affiche les entrées (nom + numéro d'inode)
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Qu'est-ce qu'un répertoire}
+    Principales opérations
+    \begin {itemize}
+	\item \code {open ("/usr/include/stdio.h", ...)} \\
+	    \begin {itemize}
+		\item recherche dans les répertoires
+		\item « traversée de répertoires »
+		\item nécessite le droit d'\textbf {exécution} sur les
+		    répertoires
+		\item chemin absolu : commencer à l'inode 2
+		\item chemin relatif : commencer à l'inode du répertoire
+		    courant
+
+	    \end {itemize}
+	\item supprimer une entrée
+	    \begin {itemize}
+		\item vider l'entrée : numéro d'inode $\leftarrow$ 0
+		\item le reste du répertoire n'est pas décalé (performances)
+	    \end {itemize}
+	\item ajouter une entrée
+	    \begin {itemize}
+		\item rechercher une entrée disponible
+		\item ou agrandir le répertoire si nécessaire
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Qu'est-ce qu'un répertoire}
+    1982 : U. Berkeley diffuse BSD 4.2
+
+    \begin {itemize}
+	\item amélioration du système de fichiers : performances,
+	    fonctionnalités
+	\item augmentation de la taille maximum des noms ($\leq$ 255)
+    \end {itemize}
+
+    \begin {center}
+	\includegraphics [width=.8\linewidth] {\inc/rep-fmt-ffs}
+    \end {center}
+\end {frame}
+
+\begin {frame} {Lecture d'un répertoire}
+    Comment lire le contenu d'un répertoire ?
+
+    \begin {itemize}
+	\item originellement : \code {open ("rep", O\_RDONLY)} \\
+	    \begin {itemize}
+		\item lire 2 octets pour l'inode et 14 pour le nom, etc.
+		\item ignorer les numéros d'inode nuls
+		\item recommencer jusqu'à la fin
+	    \end {itemize}
+
+	\item apparition du système de fichiers BSD
+	    \begin {itemize}
+		\item changer tous les programmes (ex : \code {ls})
+	    \end {itemize}
+
+	\item nouvelle primitive système BSD : \code {\alert {getdirentries}}
+	    \begin {itemize}
+		\item non normalisée par POSIX
+	    \end {itemize}
+	
+	\item BSD propose de nouvelles fonctions de bibliothèque :
+	    \begin {itemize}
+		\item \code {opendir}, \code {readdir}, \code {closedir}
+		\item normalisées par POSIX
+		\item \implique à utiliser !
+	    \end {itemize}
+
+	\item nouveaux systèmes de fichiers
+	    \begin {itemize}
+		\item locaux : lfs, unionfs, zfs, ext$n$fs, etc
+		\item réseau : nfs, smbfs, etc.
+	    \end {itemize}
+	    \implique \code {opendir} \& co : toujours utilisables
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Lecture d'un répertoire}
+    \prototype {
+	\code {DIR *opendir (const char *path)} \\
+	\code {struct dirent *readdir (DIR *dp)} \\
+	\code {int closedir (DIR *dp)}
+    }
+
+    \begin {itemize}
+	\item champs de la \code {struct dirent} normalisés par POSIX :
+
+	    \ctableau {\fC} {|l|l|} {
+		\rca \code {d\_ino} & numéro d'inode \\
+		\rcb \code {d\_name} & nom, terminé par un octet nul \\
+	    }
+
+	\item attention : il peut y avoir d'autres champs, mais ils
+	    ne sont pas normalisés par POSIX \\
+	    \implique à ne pas utiliser
+
+	\item \code {readdir} renvoie successivement toutes les entrées
+	    \begin {itemize}
+		\item y compris «~.~» et «~..~»
+		\item adresse renvoyée = variable locale \code {static}
+		    de \code {readdir}
+		    \\
+		    \implique pas besoin de la libérer
+	    \end {itemize}
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Lecture d'un répertoire}
+    Exemple~:
+
+    \lstinputlisting [basicstyle=\fD\lstmonstyle] {\inc/ex-dir.c}
+    
+\end {frame}
+
+\begin {frame} {Création et suppression de répertoires}
+    \prototype {
+	\code {int mkdir (const char *path, mode\_t mode)} \\
+	\code {int rmdir (const char *path)}
+    }
+
+    \begin {itemize}
+	\item \code {mkdir}
+	    \begin {itemize}
+		\item crée automatiquement les deux entrées «~.~» et «~..~»
+		\item \code {mode} = permissions du répertoire
+		    \begin {itemize}
+			\item droit d'exécution : traverser le répertoire
+			\item règle de base : \code {mode = 0777}
+			    (sauf si conditions spécifiques)
+			\item laisser faire le masque de création de fichiers
+			    (plus tard)
+		    \end {itemize}
+	    \end {itemize}
+
+	\item \code {rmdir} ne peut supprimer que les répertoires vides
+	    \begin {itemize}
+		\item à l'exception de «~.~» et «~..~» (qu'on ne
+		    peut pas supprimer)
+	    \end {itemize}
+
+	\item commandes \code {mkdir} et \code {rmdir} : simples
+	    appels aux primitives systèmes
+
+    \end {itemize}
+\end {frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Liens
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Liens}
+
+\begin {frame} {Liens physiques}
+    En shell :
+
+    \begin {itemize}
+	\item Commande shell \code {ln} : \code {ln toto titi}
+	\item \code {int link (const char *old, const char *new)}
+	\item \implique ajoute un deuxième nom \code {titi} au fichier {toto}
+    \end {itemize}
+
+    \vspace* {3mm}
+
+    Comment ça marche ? Rappel :
+
+    \begin {center}
+	\includegraphics [width=.8\linewidth] {\inc/arbo}
+    \end {center}
+
+    En réalité, la vision logique est biaisée...
+
+\end {frame}
+
+\begin {frame} {Liens physiques}
+    L'arborescence est un graphe orienté G = <S, A> où :
+    \begin {itemize}
+	\item sommets $\in$ S : inodes (répertoires ou fichiers réguliers)
+	\item arcs étiquetés $\in$ A : entrées de répertoires = noms
+	    \begin {center}
+		\includegraphics [width=.8\linewidth] {\inc/lien-1}
+	    \end {center}
+	\item si on exclut «~.~» et «~..~» : graphe sans cycle
+	\item nl : nombre de liens (\code {st\_nlink} avec \code {stat})
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Liens physiques -- Ajout}
+    \begin {itemize}
+	\item ajouter un arc dans le graphe
+	\item \code {link ("/usr/include/unistd.h", "/home/toto")}
+
+	    \begin {center}
+		\includegraphics [width=.5\linewidth] {\inc/lien-2}
+	    \end {center}
+
+	\item ajouter un nom augmente le nombre de liens
+	\item le nouveau nom a exactement le même statut que l'ancien
+	    \begin {itemize}
+		\item il n'y a pas de nom « principal », les 2 sont équivalents
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Liens physiques -- Suppression}
+    \begin {itemize}
+	\item supprimer un arc dans le graphe
+	\item \code {int unlink (const char *path)}
+	\item \implique décrémente le nombre de liens
+	\item si le nombre de liens = 0 \\
+	    \implique l'espace occupé par le fichier est libéré sur le disque
+	\item \code {unlink} est la primitive pour supprimer un fichier
+	    \begin {itemize}
+		\item ne fonctionne pas pour les répertoires
+		    (rappel : \code {rmdir})
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Liens physiques}
+    Limitations des liens physiques :
+    \begin {itemize}
+	\item le nouveau nom doit être sur le même disque
+	    \begin {itemize}
+		\item une entrée dans un répertoire ne contient
+		    qu'un numéro d'inode \\
+		    \implique l'inode est cherché sur le même disque
+	    \end {itemize}
+	\item on ne peut pas créer de lien vers un répertoire
+	    \begin {itemize}
+		\item sinon, on pourrait créer des cycles dans le graphe
+		\item difficile de faire un parcours récursif \\
+		    (find, recopier une arborescence, tar, etc.)
+	    \end {itemize}
+	\item l'ancien nom doit exister
+	    \begin {itemize}
+		\item pas de lien vers un fichier qui n'existe pas encore
+		\item exemple : un raccourci vers un fichier sur un
+		    système de fichiers pas encore monté (montage à
+		    la demande)
+
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Liens symboliques}
+    1982 : U. Berkeley diffuse BSD 4.2
+
+    \begin {itemize}
+	\item liens symboliques
+	\item ex: \code {ln \alert {-s} /tmp /home/pda/temp}
+	\item \code {int symlink (const char *old, const char *new)}
+	\item nouveau type de fichier (en plus de régulier et répertoire)
+	    \begin {itemize}
+		\item avec \code {stat} : \code {S\_IFLNK} et
+		    \code {S\_ISLNK()}
+	    \end {itemize}
+	\item un lien symbolique contient le nom de l'objet référencé
+	    \begin {itemize}
+		\item fichier, répertoire, lien symbolique, ou autre
+		\item peut même ne pas exister
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Liens symboliques -- Implémentation}
+    \begin {itemize}
+	\item un lien symbolique contient le nom de l'objet référencé
+	\item nouveau type de fichier
+	    \begin {center}
+		\includegraphics [width=.7\linewidth] {\inc/lien-3}
+	    \end {center}
+
+	\item lorsqu'un lien symbolique est trouvé :
+	    \begin {itemize}
+		\item si nom absolu : on repart de la racine
+		\item si nom relatif : on continue à partir du répertoire
+		    dans lequel est le lien
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Liens symboliques -- Lecture d'un lien}
+    \prototype {\code {ssize\_t readlink (const char *path, char *buf, size\_t taille)}}
+
+    \begin {itemize}
+	\item \code {path} est un fichier de type « lien symbolique »
+	\item le contenu du lien est placé dans \code {buf}
+	\item au plus \code {taille} octets placés dans \code {buf}
+	    \begin {itemize}
+		\item troncature possible
+	    \end {itemize}
+	\item renvoie le nombre d'octets placés dans \code {buf} (ou -1)
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Liens symboliques -- Retour sur stat}
+    Comment se comporte \code {stat} avec les liens symboliques ?
+
+    \begin {itemize}
+	\item sur un lien symbolique, \code {stat} lit les attributs du
+	    fichier pointé
+
+	    \begin {itemize}
+		\item -1 si le lien référence un objet inexistant
+	    \end {itemize}
+
+	\item pour savoir si le fichier est un lien symbolique :
+
+	    \code {int lstat (const char *path, struct stat *stbuf)}
+
+	    \begin {itemize}
+		\item \code {lstat} lit les attributs, même
+		    s'il s'agit d'un lien symbolique
+
+		\item exemple : \code {tar} archive les liens, pas les
+		    fichiers pointés
+
+	    \end {itemize}
+
+    \end {itemize}
+\end {frame}
