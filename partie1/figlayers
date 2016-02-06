@@ -1,0 +1,151 @@
+#!/bin/sh
+
+#
+# Extract layers from a FIG file
+#
+# History
+#  2002/04/23 : pda : design
+#  2013/02/12 : pda : extension to intervals
+#
+
+usage ()
+{
+    echo "usage: $0 layer[-layer] ... < fig-file > fig-file" >&2
+    exit 1
+}
+
+if [ $# = 0 ]
+then
+    usage
+fi
+
+LAYERS="$*"
+
+for i
+do
+    if expr "$i" : "^[0-9][0-9]*-[0-9][0-9]*$" > /dev/null
+    then
+	MIN=`expr "$i" : "\([0-9]*\)-"`
+	MAX=`expr "$i" : ".*-\([0-9]*\)"`
+	if [ $MIN -gt $MAX ]
+	then usage
+	fi
+	while [ $MIN -le $MAX ]
+	do
+	    LAYERS="$LAYERS $MIN"
+	    MIN=`expr $MIN + 1`
+	done
+    elif expr "$i" : "^[0-9][0-9]*$" > /dev/null
+    then
+	LAYERS="$LAYERS $i"
+    else
+	usage
+    fi
+done
+
+awk -v "layers_string=$LAYERS" -F" " '
+    BEGIN {
+	split (layers_string, layers, "[ \t]")
+    }
+    /^#FIG/ {
+	version = $2
+	if (version != 3.2)
+	{
+	    print "Invalid FIG version ($0)" > "/dev/stderr"
+	}
+	print
+	afficher = 1
+	next
+    }
+    /^0 / {
+	# color pseudo object
+	afficher = 1
+	print
+	next
+    }
+    /^1 / {
+	# ellipse
+	if (layerok($7))
+	{
+	    afficher = 1
+	    print
+	}
+	else afficher = 0
+	next
+    }
+    /^2 / {
+	# polyline
+	if (layerok($7))
+	{
+	    afficher = 1
+	    print
+	}
+	else afficher = 0
+	next
+    }
+    /^3 / {
+	# spline
+	if (layerok($7))
+	{
+	    afficher = 1
+	    print
+	}
+	else afficher = 0
+	next
+    }
+    /^4 / {
+	# text
+	if (layerok($4))
+	{
+	    afficher = 1
+	    print
+	}
+	else afficher = 0
+	next
+    }
+    /^5 / {
+	# arc
+	if (layerok($7))
+	{
+	    afficher = 1
+	    print
+	}
+	else afficher = 0
+	next
+    }
+    /^6 / {
+	# compound
+	afficher = 1
+	print
+	next
+    }
+    /^-6 / {
+	# end of compound
+	afficher = 1
+	print
+	next
+    }
+    /^	/ {
+	# ligne de continuation
+	if (afficher)
+	{
+	    print
+	}
+	next
+    }
+    {
+	afficher = 1
+	print
+	next
+    }
+
+    function layerok (l,           ok, n)
+    {
+	ok = 0
+	for (n in layers)
+	{
+	    if (l == layers [n])
+		ok = 1
+	}
+	return ok
+    }' -
