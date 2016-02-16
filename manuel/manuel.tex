@@ -931,6 +931,7 @@ ou -1 en cas d'erreur.
 \separation
 \primitive {stat, fstat} --- consulte le descripteur d'un fichier
     \index{{\tt stat}}
+    \index{{\tt lstat}}
     \index{{\tt fstat}}
     \label {stat}
 
@@ -939,15 +940,20 @@ ou -1 en cas d'erreur.
 #include <sys/stat.h>
 
 int stat (const char *nom, struct stat *buf)
+int lstat (const char *nom, struct stat *buf)
 int fstat (int desc, struct stat *buf)
 \end{verbatim}
 \end {quote}
 
-Les primitives {\tt stat} et {\tt fstat} lisent la partie système d'un
+Les primitives {\tt stat}, {\tt lstat} et {\tt fstat} lisent la partie système d'un
 fichier (son {\it inode}) et placent ces informations dans la structure
 pointée par {\tt buf}. Le fichier peut être spécifié par son nom
 ({\tt stat}) ou par le descripteur de fichier qui lui est associé
 ({\tt fstat}).
+
+Lorsque le fichier est un lien symbolique, {\tt stat} renvoie des
+informations sur la cible du lien, alors que {\tt lstat} renvoie des
+informations sur le lien lui-même.
 
 Le contenu de la structure {\tt buf} est défini
 comme suit~:
@@ -1018,6 +1024,7 @@ Le champ {\tt st\_mode} est composé de~:
 	    \tt S\_ISCHR({\em mode}) & fichier périphérique (mode caractère) \\
 	    \tt S\_ISDIR({\em mode}) & répertoire \\
 	    \tt S\_ISFIFO({\em mode}) & tube ou tube nommé \\
+	    \tt S\_ISLNK({\em mode}) & lien symbolique \\
 	    \hline
 	\end {tabular}
 
