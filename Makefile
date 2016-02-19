@@ -111,7 +111,7 @@ LST1dev = \
 SRC1ps = ch1-4-ps.tex sl1-4-ps.tex
 
 FIG1ps = \
-	inc1-4-ps/segments.pdf \
+	inc1-4-ps/ps-mem.pdf \
 	inc1-4-ps/umask.pdf \
 	inc1-4-ps/chroot.pdf \
 	inc1-4-ps/fork.pdf \
