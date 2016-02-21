@@ -1,10 +1,11 @@
 #
 # Cibles possibles :
-# all: tous les chapitres individuels (ch-lan.pdf, ch-ipv4.pdf, etc.)
-# ch-lan.pdf: un chapitre individuel particulier
-# ch-ipv4.pdf: idem
+# all: tous les chapitres individuels (chx-y-zzz.pdf)
+# chx-y-zzz.pdf: un chapitre individuel particulier
 # ...
-# tout.pdf: un document contenant tous les chapitres (pas fait avec "all")
+# tout1.pdf: document contenant tous les chapitres de la première partie
+# tout1.pdf: document contenant tous les chapitres de la deuxième partie
+# print: tous les PDF au format "3 pages par page"
 #
 
 .SUFFIXES:	.pdf .fig .svg .gnu .tex
@@ -171,7 +172,6 @@ FIG1tube = \
 IMG1tube = \
 
 LST1tube = \
-#	inc1-6-pipe/getpid.c \
 
 
 ##############################################################################
@@ -234,6 +234,148 @@ LST1all = \
 	$(LST1sig) \
 
 ##############################################################################
+# Deuxième partie
+##############################################################################
+
+##############################################################################
+# Introduction
+
+SRC2intro = ch2-1-intro.tex sl2-1-intro.tex
+
+FIG2intro = \
+	inc2-1-intro/acces.pdf \
+	inc2-1-intro/ps-except.pdf \
+	inc2-1-intro/trap-lib.pdf \
+	inc2-1-intro/boot.pdf \
+
+IMG2intro = \
+
+LST2intro = \
+
+##############################################################################
+# Processus
+
+SRC2ps = ch2-2-ps.tex sl2-2-ps.tex
+
+FIG2ps = \
+	inc2-2-ps/mem-1.pdf \
+	inc2-2-ps/mem-2.pdf \
+	inc2-2-ps/mem-3.pdf \
+	inc2-2-ps/etats.pdf \
+	inc2-2-ps/ps-commut.pdf \
+	inc2-2-ps/crit.pdf \
+	inc2-2-ps/decay.pdf \
+
+IMG2ps = \
+
+LST2ps = \
+
+##############################################################################
+# Système de fichiers
+
+SRC2fs = ch2-3-fs.tex sl2-3-fs.tex
+
+FIG2fs = \
+	inc2-3-fs/pile-0.pdf \
+	inc2-3-fs/pile-1.pdf \
+	inc2-3-fs/pile-2.pdf \
+	inc2-3-fs/pile-3.pdf \
+	inc2-3-fs/pile-4.pdf \
+	inc2-3-fs/pile-5.pdf \
+	inc2-3-fs/disque.pdf \
+	inc2-3-fs/bsdpart.pdf \
+	inc2-3-fs/dospart.pdf \
+	inc2-3-fs/volume.pdf \
+	inc2-3-fs/geometrie.pdf \
+	inc2-3-fs/buffer.pdf \
+	inc2-3-fs/bcache.pdf \
+	inc2-3-fs/inode.pdf \
+	inc2-3-fs/freelist.pdf \
+	inc2-3-fs/mount-0.pdf \
+	inc2-3-fs/mount-1.pdf \
+	inc2-3-fs/mount-2.pdf \
+	inc2-3-fs/vfs.pdf \
+
+IMG2fs = \
+
+LST2fs = \
+
+##############################################################################
+# Pilotes de périphériques
+
+SRC2dev = ch2-4-dev.tex sl2-4-dev.tex
+
+FIG2dev = \
+	inc2-4-dev/arch-now.pdf \
+	inc2-4-dev/bus.pdf \
+	inc2-4-dev/kbd-ctrl.pdf \
+	inc2-4-dev/cdevsw.pdf \
+	inc2-4-dev/spec.pdf \
+	inc2-4-dev/impr.pdf \
+
+IMG2dev = \
+
+LST2dev = \
+	inc2-4-dev/kbd-read.s \
+	inc2-4-dev/kbd-led.s \
+
+
+##############################################################################
+# Mémoire
+
+SRC2mem = ch2-5-mem.tex sl2-5-mem.tex
+
+FIG2mem = \
+	inc2-5-mem/mmu-i386.pdf \
+	inc2-5-mem/mmu-ipc.pdf \
+	inc2-5-mem/mmu-pdp11a.pdf \
+	inc2-5-mem/mmu-pdp11b.pdf \
+	inc2-5-mem/mmu-princ.pdf \
+	inc2-5-mem/mmu-tlb386.pdf \
+	inc2-5-mem/ps-commut.pdf \
+	inc2-5-mem/ps-mem.pdf \
+	inc2-5-mem/trans-adr.pdf \
+
+IMG2mem = \
+	inc2-5-mem/hp-ipc.jpg \
+	inc2-5-mem/pdp11.jpg \
+
+LST2mem = \
+
+
+##############################################################################
+# L'ensemble
+
+SRC2all = \
+	$(SRC2intro) \
+	$(SRC2ps) \
+	$(SRC2fs) \
+	$(SRC2dev) \
+	$(SRC2mem) \
+	tout2.tex
+
+FIG2all = \
+	$(FIG2intro) \
+	$(FIG2ps) \
+	$(FIG2fs) \
+	$(FIG2dev) \
+	$(FIG2mem) \
+
+IMG2all = \
+	$(IMG2intro) \
+	$(IMG2ps) \
+	$(IMG2fs) \
+	$(IMG2dev) \
+	$(IMG2mem) \
+
+LST2all = \
+	$(LST2intro) \
+	$(LST2ps) \
+	$(LST2fs) \
+	$(LST2dev) \
+	$(LST2mem) \
+
+##############################################################################
 # Les cibles
 ##############################################################################
 
@@ -244,6 +386,11 @@ all:	ch1-1-intro.pdf \
 	ch1-5-time.pdf \
 	ch1-6-pipe.pdf \
 	ch1-7-sig.pdf \
+	ch2-1-intro.pdf \
+	ch2-2-ps.pdf \
+	ch2-3-fs.pdf \
+	ch2-4-dev.pdf \
+	ch2-5-mem.pdf \
 
 ch1-1-intro.pdf: $(DEPS) $(FIG1intro) $(IMG1intro) $(LST1intro) $(SRC1intro)
 ch1-2-file.pdf:	$(DEPS) $(FIG1file) $(IMG1file) $(LST1file) $(SRC1file)
@@ -252,6 +399,12 @@ ch1-4-ps.pdf:	$(DEPS) $(FIG1ps) $(IMG1ps) $(LST1ps) $(SRC1ps)
 ch1-5-time.pdf:	$(DEPS) $(FIG1time) $(IMG1time) $(LST1time) $(SRC1time)
 ch1-6-pipe.pdf:	$(DEPS) $(FIG1tube) $(IMG1tube) $(LST1tube) $(SRC1tube)
 ch1-7-sig.pdf:	$(DEPS) $(FIG1sig) $(IMG1sig) $(LST1sig) $(SRC1sig)
+
+ch2-1-intro.pdf: $(DEPS) $(FIG2intro) $(IMG2intro) $(LST2intro) $(SRC2intro)
+ch2-2-ps.pdf:	$(DEPS) $(FIG2ps) $(IMG2ps) $(LST2ps) $(SRC2ps)
+ch2-3-fs.pdf:	$(DEPS) $(FIG2fs) $(IMG2fs) $(LST2fs) $(SRC2fs)
+ch2-4-dev.pdf:	$(DEPS) $(FIG2dev) $(IMG2dev) $(LST2dev) $(SRC2dev)
+ch2-5-mem.pdf:	$(DEPS) $(FIG2mem) $(IMG2mem) $(LST2mem) $(SRC2mem)
 
 inc1-2-file/lien-1.pdf: inc1-2-file/lien.fig
 	figlayers 40-60       < $< | fig2dev -L pdf > $@
@@ -274,16 +427,45 @@ inc1-6-pipe/creation-5.pdf: inc1-6-pipe/creation.fig
 	figlayers 10 16 30 40 45-65 99 < $< | fig2dev -L pdf > $@
 inc1-6-pipe/creation-6.pdf: inc1-6-pipe/creation.fig
 	figlayers 10 17 36 46-55 99 < $< | fig2dev -L pdf > $@
+inc2-2-ps/mem-1.pdf: inc2-2-ps/mem.fig
+	figlayers 30-39       < $< | fig2dev -L pdf > $@
+inc2-2-ps/mem-2.pdf: inc2-2-ps/mem.fig
+	figlayers 50-69       < $< | fig2dev -L pdf > $@
+inc2-2-ps/mem-3.pdf: inc2-2-ps/mem.fig
+	figlayers 30-99       < $< | fig2dev -L pdf > $@
+
+inc2-3-fs/pile-0.pdf: inc2-3-fs/pile.fig
+	figlayers       50-99    < $< | fig2dev -L pdf > $@
+inc2-3-fs/pile-1.pdf: inc2-3-fs/pile.fig
+	figlayers 41    50-99    < $< | fig2dev -L pdf > $@
+inc2-3-fs/pile-2.pdf: inc2-3-fs/pile.fig
+	figlayers 42    50-99    < $< | fig2dev -L pdf > $@
+inc2-3-fs/pile-3.pdf: inc2-3-fs/pile.fig
+	figlayers 43    50-99    < $< | fig2dev -L pdf > $@
+inc2-3-fs/pile-4.pdf: inc2-3-fs/pile.fig
+	figlayers 44    50-99    < $< | fig2dev -L pdf > $@
+inc2-3-fs/pile-5.pdf: inc2-3-fs/pile.fig
+	figlayers 45    50-99    < $< | fig2dev -L pdf > $@
+
+inc2-3-fs/mount-0.pdf: inc2-3-fs/mount.fig
+	figlayers       50-99    < $< | fig2dev -L pdf > $@
+inc2-3-fs/mount-1.pdf: inc2-3-fs/mount.fig
+	figlayers 40    50-99    < $< | fig2dev -L pdf > $@
+inc2-3-fs/mount-2.pdf: inc2-3-fs/mount.fig
+	figlayers 40-49 50-99    < $< | fig2dev -L pdf > $@
 
 tout1.pdf:	$(DEPS) $(FIG1all) $(LST1all) $(SRC1all)
 
-print: all tout1.pdf
+tout2.pdf:	$(DEPS) $(FIG2all) $(LST2all) $(SRC2all)
+
+print: all tout1.pdf tout2.pdf
 	for i in ch?-*.pdf tout*.pdf ; do \
 	    $(PRINTCMD) -o print-$$i $$i ; \
 	done
 
 clean:
-	cleantex -a $(SRC1all) tout1.tex
-	rm -f $(FIG1all) *.bak */*.bak *.nav *.out *.snm *.vrb
+	cleantex -a $(SRC1all) $(SRC2all) tout*.tex
+	rm -f $(FIG1all) $(FIG2all)
+	rm -f *.bak */*.bak *.nav *.out *.snm *.vrb
 	rm -f print-*.pdf
 	rm -f inc?-?-*/a.out
