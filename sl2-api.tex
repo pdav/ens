@@ -109,7 +109,7 @@
     Exemple de diagramme d'états de processus
 
     \begin {center}
-	\includegraphics [width=.9\textwidth] {\inc/ps-state}
+	\includegraphics [width=.9\linewidth] {\inc/ps-state}
     \end {center}
 
     Ressources~: E/S, date, événement d'un autre processus, etc.
@@ -148,7 +148,7 @@
 
 \begin {frame} {Rappels -- Processus}
     \begin {center}
-	\includegraphics [width=\textwidth] {\inc/ps-def}
+	\includegraphics [width=\linewidth] {\inc/ps-def}
     \end {center}
 \end {frame}
 
@@ -204,7 +204,7 @@
 
 \begin {frame} {Rappels -- Interruptions et exceptions}
     \begin {center}
-	\includegraphics [width=\textwidth] {\inc/ps-except}
+	\includegraphics [width=\linewidth] {\inc/ps-except}
     \end {center}
 \end {frame}
 
@@ -277,7 +277,7 @@
 \begin {frame} {Rappels -- Commutation de processus}
 
     \begin {center}
-	\includegraphics [width=.85\textwidth] {\inc/ps-commut}
+	\includegraphics [width=.85\linewidth] {\inc/ps-commut}
     \end {center}
 
 \end {frame}
@@ -289,7 +289,7 @@
 
     \vspace* {2mm}
 
-    \begin {minipage} {.55\textwidth}
+    \begin {minipage} {.55\linewidth}
 	Chaque processus dispose~:
 	\begin {itemize}
 	    \item du segment «~\emph {text}~» \\
@@ -304,15 +304,17 @@
 
     \end {minipage}
     \hfill
-    \begin {minipage} {.43\textwidth}
-	\includegraphics [width=\textwidth] {\inc/ps-mem}
+    \begin {minipage} {.43\linewidth}
+	\begin {center}
+	\includegraphics [width=.7\linewidth] {\inc/ps-mem}
+	\end {center}
     \end {minipage}
 \end {frame}
 
 \begin {frame} {Rappels -- Adressage physique}
     Chaque processus a son propre espace d'adressage~:
 
-    \begin {minipage} {.55\textwidth}
+    \begin {minipage} {.58\linewidth}
 
 	Les programmes utilisent des adresses \textit {relatives} à
 	l'espace d'adressage du processus.
@@ -326,8 +328,10 @@
 
     \end {minipage}
     \hfill
-    \begin {minipage} {.43\textwidth}
-	\includegraphics [width=\textwidth] {\inc/trans-adr}
+    \begin {minipage} {.40\linewidth}
+	\begin {center}
+	    \includegraphics [width=.9\linewidth] {\inc/trans-adr}
+	\end {center}
     \end {minipage}
 \end {frame}
 
@@ -335,7 +339,7 @@
 
     Unité de gestion mémoire (MMU)~:
     \begin {center}
-	\includegraphics [width=.7\textwidth] {\inc/mmu-princ}
+	\includegraphics [width=.7\linewidth] {\inc/mmu-princ}
     \end {center}
 
     \begin {itemize}
@@ -374,7 +378,7 @@
 
     \vspace* {1mm}
 
-    \begin {minipage} {.45\textwidth}
+    \begin {minipage} {.45\linewidth}
 
 	\begin {itemize}
 	    \item de considérer qu'il n'y a pas de traduction
@@ -390,8 +394,8 @@
 
     \end {minipage}
     \hfill
-    \begin {minipage} {.53\textwidth}
-	\includegraphics [width=\textwidth] {\inc/ps-commut}
+    \begin {minipage} {.53\linewidth}
+	\includegraphics [width=\linewidth] {\inc/ps-commut}
 	\\
 	\centerline {\tiny (Même dessin que précédemment)}
     \end {minipage}
@@ -402,7 +406,7 @@
     Unité de gestion mémoire du HP 9000-IPC~:
 
     \begin {center}
-	\includegraphics [width=.5\textwidth] {\inc/mmu-ipc}
+	\includegraphics [width=.5\linewidth] {\inc/mmu-ipc}
     \end {center}
 
     \begin {itemize}
@@ -419,7 +423,7 @@
     Principe de l'unité de gestion mémoire du PDP 11/45~:
 
     \begin {center}
-	\includegraphics [width=.45\textwidth] {\inc/mmu-pdp11a}
+	\includegraphics [width=.55\linewidth] {\inc/mmu-pdp11a}
     \end {center}
 
     \begin {itemize}
@@ -436,7 +440,7 @@
     Traduction d'adresse sur le PDP 11/45~:
 
     \begin {center}
-	\includegraphics [width=.45\textwidth] {\inc/mmu-pdp11b}
+	\includegraphics [width=.45\linewidth] {\inc/mmu-pdp11b}
     \end {center}
 
     \begin {itemize}
@@ -521,7 +525,7 @@
     Unité de gestion mémoire du i386~:
 
     \begin {center}
-	\includegraphics [width=.75\textwidth] {\inc/mmu-i386}
+	\includegraphics [width=\linewidth] {\inc/mmu-i386}
     \end {center}
 \end {frame}
 
@@ -583,7 +587,7 @@
     Exemple pour Pentium III (x86)~: TLB «~\emph {4-way set-associative}~»
 
     \begin {center}
-	\includegraphics [width=.8\textwidth] {\inc/mmu-tlb386}
+	\includegraphics [width=.9\linewidth] {\inc/mmu-tlb386}
     \end {center}
 
     {\footnotesize Ne pas oublier de vider le TLB lors de la commutation
@@ -792,7 +796,7 @@
     Exemple d'utilisation~: les files de messages
 
     \begin {center}
-	\includegraphics [width=.9\textwidth] {\inc/msg}
+	\includegraphics [width=.9\linewidth] {\inc/msg}
     \end {center}
 
     Une file de message possède des attributs~:
@@ -807,7 +811,7 @@
 
 \begin {frame} {Files de messages}
     \begin {center}
-	\includegraphics [width=.6\textwidth] {\inc/msg}
+	\includegraphics [width=.6\linewidth] {\inc/msg}
     \end {center}
 
     Chaque message individuel~:
@@ -892,7 +896,7 @@
     Attachement d'un segment de mémoire~:
 
     \begin {center}
-	\includegraphics [width=.6\textwidth] {\inc/shmat}
+	\includegraphics [width=.6\linewidth] {\inc/shmat}
     \end {center}
 
     Attention~: le segment de mémoire n'est pas forcément attaché à
@@ -999,7 +1003,7 @@
 
 \begin {frame} {Threads}
     \begin {center}
-	\includegraphics [width=.6\textwidth] {\inc/thr-intro}
+	\includegraphics [width=.6\linewidth] {\inc/thr-intro}
     \end {center}
 
     \begin {itemize}
@@ -1012,7 +1016,7 @@
 
 \begin {frame} {Threads}
     Espace d'adressage du processus~:
-    \begin {minipage} {.65\textwidth}
+    \begin {minipage} {.65\linewidth}
 	\begin {itemize}
 	     \item zone «~data~» : variables globales
 
@@ -1028,8 +1032,8 @@
 	\end {itemize}
     \end {minipage}
     \hfill
-    \begin {minipage} {.33\textwidth}
-	\includegraphics [width=\textwidth] {\inc/thr-stack}
+    \begin {minipage} {.33\linewidth}
+	\includegraphics [width=\linewidth] {\inc/thr-stack}
     \end {minipage}
 
 \end {frame}
@@ -1080,7 +1084,7 @@
 \begin {frame} {Threads}
     Illustration~: 4 threads (principal + 3 nouveaux)
     \begin {center}
-	\includegraphics [width=.9\textwidth] {\inc/thr-api}
+	\includegraphics [width=.9\linewidth] {\inc/thr-api}
     \end {center}
 \end {frame}
 
@@ -1353,7 +1357,7 @@ pthread_attr_destroy (&pa) ;
 
 \begin {frame} {Threads et signaux}
     \begin {center}
-	\includegraphics [width=.9\textwidth] {\inc/thr-sig}
+	\includegraphics [width=.9\linewidth] {\inc/thr-sig}
     \end {center}
 
 \end {frame}
@@ -1396,7 +1400,7 @@ pthread_attr_destroy (&pa) ;
 \begin {frame} {Barrières}
 
     \begin {center}
-	\includegraphics [width=.6\textwidth] {\inc/bar-intro}
+	\includegraphics [width=.6\linewidth] {\inc/bar-intro}
     \end {center}
 
     Valeur de retour de \code {pthread\_barrier\_wait}~:
