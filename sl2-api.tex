@@ -746,13 +746,11 @@
     \vspace* {3mm}
 
     Élaboration de la clef, par exemple à partir de :
-    \begin {center}
-    \begin {tabular} {|r|l|} \hline
-	16 bits & numéro d'inode du fichier \\ \hline
-	8 bits & numéro de périphérique (mineur) du fichier \\ \hline
-	8 bits & \texttt {projet} \\ \hline
-    \end {tabular}
-    \end {center}
+    \ctableau {} {|r|l|} {
+	\rca 16 bits & numéro d'inode du fichier \\
+	\rcb 8 bits & numéro de périphérique (mineur) du fichier \\
+	\rca 8 bits & \texttt {projet} \\
+    }
 
     \vspace* {3mm}
 

@@ -17,7 +17,7 @@
 
 \NeedsTeXFormat {LaTeX2e}
 
-\ProvidesPackage {courspda} [2013/11/18 0.9 (pda)]
+\ProvidesPackage {courspda} [2016/01/24 1.0 (pda)]
 
 \RequirePackage {etoolbox}	% toggle + AtBeginDocument
 
@@ -55,7 +55,15 @@
 \RequirePackage [\@inputenc] {inputenc}
 \RequirePackage [T1] {fontenc}
 \RequirePackage {helvet}
-\RequirePackage {cclicenses}	% creative commons icons
+\RequirePackage {ccicons}	% creative commons icons
+
+\newcommand {\credit} [1] {{\vspace* {-3mm} %
+			\fontsize{1.3mm}{1.5mm}\selectfont #1}}
+\newcommand {\creditphoto} [2] {\credit {Crédit photo : #1 -- #2}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Configuration des packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \RequirePackage {graphicx}
 % valeur par défaut pour les inclusions d'images
@@ -65,6 +73,51 @@
 \newcommand {\lstmonstyle} {\color {blue}\ttfamily}
 \lstset {language=c, basicstyle=\footnotesize\lstmonstyle, keywordstyle=}
 \newcommand {\code} [1] {{\lstmonstyle #1}}
+
+% \prototype {\code {int blabla (...)}}
+\newcommand {\prototype} [1] {
+    \begin {center}
+	\small
+	\begin {tabular} {l}
+	    #1
+	    \\
+	\end {tabular}
+    \end {center}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Pour avoir des zolis tableaux
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage {colortbl}	% pour \rowcolor
+% a mettre en debut de chaque ligne pour alterner les couleurs de fond
+\newcommand {\rca} {\rowcolor [rgb] {0.90, 0.95, 1.0}}
+\newcommand {\rcb} {\rowcolor [rgb] {0.80, 0.90, 1.0}}
+
+% tableau aligné à gauche
+% #1 : taille de police (ou vide)
+% #2 : colonnes (ex: |l|c|)
+% #3 : contenu
+\newcommand {\tableau} [3] {{#1 \begin {tabular} {#2} \hline #3 \hline
+	\end {tabular}}}
+% tableau centré
+\newcommand {\ctableau} [3] {\begin {center} \tableau {#1} {#2} {#3}
+	\end {center}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Des commandes pour éviter d'avoir à se rappeler des tailles de fonte
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand {\fA} \normalsize		% taille normale
+\newcommand {\fB} \small		% un peu plus petite
+\newcommand {\fC} \footnotesize		% encore plus petite
+\newcommand {\fD} \scriptsize		% etc.
+\newcommand {\fE} \tiny			% minuscule
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Configuration de beamer
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usetheme {default}
 \usefonttheme {structurebold}

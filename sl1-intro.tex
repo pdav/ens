@@ -366,7 +366,7 @@
 	\begin {center}
 	    \begin {tabular} {l|l}
 		\multicolumn {1} {c|} {P$_1$} &
-		    \multicolumn {1} {|c} {P$_2$} \\ \hline
+		    \multicolumn {1} {c} {P$_2$} \\ \hline
 		(1) \code {a=1} & (3) \code {a=3} \\
 		(2) \code {b=2} & \\
 	    \end {tabular}
@@ -461,7 +461,7 @@
     \begin {quote}
 	\begin {tabular} {|l|l|c|c|} \cline {3-4}
 	    \multicolumn {2} {c|} {~} &
-	    		\multicolumn {2} {|c|} {Flot de données} \\ \cline {3-4}
+	    		\multicolumn {2} {c|} {Flot de données} \\ \cline {3-4}
 	    \multicolumn {2} {c|} {~} &
 			Simple & Multiple \\ \hline
 	    Flot & Simple &
@@ -523,19 +523,16 @@
 \begin {frame} {Classification de Flynn -- SIMD}
     Plus récemment~: extensions vectorielles pour architecture x86
 
-    \begin {center}
-	\small
-	\begin {tabular} {|c|l|c|} \hline
-	    \textbf {Nom} & \textbf {Signification} & \textbf {Date} \\ \hline
-	    MMX & MultiMedia eXtension & 1997 \\ \hline
-	    SSE & Streaming SIMD Extension & 1999 \\ \hline
-	    SSE2 & & 2001 \\ \hline
-	    SSE3 & & 2004 \\ \hline
-	    SSSE3 & Supplemental Streaming SIMD Extension & 2006 \\ \hline
-	    SSE4 & & 2007 \\ \hline
-	    AVE & Advanced Vector Extensions & 2011 \\ \hline
-	\end {tabular}
-    \end {center}
+    \ctableau {\fB} {|c|l|c|} {
+	\rca \textbf {Nom} & \textbf {Signification} & \textbf {Date} \\
+	\rcb MMX & MultiMedia eXtension & 1997 \\
+	\rca SSE & Streaming SIMD Extension & 1999 \\
+	\rcb SSE2 & & 2001 \\
+	\rca SSE3 & & 2004 \\
+	\rcb SSSE3 & Supplemental Streaming SIMD Extension & 2006 \\
+	\rca SSE4 & & 2007 \\
+	\rcb AVE & Advanced Vector Extensions & 2011 \\
+    }
 
     \vspace* {3mm}
     \implique évolutions successives (et non changement radical)

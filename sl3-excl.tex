@@ -99,21 +99,20 @@ f2:  mov r0, 1000
 
     Mais si les instructions sont exécutées concurremment~:
 
-    \begin {center}
-	\small
-	\begin {tabular} {|c|l|c|c|c|} \hline
-	    Proc & Instruction
-		& \texttt {r0}$_A$ & \texttt {r0}$_B$ & Mém 1000 \\ \hline
-	    \multicolumn {2} {|l|} {initialement}
-		                      &  ?  &  ?  & 200 \\ \hline
-	    A & \texttt {mov r0,1000} & 200 &  ?  & 200 \\ \hline
-	    B & \texttt {mov r0,1000} & 200 & 200 & 200 \\ \hline
-	    A & \texttt {add r0,50}   & 250 & 200 & 200 \\ \hline
-	    B & \texttt {add r0,10}   & 250 & 210 & 200 \\ \hline
-	    A & \texttt {mov 1000,r0} & 250 & 210 & 250 \\ \hline
-	    B & \texttt {mov 1000,r0} & 250 & 210 & 210 \\ \hline
-	\end {tabular}
-    \end {center}
+    \ctableau {\fB} {|c|l|c|c|c|} {
+	\rca \textbf {Proc} & \textbf {Instruction}
+	    & \textbf {\texttt {r0}$_A$}
+	    & \textbf {\texttt {r0}$_B$}
+	    & \textbf {Mém 1000}
+	    \\
+	\rcb \multicolumn {2} {|l|} {initialement} &  ?  &  ?  & 200 \\
+	\rca A & \texttt {mov r0,1000} & 200 &  ?  & 200 \\
+	\rcb B & \texttt {mov r0,1000} & 200 & 200 & 200 \\
+	\rca A & \texttt {add r0,50}   & 250 & 200 & 200 \\
+	\rcb B & \texttt {add r0,10}   & 250 & 210 & 200 \\
+	\rca A & \texttt {mov 1000,r0} & 250 & 210 & 250 \\
+	\rcb B & \texttt {mov 1000,r0} & 250 & 210 & 210 \\
+    }
 
     Résultat~: \texttt {compte} est augmenté de 10~!
 \end {frame}
@@ -346,23 +345,22 @@ main () {
     Si deux processeurs essayent d'exécuter \code {verrouiller}
     en même temps (on suppose que le verrou est à l'adresse 1000)~:
 
-    \begin {center}
-	\footnotesize
-	\begin {tabular} {|c|l|c|c|c|} \hline
-	    Proc & Instruction
-		& \texttt {r0}$_A$ & \texttt {r0}$_B$ & Mém 1000 \\ \hline
-	    \multicolumn {2} {|l|} {initialement}
-		                      & ? & ? & 0 \\ \hline
-	    A & \texttt {mov r0,(r1)} & 0 & ? & 0 \\ \hline
-	    B & \texttt {mov r0,(r1)} & 0 & 0 & 0 \\ \hline
-	    A & \texttt {tst r0}      & 0 & 0 & 0 \\ \hline
-	    B & \texttt {tst r0}      & 0 & 0 & 0 \\ \hline
-	    A & \texttt {mov r0,1}    & 1 & 0 & 0 \\ \hline
-	    B & \texttt {mov r0,1}    & 1 & 1 & 0 \\ \hline
-	    A & \texttt {mov (r1),r0} & 1 & 1 & 1 \\ \hline
-	    B & \texttt {mov (r1),r0} & 1 & 1 & 1 \\ \hline
-	\end {tabular}
-    \end {center}
+    \ctableau {\fC} {|c|l|c|c|c|} {
+	\rca \textbf {Proc} & \textbf {Instruction}
+	    & \textbf {\texttt {r0}$_A$}
+	    & \textbf {\texttt {r0}$_B$}
+	    & \textbf {Mém 1000}
+	    \\
+	\rcb \multicolumn {2} {|l|} {initialement} & ? & ? & 0 \\
+	\rca A & \texttt {mov r0,(r1)} & 0 & ? & 0 \\
+	\rcb B & \texttt {mov r0,(r1)} & 0 & 0 & 0 \\
+	\rca A & \texttt {tst r0}      & 0 & 0 & 0 \\
+	\rcb B & \texttt {tst r0}      & 0 & 0 & 0 \\
+	\rca A & \texttt {mov r0,1}    & 1 & 0 & 0 \\
+	\rcb B & \texttt {mov r0,1}    & 1 & 1 & 0 \\
+	\rca A & \texttt {mov (r1),r0} & 1 & 1 & 1 \\
+	\rcb B & \texttt {mov (r1),r0} & 1 & 1 & 1 \\
+    }
 
     \implique les deux processeurs sont entrés en section critique !
 
@@ -477,23 +475,22 @@ main () {
     Si deux processeurs essayent d'exécuter \texttt {verrouiller}
     en même temps (on suppose que le verrou est à l'adresse 1000)~:
 
-    \begin {center}
-	\footnotesize
-	\begin {tabular} {|c|l|c|c|c|} \hline
-	    Proc & Instruction
-		& \texttt {r0}$_A$ & \texttt {r0}$_B$ & Mém 1000 \\ \hline
-	    \multicolumn {2} {|l|} {initialement}
-		                      & ? & ? & 0 \\ \hline
-	    A & \texttt {mov r0,1}    & 1 & ? & 0 \\ \hline
-	    B & \texttt {mov r0,1}    & 1 & 1 & 0 \\ \hline
-	    B & \texttt {fas (r1),r0} & \textbf {0} & 0 & \textbf {1} \\ \hline
-	    B & \texttt {fas (r1),r0} & 0 & \textbf {1} & \textbf {1} \\ \hline
-	    A & \texttt {tst r0}      & 0 & 1 & 1 \\ \hline
-	    B & \texttt {tst r0}      & 0 & 1 & 1 \\ \hline
-	    A & \texttt {rtn}         & 0 & 1 & 1 \\ \hline
-	    B & \texttt {jnz ...}     & 0 & 1 & 1 \\ \hline
-	\end {tabular}
-    \end {center}
+    \ctableau {\fC} {|c|l|c|c|c|} {
+	\rca \textbf {Proc} & \textbf {Instruction}
+	    & \textbf {\texttt {r0}$_A$}
+	    & \textbf {\texttt {r0}$_B$}
+	    & \textbf {Mém 1000}
+	    \\
+	\rcb \multicolumn {2} {|l|} {initialement} & ? & ? & 0 \\
+	\rca A & \texttt {mov r0,1}    & 1 & ? & 0 \\
+	\rcb B & \texttt {mov r0,1}    & 1 & 1 & 0 \\
+	\rca B & \texttt {fas (r1),r0} & \textbf {0} & 0 & \textbf {1} \\
+	\rcb B & \texttt {fas (r1),r0} & 0 & \textbf {1} & \textbf {1} \\
+	\rca A & \texttt {tst r0}      & 0 & 1 & 1 \\
+	\rcb B & \texttt {tst r0}      & 0 & 1 & 1 \\
+	\rca A & \texttt {rtn}         & 0 & 1 & 1 \\
+	\rcb B & \texttt {jnz ...}     & 0 & 1 & 1 \\
+    }
 
     \implique seul A est entré dans la section critique, B est toujours
     dans l'attente active
