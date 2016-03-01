@@ -68,5 +68,5 @@ verif:	exercices.tex $(FIGS) $(EXAMENS)
 
 clean:
 	rm -f *.pdf *.bak
-	rm -f *.aux *.log *.toc
+	rm -f *.aux *.log *.toc *.out
 	rm -f $(FIGS)
