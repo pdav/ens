@@ -464,9 +464,7 @@ print: all tout1.pdf tout2.pdf
 	done
 
 clean:
-	cleantex -a $(SRC1all) $(SRC2all) tout*.tex
 	rm -f $(FIG1all) $(FIG2all)
-	rm -f *.bak */*.bak *.nav *.out *.snm *.vrb *.log
-	rm -f print-*.pdf
-	rm -f by-nc.pdf
+	rm -f *.bak */*.bak *.nav *.out *.snm *.vrb *.log *.toc *.aux
+	rm -f print-*.pdf ch*.pdf tout*.pdf by-nc.pdf
 	rm -f inc?-?-*/a.out
