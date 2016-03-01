@@ -29,7 +29,7 @@ THEMES = \
 	theme-12-threads.tex \
 	theme-13-sockets.tex
 
-INCLUDES = ue.tex annee.tex $(THEMES)
+INCLUDES = ue.tex annee.tex $(THEMES) by-nc.pdf
 
 FIGS = msg.pdf
 
@@ -37,7 +37,7 @@ FIGS = msg.pdf
 # Les règles par défaut
 #
 
-.SUFFIXES:	.fig .tex .pdf
+.SUFFIXES:	.fig .tex .svg .pdf
 
 .fig.pdf:
 	fig2dev -L pdf -l 2 $*.fig > $*.pdf
@@ -45,6 +45,8 @@ FIGS = msg.pdf
 .tex.pdf:
 	pdflatex $*
 	pdflatex $*
+.svg.pdf:
+	inkscape --export-pdf=$*.pdf $*.svg
 
 #
 # Les cibles "globales"
@@ -57,8 +59,6 @@ all:	exercices.pdf
 #
 
 exercices.pdf: exercices.tex $(INCLUDES) $(FIGS)
-
-exercices.pdf: exercices.tex
 	pdflatex exercices
 	pdflatex exercices			# pour la table des matières
 

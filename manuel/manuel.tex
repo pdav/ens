@@ -24,6 +24,7 @@
 %   2012/04/20 : pda : obsolescence des fonctions inet_ntoa/etc seulement IPv4
 %   2015/12/23 : pda : ajout hyperref
 %   2015/12/23 : pda : ajout strftime & co
+%   2016/03/01 : pda : licence cc
 %
 
 \documentclass [twoside] {report}
@@ -34,9 +35,9 @@
     \usepackage [T1] {fontenc}
     \usepackage {times}
     \renewcommand {\ttdefault}{cmtt}
-    \usepackage {supertabular}
     \usepackage [a4paper, margin=20mm] {geometry}
     \usepackage {hyperref}
+    \usepackage {graphicx}
 
     \raggedbottom	% par défaut, babel aligne les bas de page. Pas bôôôôô !
 
@@ -83,9 +84,17 @@
 
     \vfill
 
-    \begin {flushright}
-	Pierre David
-    \end {flushright}
+    \begin {center}
+	\copyright Pierre David
+
+        Ce texte est placé sous licence « Creative Commons Attribution
+	-- Pas d’Utilisation Commerciale 4.0 International » \\
+	Pour accéder à une copie de cette licence,
+	merci de vous rendre à l'adresse suivante
+	\url {http://creativecommons.org/licenses/by-nc/4.0/}
+
+	\includegraphics [scale=.5] {by-nc}
+    \end {center}
 \end {titlepage}
 
 \cleardoublepage

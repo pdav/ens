@@ -19,19 +19,22 @@
 %   2002/05/16 : pda : retrait des anales - pour les remettre, chercher EXAMENS
 %   2007/03/05 : pda : ajout durée d'exécution comparée FL/PS
 %   2013/08/27 : pda : ajout pour svnpeda
+%   2016/03/01 : pda : licence cc
 %
 
-\documentclass  {report}
+\documentclass  [twoside] {report}
 
     \usepackage {verbatim}	% pour la macro "listing"
 
     \usepackage [francais] {babel}
     \usepackage [utf8] {inputenc}
     \usepackage [T1] {fontenc}
-    \usepackage {graphicx}
     \usepackage {times}
     \renewcommand {\ttdefault}{cmtt}
     \usepackage [a4paper, margin=20mm] {geometry}
+    \usepackage {hyperref}
+    \usepackage {graphicx}
+
     \raggedbottom	% par défaut, babel aligne les bas de page. Pas bôôôôô !
 
     \setlength {\parskip} {3mm}
@@ -138,9 +141,17 @@
 
     \vfill
 
-    \begin {flushright}
-	Pierre David
-    \end {flushright}
+    \begin {center}
+	\copyright Pierre David
+
+        Ce texte est placé sous licence « Creative Commons Attribution
+	-- Pas d’Utilisation Commerciale 4.0 International » \\
+        Pour accéder à une copie de cette licence,
+        merci de vous rendre à l'adresse suivante
+        \url {http://creativecommons.org/licenses/by-nc/4.0/}
+
+        \includegraphics [scale=.5] {by-nc}
+    \end {center}
 \end {titlepage}
 
 \cleardoublepage
@@ -190,65 +201,5 @@
 \input {theme-11-ps-ipc-sysv}
 \input {theme-12-threads}
 \input {theme-13-sockets}
-
-\end {document}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Sujets d'examens
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\setlength {\parskip} {2mm}
-
-%%% 1992/1993
-
-% \examen {e9306} {Juin 1993}
-% \examen {e9309} {Septembre 1993}
-
-%%% 1993/1994
-
-% \examen {e9405} {Mai 1994}
-% \examen {e9406} {Juin 1994}
-% \examen {e9409} {Septembre 1994}
-
-%%% 1994/1995
-
-% \examen {e9504} {Avril 1995}
-% \examen {e9506} {Juin 1995}
-% \examen {e9509} {Septembre 1995}
-
-%%% 1995/1996
-
-% \examen {e9511} {Novembre 1995 (Licence d'informatique et ISTY)}
-% \examen {e9601} {Janvier 1996 (Licence d'informatique et ISTY)}
-% \examen {e9604} {Avril 1996 (Licence d'informatique et ISTY)}
-% \examen {e9606} {Juin 1996 (Licence d'informatique et ISTY)}
-% \examen {e9609} {Septembre 1996 (Licence d'informatique et ISTY)}
-
-%%% 1996/1997
-
-\examen {el9611} {Novembre 1996 (Licence d'informatique)}
-\examen {el9701} {Janvier 1997 (Licence d'informatique)}
-\examen {el9703} {Mars 1997 (Licence d'informatique)}
-\examen {el9706} {Juin 1997 (Licence d'informatique)}
-\examen {el9709} {Septembre 1997 (Licence d'informatique)}
-
-\examen {ei9611} {Novembre 1996 (ISTY 1)}
-\examen {ei9701} {Janvier 1997 (ISTY 1)}
-% \examen {ei9703} {Mars 1997 (ISTY 1)}
-\examen {ei9706} {Juin 1997 (ISTY 1)}
-% \examen {ei9709} {Septembre 1997 (ISTY 1)}
-
-%%% 1997/1998
-
-\examen {el9801} {Janvier 1998 (Licence d'informatique)}
-\examen {el9806} {Juin 1998 (Licence d'informatique)}
-\examen {el9809} {Septembre 1998 (Licence d'informatique)}
-
-\examen {ei9711} {Novembre 1997 (ISTY 1)}
-\examen {ei9801} {Janvier 1998 (ISTY 1)}
-\examen {ei9805} {Mai 1998 (ISTY 1)}
-\examen {ei9806} {Juin 1998 (ISTY 1)}
-\examen {ei9809} {Septembre 1998 (ISTY 1)}
-
 
 \end {document}

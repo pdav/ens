@@ -17,7 +17,8 @@
 #   2013/08/21 : pda : conversion pdflatex
 #
 
-INCLUDES = debug.tex ue.tex annee.tex
+
+INCLUDES = ue.tex annee.tex by-nc.pdf
 
 all:	manuel.pdf
 
@@ -31,6 +32,9 @@ manuel.pdf: manuel.tex $(INCLUDES)
 	pdflatex manuel
 	makeindex manuel
 	pdflatex manuel
+
+by-nc.pdf: by-nc.svg
+	inkscape --export-pdf=$@ $<
 
 clean:
 	rm -f *.pdf *.bak
