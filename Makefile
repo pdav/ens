@@ -246,8 +246,6 @@ gencpu:
 	$(GENCPU) $(CPUDBDIR) inc1-intro/cpu-
 
 clean:
-	cleantex -a $(SRCall) tout.tex
 	rm -f $(FIGall) *.bak */*.bak *.nav *.out *.snm *.vrb *.log
-	rm -f print-*.pdf
-	rm -f by-nc.pdf
+	rm -f print-*.pdf ch*.pdf tout.pdf by-nc.pdf
 	rm -f inc?-*/a.out
