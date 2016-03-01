@@ -4,7 +4,7 @@
 # chx-y-zzz.pdf: un chapitre individuel particulier
 # ...
 # tout1.pdf: document contenant tous les chapitres de la première partie
-# tout1.pdf: document contenant tous les chapitres de la deuxième partie
+# tout2.pdf: document contenant tous les chapitres de la deuxième partie
 # print: tous les PDF au format "3 pages par page"
 #
 
@@ -27,7 +27,7 @@
 # pdfjam directement avec des paramètres plus sophistiqués)
 PRINTCMD = pdfjam-slides3up --quiet --paper a4paper --keepinfo
 
-DEPS	= courspda.sty annee.tex logo-uds.pdf
+DEPS	= courspda.sty annee.tex logo-uds.pdf licence.tex by-nc.pdf
 
 ##############################################################################
 # Première partie
@@ -466,6 +466,7 @@ print: all tout1.pdf tout2.pdf
 clean:
 	cleantex -a $(SRC1all) $(SRC2all) tout*.tex
 	rm -f $(FIG1all) $(FIG2all)
-	rm -f *.bak */*.bak *.nav *.out *.snm *.vrb
+	rm -f *.bak */*.bak *.nav *.out *.snm *.vrb *.log
 	rm -f print-*.pdf
+	rm -f by-nc.pdf
 	rm -f inc?-?-*/a.out
