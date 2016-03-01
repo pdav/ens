@@ -26,7 +26,7 @@
 # pdfjam directement avec des paramètres plus sophistiqués)
 PRINTCMD = pdfjam-slides3up --quiet --paper a4paper --keepinfo
 
-DEPS	= courspda.sty annee.tex logo-uds.pdf
+DEPS	= courspda.sty annee.tex logo-uds.pdf licence.tex by-nc.pdf
 
 #
 # Extraction (optionnelle) des caracteristiques des processeurs de la
@@ -247,6 +247,7 @@ gencpu:
 
 clean:
 	cleantex -a $(SRCall) tout.tex
-	rm -f $(FIGall) *.bak */*.bak *.nav *.out *.snm *.vrb
+	rm -f $(FIGall) *.bak */*.bak *.nav *.out *.snm *.vrb *.log
 	rm -f print-*.pdf
+	rm -f by-nc.pdf
 	rm -f inc?-*/a.out
