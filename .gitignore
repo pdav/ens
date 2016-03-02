@@ -1,0 +1,9 @@
+# TeX output files
+*.ps
+*.cb
+*.aux
+*.dvi
+*.out
+*.toc
+*.log
+*.bak
