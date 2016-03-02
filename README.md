@@ -54,7 +54,7 @@ quoi qui permette d'améliorer ces supports, vous pouvez :
 Lecture en ligne
 ----------------
 
-Si vous êtes intéressé-e-s seulement par la lecture de ces supports, vous les
+Si vous êtes intéressé-e-s par la lecture de ces supports, vous les
 trouverez dans les liens suivants :
 
 | Document | Objet |
@@ -102,4 +102,4 @@ Note spécifique au cours de système concurrents : certaines données
 sont extraites de la CPUDB de Stanford. Une copie des données utilisées
 est présente dans le dépôt. Si vous voulez rafraîchir ces données
 (ce qui n'est à priori pas nécessaire), le moteur SGBD [PostgreSQL]
-(http://www.postgresql.org) sera nécessaire.
+(http://www.postgresql.org) sera indispensable.
