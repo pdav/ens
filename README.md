@@ -45,9 +45,10 @@ Erreurs, imperfections, coquilles, etc.
 ---------------------------------------
 
 Si vous notez des erreurs, des inperfections, des coquilles ou n'importe
-quoi qui permette d'améliorer ces supports, vous pouvez soit me contacter
-par mail à l'adresse ci-dessus, soit utiliser le mécanisme de [bug
-tracking de github](../../issues).
+quoi qui permette d'améliorer ces supports, vous pouvez :
+- me contacter par mail à l'adresse ci-dessus
+- utiliser le mécanisme de [bug tracking de github](../../issues)
+- ou, mieux encore si vous maîtrisez LaTeX et git, faire une « pull request »
 
 
 Lecture en ligne
