@@ -1,0 +1,770 @@
+%
+% Historique
+%   2014/08/30 : pda : conception
+%
+
+\newcounter {ompexemple}
+\def\inc{inc7-openmp}
+
+\titreA {Introduction à OpenMP}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Introduction}
+
+\begin {frame} {Introduction}
+    Objectifs~:
+    
+    \begin {itemize}
+	\item faciliter la programmation parallèle...
+	\item ...  sur les architectures à mémoire partagée
+	\item supporter C, C++ et Fortran
+	\item permettre la maintenance d'un programme unique pour
+	    les versions séquentielle et parallèle
+	\item permettre la portabilité \implique standard de-facto
+	\item large support des industriels
+	\item attractif pour les utilisateurs
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Historique}
+
+    \begin {itemize}
+	\item milieu des années 1990 :
+	    \begin {itemize}
+		\item retour en grâce des architectures à mémoire partagée
+		\item programmation par passage de message fastidieuse
+	    \end {itemize}
+	\item 1997 : première spécification d'OpenMP pour Fortran
+	\item 1998 : première spécification d'OpenMP pour C/C++
+	\item 2000 : OpenMP 2.0 pour Fortran
+	\item 2002 : OpenMP 2.0 pour C/C++
+	\item 2005 : OpenMP 2.5 unifié pour Fortran et C/C++
+	\item 2008 : OpenMP 3.0 unifié pour Fortran et C/C++
+	\item 2013 : OpenMP 4.0 unifié pour Fortran et C/C++
+    \end {itemize}
+
+    \implique OpenMP est très dynamique \\
+    (dans cette introduction, on se limitera à OpenMP 1.0)
+
+\end {frame}
+
+\begin {frame} {Structuration d'OpenMP}
+    \begin {center}
+	\includegraphics [width=.9\textwidth] {\inc/couches}
+    \end {center}
+
+    \begin {itemize}
+	\item programme rédigé avec des directives \texttt {\#pragma}
+	    et des appels à la bibliothèque OpenMP
+	\item compilation (\texttt {-fopenmp}) : utilise
+	    le «~\emph {run-time}~» OpenMP
+
+	\item «~\emph {run-time}~» OpenMP s'appuie sur les Threads
+	    POSIX
+	\item comportement du programme modifiable dynamiquement
+	    avec des variables d'environnement
+
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Directives \texttt {\#pragma}}
+    Directives \texttt {\#pragma} : moyen normalisé d'introduire des
+    directives spécifiques au compilateur C ou des extensions du langage
+
+    \vspace* {3mm}
+
+    Exemples~:
+    \begin {itemize}
+	\item \texttt {\#pragma message "Je compile " \_\_FILE\_\_}
+
+	    \begin {itemize}
+		\item «~\texttt {\#pragma message}~» : reconnu
+		    par GCC et CLANG
+		\item affiche un message lors de la compilation
+	    \end {itemize}
+
+	\item \texttt {\#pragma omp parallel private (i)}
+
+	    \begin {itemize}
+		\item
+		    les directives OpenMP commencent par «~\texttt
+		    {\#pragma omp}~»
+		    \\
+		    \implique attention de ne pas oublier \texttt {omp}
+		    (sinon \texttt {\#pragma} ignoré)
+
+		\item
+		    la directive \texttt {parallel} admet des clauses
+		    (ex: \texttt {private (i)})
+
+	    \end {itemize}
+
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Compilation}
+    Compilation~:
+
+    \begin {itemize}
+	\item inclusion des définitions de prototypes, de macros, etc~:
+
+	    \hspace* {5mm} \code {\#include "omp.h"}
+
+	\item compilation avec prise en compte des \code {\#pragma}
+	
+	    \hspace* {5mm} \texttt {gcc -fopenmp hello.c}
+    \end {itemize}
+
+    Mise au point~:
+    \begin {itemize}
+	\item plus facile de déboguer la version séquentielle
+	\item compilation sans \texttt {-fopenmp}
+	    \begin {itemize}
+		\item pas de prise en compte des \code {\#pragma omp}
+		\item pas de région parallèle, pas de multiples threads
+		\item si utilisation de fonctions de la bibliothèque OpenMP \\
+		    \implique édition de liens avec la bibliothèque OpenMP
+
+		    Exemple (spécifique \texttt {gcc})~:
+			\texttt {gcc .... -lgomp}
+
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Régions parallèles
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Régions parallèles}
+
+\begin {frame} {Régions parallèles}
+    Région parallèle = brique de base d'OpenMP
+
+    \begin {center}
+	\includegraphics [width=.9\textwidth] {\inc/fork-join}
+    \end {center}
+
+    \begin {itemize}
+	\item le thread principal génère des threads (ou réactive
+	    des threads existants) lorsqu'une région parallèle est
+	    spécifiée
+
+	\item synchronisation implicite (barrière) en fin de région
+
+	\item les régions parallèles peuvent être imbriquées
+
+    \end {itemize}
+
+    \vspace* {2mm}
+
+    Note : en réalité, le thread maître fait partie des threads
+    (travailleurs) de la région parallèle
+
+\end {frame}
+
+\refstepcounter {ompexemple}
+
+\begin {frame} [fragile] {Exemple \theompexemple{} -- Hello world}
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle, firstline=3] {\inc/hello.c}
+
+    \begin {itemize}
+	\item \code {\#pragma omp parallel} crée une région parallèle
+	\item utilise un nombre de threads «~optimum~»
+	\item \code {omp\_get\_num\_threads} : nombre de threads
+	    créés \\
+	    \implique 1 avant la région parallèle
+	\item \code {omp\_get\_thread\_num} : numéro du thread
+	    courant
+    \end {itemize}
+
+\end{frame}
+
+\begin {frame} {Exemple \theompexemple{} -- Hello world}
+
+    \begin {itemize}
+	\item \code {private}~: variables placées dans l'espace du
+	    thread au début de la région parallèle et détruites à
+	    la fin de la région
+
+	    \begin {itemize}
+		\item \code {i} et \code {j} : valeurs différentes
+		    dans chaque thread
+	    \end {itemize}
+
+	\item \code {shared}~: variables partagées par tous les
+	    threads
+
+	    \begin {itemize}
+		\item \code {pid} : valeur constante
+		\item \code {n} : modifiée (globalement)
+		    par chaque thread
+		\item attention aux modifications non atomiques !
+	    \end {itemize}
+
+    \end {itemize}
+
+    \begin {center}
+	\includegraphics [width=.8\textwidth] {\inc/hello}
+    \end {center}
+
+\end {frame}
+
+\begin {frame} {Exemple \theompexemple{} -- Hello world}
+    Choix du nombre de threads :
+
+    \begin {itemize}
+	\item par défaut : nombre de threads « optimum »
+	    \\
+	    \implique choisi par OpenMP
+
+	\item variable d'environnement \code {OMP\_NUM\_THREADS}
+	    \\
+	    \implique valeur forcée par l'utilisateur du programme
+
+	    \code {OMP\_NUM\_THREADS=5} \\
+	    \code {export OMP\_NUM\_THREADS}
+
+	\item \code {\#pragma omp parallel ... num\_threads (5)}
+	    \\
+	    \implique forcé par le programmeur dans le programme
+	    \\
+	    \implique prioritaire sur \code {OMP\_NUM\_THREADS}
+
+    \end {itemize}
+\end {frame}
+
+\refstepcounter {ompexemple}
+
+\begin {frame} [fragile] {Exemple \theompexemple{} -- Réduction}
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle, firstline=2] {\inc/reduc.c}
+
+    \begin {itemize}
+	\item directive \code {\#pragma} sur plusieurs lignes
+
+	\item clause \code {reduction (+:s)}
+
+	    \begin {itemize}
+		\item un opérateur (\code {+})
+		\item une ou plusieurs variables (\code {s})
+	    \end {itemize}
+    \end {itemize}
+\end{frame}
+
+\begin {frame} {Exemple \theompexemple{} -- Réduction}
+
+    \begin {itemize}
+	\item réduction : applique un opérateur sur une valeur
+	    calculée par chaque thread
+
+	\item opérateurs : opérateurs associatifs (\code {+},
+	    \code {-}, \code {*} \code {\&}, \code {|}, \code
+	    {\^~}, \code {\&\&} et \code {||}, mais pas \code {/})
+
+    \end {itemize}
+
+    \begin {center}
+	\includegraphics [width=.8\textwidth] {\inc/reduc}
+    \end {center}
+
+\end {frame}
+
+\begin {frame} {Autres clauses des régions parallèles}
+    \begin {itemize}
+	\item \code {\#pragma omp parallel ... if (...)}
+
+	    \begin {itemize}
+		\item expression du \code {if} vraie,
+		    \implique région exécutée en parallèle
+		\item si non \implique  région exécutée en séquentiel
+	    \end {itemize}
+
+	\item \code {\#pragma omp parallel ... default (none)}
+
+	    \begin {itemize}
+
+		\item \code {default (shared)}~: par défaut, toutes
+		    les variables sont partagées
+		    (\implique comportement implicite)
+
+		\item \code {default (none)}~: rien n'est défini
+		    par défaut, il faut spécifier explicitement toutes
+		    les variables
+		    (\implique conseillé)
+
+	    \end {itemize}
+
+	\item \code {\#pragma omp parallel ... firstprivate (...)}
+
+	    \begin {itemize}
+		\item idem \code {private}, sauf...
+		\item ... la copie de chaque variable est initialisée avec
+		    la valeur de la variable avant la
+		    région parallèle
+	    \end {itemize}
+
+	\item \code {\#pragma omp parallel ... copyin (...)}
+
+	    \begin {itemize}
+		\item voir plus loin (partage des données,
+		    \code {threadprivate})
+	    \end {itemize}
+
+    \end {itemize}
+
+\end {frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Partage du travail
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Partage du travail}
+
+\begin {frame} {Partage du travail}
+    
+    Objectif : répartir le travail à réaliser entre les différents
+    threads d'une section parallèle
+
+    \begin {itemize}
+	\item \code {\#pragma omp for}
+
+	    Répartit les itérations d'une boucle sur les différents
+	    threads
+
+	\item \code {\#pragma omp sections}
+
+	    Répartit des codes indépendants (sections) sur les
+	    différents threads
+
+	\item \code {\#pragma omp single}
+
+	    Spécifie un code devant être exécuté par un thread unique
+
+    \end {itemize}
+\end {frame}
+
+\refstepcounter {ompexemple}
+
+\begin {frame} [fragile] {Exemple \theompexemple{} -- Boucle parallèle}
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle, firstline=4] {\inc/parfor.c}
+
+    \begin {itemize}
+	\item la directive OpenMP \code {\#pragma omp for} suppose
+	    une boucle C associée (ligne suivante)
+
+	\item \code {omp\_get\_wtime} : heure actuelle (en s)
+	    par rapport à une référence stable pendant la durée
+	    du programme
+
+    \end {itemize}
+\end{frame}
+
+\begin {frame} {Exemple \theompexemple{} -- Boucle parallèle}
+    \begin {center}
+	\includegraphics [width=.8\textwidth] {\inc/parfor}
+    \end {center}
+
+    \begin {itemize}
+	\item restrictions sur la boucle \code {for(}\emph {init}\code {;}\emph {test}\code {;}\emph {incr}\code {)}~:
+	    \begin {itemize}
+		\item \emph {init}~: de la forme \emph {var}\code {=}\emph {expr}
+
+		\item \emph {test}~: de la forme \emph {var op expr} (\emph {op}
+		    $\in \{$ \code {<}, \code {<=}, \code {>},
+		    \code {>=} $\}$)
+
+		\item \emph {incr}~: de la forme \emph {var}\code {=}\emph
+		    {var}\code {+}/\code {-}\emph {expr} (ou
+		    \emph {var}\code{++}, \emph {var}\code {+=}...)
+
+		\item la variable \emph {var} est implicitement privée
+
+		\item \emph {expr} : expression invariante, sans effet
+		    de bord
+
+	    \end {itemize}
+
+	\item simplification de l'écriture~: contraction des directives
+	    \code {parallel} et \code {for} en~:
+
+	    \hspace* {5mm} \code {\#pragma omp parallel for \emph {clauses}...}
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Boucle parallèle -- Clauses 1/2}
+    La boucle parallèle admet les clauses suivantes~:
+    \begin {itemize}
+	\item les clauses des régions parallèles~:
+
+	    \begin {itemize}
+		\item \code {\#pragma omp for ... private (...)}
+		\item \code {\#pragma omp for ... firstprivate (...)}
+		\item \code {\#pragma omp for ... reduction (...)}
+	    \end {itemize}
+
+	\item \code {\#pragma omp for ... lastprivate (...)}
+
+	    \begin {itemize}
+		\item idem \code {private}, sauf...
+		\item ... à la fin de la boucle, la dernière valeur
+		    calculée est recopiée dans le thread principal
+
+	    \end {itemize}
+
+	\item \code {\#pragma omp for ... ordered}
+
+	    \begin {itemize}
+		\item les itérations sont réalisées dans l'ordre
+		\item intéressant si la boucle est dans une région
+		    parallèle plus importante
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Boucle parallèle -- Clauses 2/2}
+    \begin {itemize}
+
+	\item \code {\#pragma omp for ... schedule (}\emph {méthode}
+	    [\code {,}\emph {taille\/}]\code {)}
+
+	    \begin {itemize}
+		\item \emph {taille}~: nombre d'itérations traitées
+		    en un seul bloc indivisible
+
+		\item méthode \code {static}~: les itérations sont
+		    affectées aux threads de manière statique
+		    (i.e. avant le démarrage de la boucle)
+
+		\item méthode \code {dynamic}~: les itérations sont
+		    affectées aux threads au fur et à mesure de leur
+		    avancement
+
+		\item méthode \code {guided}~: adapte dynamiquement
+		    la taille des blocs indivisibles
+
+		\item méthode \code {runtime}~: utilise la variable
+		    \code {OMP\_SCHEDULE}
+
+	    \end {itemize}
+
+	\item \code {\#pragma omp for ... nowait}
+
+	    \begin {itemize}
+		\item supprime la barrière implicite en fin de boucle
+
+	    \end {itemize}
+
+    \end {itemize}
+    
+\end {frame}
+
+\refstepcounter {ompexemple}
+
+\begin {frame} [fragile] {Exemple \theompexemple{} -- Sections indépendantes}
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle, firstline=4] {\inc/parsect.c}
+
+    \begin {itemize}
+	\item \code {\#pragma omp sections}
+	    introduit des sections indépendantes devant être exécutées
+	    en parallèle
+
+    \end {itemize}
+\end{frame}
+
+\begin {frame} {Exemple \theompexemple{} -- Section indépendantes}
+    \begin {center}
+	\includegraphics [width=.8\textwidth] {\inc/parsect}
+    \end {center}
+
+    \begin {itemize}
+	\item chaque section débute par \code {\#pragma omp section}
+
+	    \begin {itemize}
+		\item moins de sections que de threads \implique threads
+		    inactifs
+
+		\item plus de sections que de threads \implique un thread
+		    peut exécuter plus d'une section
+
+	    \end {itemize}
+
+	\item chaque section doit être un bloc structuré, sans
+	    «~goto~» vers l'extérieur ou depuis l'extérieur (\code
+	    {break}, etc.)
+
+	\item simplification de l'écriture~: contraction des directives
+	    \code {parallel} et \code {sections} en~:
+
+	    \hspace* {5mm} \code {\#pragma omp parallel sections \emph {clauses}...}
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Sections indépendantes -- Clauses}
+    La directive \code {\#pragma omp sections} admet les clauses suivantes~:
+    \begin {itemize}
+	\item \code {\#pragma omp sections ... private (...)}
+	\item \code {\#pragma omp sections ... firstprivate (...)}
+	\item \code {\#pragma omp sections ... lastprivate (...)}
+	\item \code {\#pragma omp sections ... reduction (...)}
+	\item \code {\#pragma omp sections ... nowait}
+    \end {itemize}
+
+    \vspace* {3mm}
+
+    La directive \code {\#pragma omp section} (délimiteur de section)
+    n'admet aucune clause
+\end {frame}
+
+\refstepcounter {ompexemple}
+
+\begin {frame} [fragile] {Exemple \theompexemple{} -- Exécution unique}
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle, firstline=4] {\inc/parsgl.c}
+
+    \begin {itemize}
+	\item Le bloc qui suit \code {\#pragma omp single}
+	    est exécuté par un seul thread
+
+    \end {itemize}
+\end{frame}
+
+\begin {frame} {Exemple \theompexemple{} -- Exécution unique}
+    \begin {center}
+	\includegraphics [width=.8\textwidth] {\inc/parsgl}
+    \end {center}
+
+    \begin {itemize}
+	\item chaque bloc d'exécution unique est exécuté par un
+	    et un seul thread
+
+	    \begin {itemize}
+		\item le choix du thread n'est pas déterministe
+		\item les autres threads sautent le bloc et attendent
+		    à la barrière implicite
+	    \end {itemize}
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Exécution unique -- Clauses}
+    La directive \code {\#pragma omp single} admet les clauses suivantes~:
+    \begin {itemize}
+	\item \code {\#pragma omp single ... private (...)}
+	\item \code {\#pragma omp single ... firstprivate (...)}
+	\item \code {\#pragma omp single ... copyprivate (...)}
+	\item \code {\#pragma omp single ... nowait}
+    \end {itemize}
+
+    \vspace* {3mm}
+\end {frame}
+
+
+\begin {frame} {Exécution unique -- Cas particulier}
+    Directive \code {\#pragma omp master} : comparable à
+    l'exécution unique, mais le bloc est exécuté par le thread
+    principal
+
+\end {frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Partage des données
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Partage des données}
+
+\begin {frame} {Partage des données}
+    À l'intérieur d'une région parallèle, les variables (scalaires
+    ou tableau) peuvent être~:
+
+    \begin {itemize}
+	\item partagées~: accessibles par tous les threads
+
+	    \code {\#pragma omp parallel shared (i, tab)}
+
+	    \begin {itemize}
+		\item mode par défaut...
+		\item ... modifiable avec la clause \code {default}
+		\item attention aux modifications non atomiques !
+	    \end {itemize}
+
+	\item privées~: copie créée dans chaque thread
+
+	    \code {\#pragma omp parallel private (i, tab)}
+
+	    \begin {itemize}
+		\item Valeur initiale indéfinie dans chaque thread...
+		\item ...sauf si \code {\#pragma omp ... firstprivate()}
+		\item Valeurs finales détruites en fin de région
+		    parallèle...
+		\item ...sauf si \code {\#pragma omp ... lastprivate()}
+	    \end {itemize}
+    \end {itemize}
+
+    Exercice~: quid des variables référencées par des réductions ?
+\end {frame}
+
+\begin {frame} [fragile] {Partage des données}
+    Attention à la portée lexicale~:
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle, firstline=4] {\inc/priv.c}
+
+    \begin {itemize}
+	\item des copies de \code {v} sont créées dans \code {main}
+	\item \code {f} manipule la variable \code {v} originale
+	\item chaque thread manipule donc une variable \code {v} non
+	    initialisée !
+    \end {itemize}
+\end{frame}
+
+\begin {frame} [fragile] {Partage des données -- \texttt {threadprivate}}
+    Directive \code {\#pragma omp threadprivate}~: crée une copie
+    privée (d'une variable globale) pour chaque thread
+
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle, firstline=4] {\inc/thrpriv.c} 
+\end{frame}
+
+\begin {frame} {Partage des données -- \texttt {threadprivate}}
+    \begin {itemize}
+	\item les variables globales marquées par \code {threadprivate}
+	    sont dupliquées dans l'espace de chaque thread
+
+	\item chaque copie a une valeur initiale indéfinie à l'entrée
+	    de la première région parallèle rencontrée
+
+	\item chaque copie conserve sa valeur entre régions
+	    parallèles identiques (même nombre de threads, etc.)
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} [fragile] {Partage des données -- \texttt {threadprivate}}
+
+    À l'entrée d'une région parallèle, la clause \code {copyin}
+    copie la valeur indiquée dans chaque copie~:
+
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle, firstline=4] {\inc/thrcopy.c}
+
+\end{frame}
+
+\begin {frame} {Partage des données -- Variables partagées}
+
+    Accès multiples (lecture et écriture) à une variable partagée \\
+    \implique résultat indéfini (cohérence des caches non garantie)
+
+    \vspace* {3mm}
+
+    \begin {itemize}
+	\item directive \code {\#pragma omp flush (...)} : synchronise
+	    les variables indiquées de sorte que la vue du thread soit
+	    cohérente avec la mémoire
+
+	\item \emph {flush} implicite lors d'une barrière, d'une
+	    entrée ou d'une sortie d'une région parallèle ou d'une
+	    section critique
+
+    \end {itemize}
+
+
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Synchronisation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Synchronisation}
+
+\begin {frame} {Synchronisation}
+    OpenMP utilise des barrières implicites~:
+    \begin {itemize}
+	\item en fin de région parallèle
+	\item en présence de blocs spécifiques~:
+	    \begin {itemize}
+		\item \code {\#pragma omp for}
+		\item \code {\#pragma omp single}
+		\item \code {\#pragma omp sections}
+	    \end {itemize}
+	    \implique sauf si clause \code {nowait}
+	\item lorsque des portions de boucle doivent être ordonnées
+	\item etc.
+    \end {itemize}
+
+    OpenMP offre des mécanismes de synchronisation explicites~:
+    \begin {enumerate}
+	\item barrière explicite
+	\item section critique
+	\item mise à jour atomique de variable
+	\item verrou
+    \end {enumerate}
+\end {frame}
+
+\refstepcounter {ompexemple}
+
+\begin {frame} [fragile] {Exemple \theompexemple{} -- Barrière}
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle, firstline=4] {\inc/barrier.c}
+
+    \begin {itemize}
+	\item Pas de clause pour cette directive
+
+    \end {itemize}
+\end{frame}
+
+
+\refstepcounter {ompexemple}
+
+\begin {frame} [fragile] {Exemple \theompexemple{} -- Section critique}
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle, firstline=4] {\inc/critical.c}
+
+    \begin {itemize}
+	\item un seul thread à la fois dans toutes les sections
+	    critiques de nom \code {modif\_c}
+
+	\item pas de nom \implique un seul thread à la fois
+	    dans toutes les sections critiques anonymes
+
+    \end {itemize}
+\end{frame}
+
+
+\refstepcounter {ompexemple}
+
+\begin {frame} [fragile] {Exemple \theompexemple{} -- Modification atomique}
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle, firstline=4] {\inc/atomic.c}
+
+    \begin {itemize}
+	\item l'instruction doit être de la forme \emph {var} \emph
+	    {op}\code {=} \emph {expr} (ou \code {++}/\code {-{}-})
+
+	\item overhead minimal car utilisation directe des facilités
+	    disponibles du processeur
+
+    \end {itemize}
+\end{frame}
+
+
+\begin {frame} {Verrous}
+    OpenMP offre des verrous~:
+
+    \begin {itemize}
+	\item type \code {omp\_lock\_t}
+	\item \code {void omp\_init\_lock (omp\_lock\_t *verrou)}
+	\item \code {void omp\_destroy\_lock (omp\_lock\_t *verrou)}
+	\item \code {void omp\_set\_lock (omp\_lock\_t *verrou)}
+	\item \code {void omp\_unset\_lock (omp\_lock\_t *verrou)}
+	\item \code {int omp\_test\_lock (omp\_lock\_t *verrou)}
+
+    \end {itemize}
+\end {frame}
+

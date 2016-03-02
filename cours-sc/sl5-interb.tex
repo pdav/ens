@@ -1,0 +1,614 @@
+%
+% Historique
+%   2014/08/30 : pda : conception
+%
+
+\def\inc{inc5-interb}
+
+\titreA {Interblocage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Introduction}
+
+\begin {frame} {Introduction}
+    Interblocage : situation dans laquelle un ou plusieurs processus
+    sont bloqués et ne peuvent pas se débloquer eux-mêmes
+
+    \vspace* {3mm}
+
+    Autres noms~: \emph {deadlock}, étreinte mortelle, etc.
+
+    \vspace* {3mm}
+
+    \begin {itemize}
+	\item comment caractériser un interblocage ?
+	\item comment programmer sans interblocage ?
+	\item quelles autres stratégies face à l'interblocage ?
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Exemple d'interblocage}
+    Exemple (avec des sémaphores binaires)~:
+
+    \begin {center}
+	\footnotesize
+	\begin {tabular} {c|c}
+	    Processus A & Processus B \\
+	    \hline
+	    P (r$_1$) & P (r$_2$) \\
+	    P (r$_2$) & P (r$_1$) \\
+	    V (r$_2$) & V (r$_1$) \\
+	    V (r$_1$) & V (r$_2$) \\
+	\end {tabular}
+    \end {center}
+
+    \begin {itemize}
+	\item situation d'interblocage si A a obtenu la ressource r$_1$ et
+	    B a obtenu la ressource r$_2$
+
+	\item l'interblocage n'est pas obligatoire : si A obtient toutes
+	    ses ressources, A finira bien par les libérer et B pourra être
+	    débloqué
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Exemple d'interblocage}
+    Pas besoin de plusieurs processus pour avoir un interblocage
+    \\
+    \implique «~interblocage du pauvre~»
+
+    \vspace* {3mm}
+
+    Exemple (avec un sémaphore binaire)~:
+
+    \begin {center}
+	\footnotesize
+	\begin {tabular} {c}
+	    Processus A \\
+	    \hline
+	    P (r$_1$) \\
+	    P (r$_1$) \\
+	    V (r$_1$) \\
+	    V (r$_1$) \\
+	\end {tabular}
+    \end {center}
+
+    \implique avec un seul processus et une seule ressource, on peut
+    arriver à une situation d'interblocage
+
+\end {frame}
+
+\begin {frame} {Exemple d'interblocage}
+    Les sémaphores ne sont pas les uniques responsables des interblocages
+
+    \vspace* {3mm}
+
+    Exemple (avec une barrière initialisée à 2)~:
+
+    \begin {center}
+	\footnotesize
+	\begin {tabular} {c|c}
+	    Processus A & Processus B \\
+	    \hline
+	    mutex\_lock (\&v) & mutex\_lock (\&v) \\
+	    barrier\_wait (\&b) & barrier\_wait (\&b) \\
+	    mutex\_unlock (\&v) & mutex\_unlock (\&v) \\
+	\end {tabular}
+    \end {center}
+
+    \implique interblocage certain car A (resp. B) acquiert le verrou
+    v, attend ensuite que la barrière s'ouvre, alors que B (resp. A)
+    attend le verrou v
+
+    % \vspace* {3mm}
+    %
+    % Dans la suite, on ne parlera plus que de ressources
+
+\end {frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Conditions de l'interblocage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Conditions de l'interblocage}
+
+\begin {frame} {Conditions de l'interblocage}
+    4 conditions sont nécessaires et suffisantes pour avoir une situation
+    d'interblocage \\
+    \implique conditions de Coffman, Elphick et Shoshani (1971)
+
+    \begin {enumerate}
+	\item exclusion mutuelle : une ressource ne peut pas être
+	    allouée simultanément à plusieurs processus
+
+	\item conserver et attendre~: lorqu'un processus attend une
+	    ressource, il ne libère pas celles qu'il a déjà obtenues
+
+	\item pas de réquisition~: les ressources déjà acquises ne
+	    peuvent pas être réquisitionnées
+
+	\item attente circulaire~: P$_0$ attend une ressource obtenue par
+	    P$_1$, qui attend lui-même une ressource obtenue par P$_2$...
+	    par P$_n$ qui attend lui-même une ressource obtenue par P$_0$
+
+    \end {enumerate}
+
+\end {frame}
+
+\begin {frame} {Conditions de l'interblocage}
+    Retour sur le premier exemple~:
+    \begin {center}
+	\footnotesize
+	\begin {tabular} {c|c}
+	    Processus A & Processus B \\
+	    \hline
+	    P (r$_1$) & P (r$_2$) \\
+	    P (r$_2$) & P (r$_1$) \\
+	    V (r$_2$) & V (r$_1$) \\
+	    V (r$_1$) & V (r$_2$) \\
+	\end {tabular}
+    \end {center}
+
+    \begin {enumerate}
+	\item exclusion mutuelle~: r$_1$ et r$_2$ ne sont
+	    allouées qu'à un seul processus
+
+	\item conserver et attendre~: A a déjà obtenu r$_1$ et la
+	    conserve pendant l'attente de r$_2$ (idem pour B)
+
+	\item pas de réquisition~: de par la conception des sémaphores
+
+	\item attente circulaire~: A attend r$_2$, qui est obtenue
+	    par B, qui lui-même attend r$_1$ qui est obtenue par A
+
+    \end {enumerate}
+
+    Les 4 conditions sont remplies \implique situation d'interblocage
+\end {frame}
+
+\begin {frame} {Conditions de l'interblocage}
+    Retour sur le deuxième exemple~:
+    \begin {center}
+	\footnotesize
+	\begin {tabular} {c}
+	    Processus A \\
+	    \hline
+	    P (r$_1$) \\
+	    P (r$_1$) \\
+	    V (r$_1$) \\
+	    V (r$_1$) \\
+	\end {tabular}
+    \end {center}
+
+    \begin {enumerate}
+	\item exclusion mutuelle~: r$_1$ n'est allouée qu'à A
+
+	\item conserver et attendre~: A a déjà obtenu r$_1$ et la
+	    conserve pendant l'attente de r$_1$
+
+	\item pas de réquisition~: de par la conception des sémaphores
+
+	\item attente circulaire~: A attend r$_1$, qui est obtenue
+	    par A
+
+    \end {enumerate}
+
+    Les 4 conditions sont remplies \implique situation d'interblocage
+\end {frame}
+
+\begin {frame} {Graphe d'allocation de ressources}
+    Description de l'interblocage avec un graphe d'allocation de
+    ressources~:
+
+    \begin {itemize}
+	\item Graphe orienté $G = <S, A>$
+	\item Deux types de sommets : $S = \{P, R\}$
+	    \begin {itemize}
+		\item $P = \{P_1, P_2, ... P_n \}$ : ensemble des processus
+		\item $R = \{R_1, R_2, ... R_m \}$ : ensemble des ressources
+		    \\
+		    Chaque ressource possède un nombre d'exemplaires
+	    \end {itemize}
+	\item Deux types d'arcs $\in A$ :
+	    \begin {itemize}
+		\item Arc $R_j \rightarrow P_i$ : un exemplaire de la
+		    ressource $R_j$ est allouée au processus $P_i$
+		    \\
+		    \implique l'arc part de l'exemplaire de la ressource
+
+		\item Arc $P_i \rightarrow R_j$ : le processus $P_i$ attend
+		    un exemplaire de la ressource $R_j$
+		    \\
+		    \implique l'arc arrive sur la ressource et non sur
+		    un exemplaire spécifique
+	    \end {itemize}
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Graphe d'allocation de ressources}
+    Exemple~:
+    \begin {center}
+	\includegraphics [width=.4\textwidth] {\inc/gralloc}
+    \end {center}
+    \begin {itemize}
+	\item $P_1$ a acquis un exemplaire de $R_1$ et de $R_2$
+
+	\item $P_2$ a acquis un exemplaire de $R_1$ et de $R_2$ et attend
+	    un exemplaire de $R_3$
+
+	\item $P_3$ a acquis un exemplaire de $R_3$ et attend
+	    un exemplaire de $R_4$
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Graphe d'allocation de ressources}
+    Propriétés du graphe d'allocation de ressources~:
+
+    \begin {itemize}
+	\item interblocage \implique cycle dans le graphe
+	\item dans le cas général (ressources à exemplaires
+	    multiples), l'inverse n'est pas vrai : un cycle dans le graphe
+	    n'implique pas forcément un interblocage
+
+	\item dans le cas spécifique de ressources à exemplaire unique,
+	    cycle dans le graphe \implique interblocage
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Graphe d'allocation de ressources}
+    Exemple de situation sans interblocage~:
+    \begin {center}
+	\includegraphics [width=.4\textwidth] {\inc/gr-0}
+    \end {center}
+    Dans cette situation~:
+    \begin {itemize}
+	\item il y a un cycle dans le graphe
+	    ($P_1 \rightarrow R_2 \rightarrow P_2 \rightarrow R_1
+	    \rightarrow P_1$)
+
+	\item $P_1$ et $P_2$ sont effectivement bloqués
+	\item $P_3$ n'est pas bloqué et peut se terminer, auquel
+	    cas il libère la ressource $R_2$ qui permettra à $P_1$
+	    de continuer
+    \end {itemize}
+    \implique pas d'interblocage
+\end {frame}
+
+\begin {frame} {Graphe d'allocation de ressources}
+    Exemple avec des ressources à exemplaire unique~:
+    \begin {center}
+	\includegraphics [width=.4\textwidth] {\inc/gr-1}
+    \end {center}
+    \begin {itemize}
+	\item les ressources sont à exemplaire unique
+	\item il y a un cycle
+	    ($P_1 \rightarrow R_3 \rightarrow P_3 \rightarrow R_2
+	    \rightarrow P_2 \rightarrow R_1 \rightarrow P_1$)
+	\item donc il y a interblocage
+    \end {itemize}
+\end {frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Graphe
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Gestion de l'interblocage}
+
+\begin {frame} {Gestion de l'interblocage}
+    Comment gérer un interblocage ?
+
+    \vspace* {3mm}
+
+    Plusieurs approches possibles~:
+    \begin {enumerate}
+	\item ignorer l'interblocage
+	\item prévenir l'interblocage
+	\item éviter que l'interblocage ne se produise
+	\item détecter l'interblocage et intervenir
+    \end {enumerate}
+\end {frame}
+
+\begin {frame} {Ignorer l'interblocage}
+    Solution la plus simple
+
+    \begin {itemize}
+	\item adoptée par la plupart des systèmes d'exploitation \\
+	    Exemples : Unix, Windows
+
+	\item c'est à l'application de gérer l'interblocage
+    \end {itemize}
+
+    \implique les autres approches sont beaucoup plus complexes
+
+\end {frame}
+
+\begin {frame} {Prévenir l'interblocage}
+    Prévenir l'interblocage : faire en sorte qu'une des 4 conditions
+    soit toujours non vérifiée
+
+    \begin {enumerate}
+	\item exclusion mutuelle : offrir des ressources sans accès
+	    exclusif \\
+	    Exemple~: spooler d'imprimante, fichier en lecture seule
+
+	\item conserver et attendre~: relâcher toutes les ressources
+	    déjà obtenues en cas d'attente \\
+	    Exemple~: noyau Unix, allouer toutes les ressources en
+	    une seule fois de manière atomique (sémaphores System V)
+
+	\item pas de réquisition~: permettre la réquisition \\
+	    Exemple~: pas d'exemple
+
+	\item attente circulaire~: ordonner les allocations \\
+	    Exemple~: programmer les allocations toujours dans le
+	    même ordre
+
+    \end {enumerate}
+
+\end {frame}
+
+\begin {frame} {Éviter l'interblocage}
+    Éviter l'interblocage : éviter de se placer dans une situation
+    où l'interblocage pourrait peut-être survenir dans le futur
+
+    \begin {minipage} {.25\textwidth}
+	\includegraphics [width=\textwidth] {\inc/gr-sur}
+    \end {minipage}
+    \begin {minipage} {.73\textwidth}
+	\vspace* {2mm}
+	Si $P_1$ et $P_2$ demandent \emph {encore} chacun~:
+	\begin {itemize}
+	    \item 1 exemplaire de $R_1$ :
+		\\
+		\implique interblocage évité si $P_1$ (resp. $P_2$)
+		    termine et libère ses deux exemplaires
+		\\
+		\implique l'état actuel est «~sûr~»
+
+	    \item 2 exemplaires de $R_1$ :
+		\\
+		\implique interblocage certain \\
+		\implique l'état actuel est «~non sûr~»
+
+	\end {itemize}
+    \end {minipage}
+
+    \vspace* {3mm}
+
+
+    Si on connaît à l'avance toutes les demandes futures des processus,
+    on peut éviter les états (états non sûrs) dans lesquels un
+    interblocage ultérieur est possible
+    \\
+    \implique chaque processus doit déclarer toutes les ressources
+    nécessaires à son exécution
+
+\end {frame}
+
+\begin {frame} {Éviter l'interblocage}
+    Notion d'état sûr~:
+
+    \begin {quote}
+	Un état est sûr si et seulement si il existe une séquence de
+	processus $P_1, P_2, ..., P_n$ telle que $\forall i$, la demande
+	de $P_i$ puisse être satisfaite par les ressources déjà
+	obtenues par $P_i$ ainsi que les ressources libérées par les
+	$P_j$ avec $j < i$
+
+    \end {quote}
+
+    \begin {center}
+	\includegraphics [width=.7\textwidth] {\inc/etat-sur}
+    \end {center}
+
+\end {frame}
+
+\begin {frame} {Éviter l'interblocage}
+    Comment éviter l'interblocage ? \\
+    \implique vérifier, lors de l'allocation, que l'état résultant
+    reste sûr
+
+    \begin {enumerate}
+	\item en utilisant le graphe d'allocation des ressources \\
+	    (pour les ressources à un seul exemplaire)
+	\item en utilisant l'algorithme du banquier \\
+	    (pour le cas général)
+    \end {enumerate}
+
+    \vspace* {3mm}
+
+    Ces méthodes nécessitent de connaître à priori toutes les
+    ressources nécessaires pour chaque processus
+
+\end {frame}
+
+\begin {frame} {Éviter l'interblocage -- Graphe d'allocation}
+    Principe~:
+
+    \begin {itemize}
+	\item matérialiser les demandes futures de ressources...
+	\item ... via un arc spécial $P_i \leadsto R_j$
+	    \\
+	    (figuré graphiquement par une flèche pointillée)
+	\item quand $R_j$ est allouée à $P_i$ ou si $P_i$ attend $R_j$,
+	    l'arc spécial est remplacé par un arc classique
+	\item l'état reste sûr si et seulement si il n'y a pas de
+	    cycle dans le graphe résultant
+	\item si ce n'est pas le cas, l'allocation est bloquante
+	\item lorsque $P_i$ libère $R_j$, l'arc $R_j \rightarrow P_i$
+	    est remplacé par l'arc spécial original $P_i \leadsto R_j$
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Éviter l'interblocage -- Graphe d'allocation}
+    Exemple~: $P_1$ et $P_2$ ont chacun déclaré l'utilisation de
+    $R_1$ et $R_2$
+
+    \begin {center}
+	\includegraphics [width=.8\textwidth] {\inc/evit-graphe}
+    \end {center}
+
+    \begin {enumerate}
+	\item initialement, arcs $P_i \leadsto R_j$ : demandes futures
+
+	\item $P_1$ demande ensuite $R_1$ : il l'obtient (arc $R_1
+	    \rightarrow P_1$)
+
+	\item après, $P_2$ demande $R_2$~: l'arc $R_2 \rightarrow P_2$
+	    créerait un cycle \\
+	    \implique demande bloquée : arc $P_2 \leadsto R_2$
+		remplacé par $P_2 \rightarrow R_2$
+
+	\item $P_1$ alloue ensuite $R_2$, termine son exécution et
+	    libère $R_1$ et $R_2$. Les arcs initiaux $P_1 \leadsto R_1$ 
+	    et $P_1 \leadsto R_2$ sont rétablis \\
+	    \implique $P_2$ peut reprendre (et obtenir $R_2$)
+
+    \end {enumerate}
+\end {frame}
+
+\begin {frame} {Éviter l'interblocage -- Algor. du banquier}
+    Avec des ressources à exemplaires multiples, un cycle dans le
+    graphe d'allocation de ressources ne permet pas de conclure à
+    un interblocage ou à un état non sûr
+
+    \vspace* {3mm}
+
+    Principe de l'algorithme du banquier~:
+
+    \begin {enumerate}
+	\item simuler l'allocation de la ressource demandée
+	\item trouver un processus qui peut obtenir toutes ses
+	    allocations
+	\item s'il en existe un, alors simuler son exécution jusqu'à
+	    la fin : simuler la libération de ses ressources déjà
+	    obtenues et recommencer en 2
+	\item s'il ne reste plus aucun processus, l'état est sûr
+	\item s'il reste des processus qui ne peuvent obtenir leurs
+	    ressources, l'état n'est pas sûr
+    \end {enumerate}
+
+    \implique comme un vrai banquier, l'algorithme n'alloue que ce qu'il
+    pourra récupérer
+
+\end {frame}
+
+\begin {frame} {Éviter l'interblocage -- Algor. du banquier}
+    Notations~:
+    \begin {itemize}
+	\item $P_1 ... P_i ... P_n$ : processus ($i$ : index d'un $P_i$)
+	\item $R_1 ... R_j ... R_m$ : ressources ($j$ : index d'un $R_j$)
+	\item $k_j$ : nombre d'exemplaires de $R_j$
+    \end {itemize}
+
+    \vspace* {3mm}
+
+    Signification et valeur initiale des variables~:
+
+    \begin {itemize}
+	\item dispo [$j$] = $k_j$ : nombre d'exemplaires disponibles de $R_j$
+	\item max [$i, j$] : demande maximum de $P_i$ pour $R_j$
+	\item alloc [$i, j$] = 0 : nombre d'exemplaires de $R_j$ alloués à $P_i$
+	\item encore [$i,j$] = max [$i, j$] : demande de $P_i$ pour $R_j$ pour
+	    permettre à $P_i$ de se terminer
+	    \\
+	    Propriété : encore [$i,j$] = max [$i, j$] - alloc [$i, j$] 
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Éviter l'interblocage -- Algor. du banquier}
+    Allocation (req [] = vecteur de demande d'allocation de $P_i$)~:
+
+    \footnotesize
+    \begin {tabbing}
+	\hspace* {3mm} \= \hspace* {3mm} \= \hspace* {3mm} \=
+		\hspace* {40mm} \= \kill
+	\> si $\neg$ (req [$j$] $\leq$ encore [$j$], $\forall j$) \\
+	    \> \> alors erreur \\
+	\> fin si \\
+	debut: \\
+	\> si $\neg$ (req [$j$] $\leq$ dispo [$j$], $\forall j$) \\
+	\> alors attendre \\
+	\> sinon \\
+	\> \> dispo [$j$] -= req [$j$], $\forall j$
+		\> \> /* simuler une allocation */ \\
+	\> \> alloc [$i, j$] += req [$j$], $\forall j$ \\
+	\> \> encore [$i, j$] -= req [$j$], $\forall j$
+		\> \> /* fin de la simulation */ \\
+	\> \> si l'état simulé est sûr
+		\> \> /* test état sûr, cf page suivante */ \\
+	\> \> alors allouer les ressources \\
+	\> \> sinon \\
+	\> \> \> défaire la simulation \\
+	\> \> \> attendre \\
+	\> \> \> goto debut \\
+	\> \> fin si \\
+	\> fin si \\
+    \end {tabbing}
+\end {frame}
+
+\begin {frame} {Éviter l'interblocage -- Algor. du banquier}
+    Test de sûreté~:
+
+    \footnotesize
+    \begin {tabbing}
+	\hspace* {3mm} \= \hspace* {3mm} \= \hspace* {3mm} \=
+		\hspace* {40mm} \= \kill
+	fini [$i$] = faux, $\forall i$
+	    \> \> \> \> /* simulation : tous les $P_i$ sont actifs */
+	    \\
+	tmp [$j$] = dispo [$j$], $\forall j$ \\
+	tant qu'il existe $i$ tel que
+	    (fini[$i$] = faux $\wedge$
+		encore [$i,$j] $\leq$ tmp [$j$] $\forall j$) \\
+	faire \\
+	\> tmp [$j$] = tmp [$j$] + alloc [$i,j$], $\forall j$
+	    \> \> \> /* simuler la libération des ressources de $i$ */
+	    \\
+	\> fini [$i$] = vrai
+	    \> \> \> /* simuler la terminaison de $P_i$ */
+	    \\
+	fin tant que \\
+	si fini [$i$] = vrai $\forall i$ \\
+	alors l'état est sûr \\
+	sinon l'état n'est pas sûr
+	    \> \> \> \> /* il reste des $P_i$ qui n'ont pu se terminer */
+	    \\
+	fin si
+    \end {tabbing}
+\end {frame}
+
+
+\begin {frame} {Détecter l'interblocage}
+    Solution «~à priori~» simple~:
+
+    \begin {enumerate}
+	\item laisser l'interblocage arriver
+	\item détecter l'interblocage
+	    \begin {itemize}
+		\item quand ? lors de l'allocation ? examen périodique ?
+		\item comment ? détection coûteuse
+	    \end {itemize}
+	\item réagir suite à l'interblocage
+	    \begin {itemize}
+		\item réquisitionner des ressources ? il faut que
+		    l'application soit prévue pour cela
+
+		\item terminer des processus ? lesquels choisir ? tous
+		    ? seulement quelques-uns afin de casser l'interblocage ?
+
+	    \end {itemize}
+    \end {enumerate}
+
+    \implique solution pas si simple...
+
+\end {frame}
