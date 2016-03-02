@@ -1,0 +1,548 @@
+\documentclass {article}
+
+    \usepackage [utf8] {tdpda}
+    \usepackage {hyperref}
+
+\begin {document}
+
+\entete
+    {Systèmes d'Exploitation}
+    {Licence d'informatique -- Semestre 4}
+    {2015 -- 2016}
+    {Conseils pour réussir vos TP et projets}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section {Introduction}
+
+L'UE de Systèmes d'Exploitation nécessite que vous mettiez en pratique
+vos connaissances par la rédaction de nombreux programmes en langage C,
+dont une bonne partie sera soumise à évaluation. Vous devez bien sûr
+appliquer les méthodes et consignes apprises dans l'UE «~Techniques
+de Développement~» (L2S3). En complément, ce petit guide a pour but
+de vous indiquer quelques règles basiques et de bon sens pour vous
+permettre d'obtenir la meilleure note possible.
+
+Bon nombre d'organisations (entreprises, logiciels libres)
+ont rédigé des «~standards de programmation~», composés de
+règles plus ou moins arbitraires dont le but est de faciliter
+l'écriture et la maintenance des logiciels.  On trouve de
+tels guides de style de programmation en ligne\footnote {\url
+{http://www.maultech.com/chrislott/resources/cstyle/}}
+comme en particulier ceux de Google\footnote {\url
+{https://code.google.com/p/google-styleguide/}} pour les différents
+langages utilisés dans cette entreprise, ou encore
+l'indispensable standard de programmation sécurisée\footnote {\url
+{https://www.securecoding.cert.org/confluence/display/seccode/CERT+C+Coding+Standard}}
+du CERT.  Le présent document n'ambitionne pas de remplacer de tels
+guides, mais de les compléter par des règles de base.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section {La forme}
+
+Que ce soit lors de vos études ou dans votre vie professionnelle
+future, les programmes que vous écrivez seront inévitablement
+lus par d'autres. Dès lors, la lisibilité de vos programmes
+est cruciale\footnote {Il n'y a qu'un seul cas où la lisibilité
+n'est pas requise, bien au contraire, c'est le concours IOCCC (\url
+{http://www.ioccc.org/}). Ne prenez pas ça comme modèle pour vos
+propres programmes...}. Dans le cadre de vos études, en particulier,
+vous écrivez des programmes destinés à être évalués, c'est-à-dire
+à être lus et compris par une autre personne que vous : la lisibilité
+doit donc être une de vos priorités au même niveau que la correction
+de vos programmes et le respect de l'énoncé.
+
+
+\subsection {Soignez la cohérence du style et l'indentation}
+
+On peut identifier plusieurs styles de placement des accolades dans
+les programmes en C, comme par exemple~:
+
+\begin {quote}
+\begin {minipage} {.25\textwidth}
+\begin {lstlisting}
+if (...) {
+    ...
+} else {
+    ...
+}
+\end{lstlisting}
+\end {minipage}
+\hfill
+\begin {minipage} {.25\textwidth}
+\begin {lstlisting}
+if (...)
+{
+    ...
+}
+else
+{
+    ...
+}
+\end{lstlisting}
+\end {minipage}
+\hfill
+\begin {minipage} {.25\textwidth}
+\begin {lstlisting}
+if (...) {
+	...
+    } else {
+	...
+}
+\end{lstlisting}
+\end {minipage}
+\end {quote}
+
+Ces styles de placement constituent le premier guide de
+lecture. Choisissez le style que vous préférez, mais restez cohérent
+tout au long d'un programme. De même, lorsque vous faites une addition
+à un programme existant, utilisez le style général du programme et
+n'introduisez pas d'incohérence.
+
+L'indentation (le décalage pour visualiser l'imbrication des blocs) est
+de toute première importance pour permettre au lecteur de comprendre
+la structure de votre programme. Au premier coup d'oeil, une mauvaise
+indentation donnera un sentiment d'amateurisme et n'incitera guère à
+prolonger la lecture.
+
+Quelle largeur d'indentation utiliser~? C'est à vous de choisir, mais 4
+espaces constituent un bon compromis entre une bonne visualisation de la
+structure de blocs et des lignes pas trop longues (voir \ref {lignes80}
+ci-après).
+
+Astuces~: le programme \texttt {indent}\footnote {\url
+{http://www.gnu.org/software/indent/}} disponible sur turing, est
+remarquablement configurable et vous permet de reformatter votre programme
+en prenant en compte le style de placement des accolades et l'indentation
+que vous aurez choisis.  N'hésitez pas à lire la documentation pour
+le configurer (voir~\ref {indentpro}, page~\pageref {indentpro})
+et à l'utiliser. Vous pouvez également utiliser un environnement
+de développement intégré (IDE) qui vous aidera à maintenir une
+indentation homogène.
+
+
+\subsection {Ne changez pas la longueur des tabulations}
+
+Le caractère «~tabulation~» a une signification héritée des machines
+à écrire~: il provoque l'avancée du chariot jusqu'au prochain taquet
+de tabulation\footnote {\url
+{http://fr.wikipedia.org/wiki/Taquet_de_tabulation}}. Les premières
+imprimantes ont par la suite utilisé ce caractère avec des tabulations
+fixes, de longueur égale à 8 caractères. Cette convention est restée
+jusqu'à nos jours, partagée entre terminaux, émulateurs de terminaux
+et imprimantes.
+
+Certains éditeurs permettent de changer la longueur de
+tabulation\footnote {Par exemple, \texttt {vi} permet d'utiliser la
+commande \texttt {set tabstop=4} (ou \texttt {set ts=4}). Il ne faut
+pas utiliser cette commande, et laisser la valeur 8 par défaut. À
+la place, vous pouvez utiliser \texttt {set shiftwidth=4} (ou \texttt
+{set sw=4}) et utiliser les touches \texttt {CTRL-T} et \texttt {CTRL-D}
+pour indenter ou «~dés-indenter~».}\footnote {Les utilisateurs de
+\texttt {Geany} doivent configurer l'indentation comme suit~: menu
+Éditer $\rightarrow$ Préférences, puis onglet Éditeur $\rightarrow$
+Indentation~: Largeur=«~4~», Type=«~Tabulations et espaces~», Largeur
+des tabulations=«~8~» et Indentation par la touche Tab=«~oui~».}~:
+c'est une mauvaise pratique à éviter absolument pour au moins deux
+raisons~:
+
+\begin {itemize}
+    \item la personne qui va vous relire n'a pas forcément les mêmes
+	réglages que vous~;
+    \item votre programme peut être imprimé, et l'imprimante utilise
+	des tabulations de longueur 8.
+\end {itemize}
+Dans ces deux cas, votre programme apparaîtra alors au lecteur avec
+des décalages fantaisistes et la lisibilité s'en ressentira. Une bonne
+manière de vérifier votre indentation est d'afficher votre programme à
+l'écran (avec \texttt {more} par exemple)~: ce que vous voyez correspond
+à ce qui sera imprimé.
+
+
+\subsection {Les lignes ne doivent pas dépasser 80 colonnes}
+    \label {lignes80}
+
+Votre programme ne doit pas contenir de ligne plus longue que 80 colonnes.
+Pourquoi cette limite alors que vous avez un grand écran qui vous permet
+d'afficher des lignes de 2365 colonnes ? La raison est simple~:
+la personne qui vous relit n'a pas forcément un écran aussi grand que le
+vôtre, ou peut préférer utiliser une police de caractères plus grosse.
+Elle peut également vouloir imprimer votre programme, ce qui peut avoir
+comme effet de tronquer les lignes supérieures à 80 colonnes.  Il est
+donc important que votre programme respecte cette contrainte même si
+vous devez pour cela découper des instructions sur plusieurs lignes.
+
+
+\subsection {Documentez vos intentions}
+
+La documentation doit être rédigée en même temps que votre programme.
+Elle ne doit pas faire doublon avec le code mais elle doit expliquer
+en termes de haut niveau votre intention, en supposant que le lecteur
+n'a pas de difficulté avec le langage de programmation (évitez donc
+le classique commentaire de type \verb|/* incrémentation de i */|).
+
+Pour le formalisme, vous pourrez utiliser avec profit celui de \texttt
+{doxygen}\footnote {\url {http://www.doxygen.org}}, comme par exemple~:
+
+\begin {quote}
+\begin {lstlisting}
+/**
+ * @brief Construit une liste des nombres premiers
+ *
+ * Cette fonction initialise une liste vide, puis parcourt tous les
+ * entiers de `n` a `m`, determine pour chacun si c'est un nombre premier
+ * et, si c'est le cas, l'ajoute a la liste. Pour supprimer la liste,
+ * il est conseille d'utiliser la fonction `detruire_liste`.
+ *
+ * @param n limite inferieure (borne incluse) des nombres premiers
+ * @param m limite superieure (borne incluse) des nombres premiers
+ * @result une nouvelle liste
+ */
+
+struct element *liste_premiers (int n, int m)
+{
+    ...
+}
+\end{lstlisting}
+\end {quote}
+
+Comme pour n'importe quel texte, vérifiez bien sûr l'orthographe de
+vos commentaires.
+
+La documentation est une partie essentielle pour la compréhension de
+votre programme. Vous souhaitez être compris, n'est-ce pas ?
+
+
+\subsection {Découpez vos fichiers, mais pas trop}
+
+Une bonne pratique de programmation consiste à découper un programme en
+plusieurs fichiers pour constituer des ensembles cohérents de fonctions,
+de classes, etc. Cependant, ne poussez pas cette idée à l'extrême :
+pour de petits programmes de quelques dizaines à quelques centaines de
+lignes~: ce n'est pas forcément nécessaire et peut risquer même de
+nuire à la lisibilité, obligeant votre lecteur à jongler sans cesse
+entre plusieurs fichiers.
+
+
+\subsection {Copyright}
+
+Inutile de placer dans vos exercices de TP ou dans vos projets des
+mentions de copyright longues comme un jour sans pain. Outre le fait
+que ça gâche beaucoup de papier si c'est imprimé, vos créations
+restent entre vous et la personne qui évalue votre travail et ne sont
+pas destinées à publication.
+
+
+% \subsection {Français ou anglais ?}
+% 
+% Dans le cadre de vos études, vous devriez rédiger  le français.
+% 
+%     noms de procedures, de var, de champ, de macros, commentaires ?
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section {Le langage C}
+
+\subsection {Programmez portable}
+
+Une des qualités du langage C est de permettre la rédaction de
+programmes portables, c'est-à-dire donnant des résultats identiques
+sur plusieurs systèmes et versions de systèmes différents. Cependant,
+programmer portable n'est n'est sans doute pas la recommandation la plus
+facile à suivre. Elle peut être frustrante car vous devrez sans doute
+vous limiter dans l'utilisation des caractéristiques qui facilitent
+la vie, mais qui ne sont disponibles que sur un nombre limité de
+systèmes. Et elle nécessite de l'expérience car vous devez avoir la
+connaissance de plusieurs systèmes ou environnements.
+
+Si vous en avez la possibilité, observez le comportement de vos
+programmes sur plusieurs systèmes différents (Linux, *BSD, MacOS, etc.).
+Dans tous les cas, le point minimum à respecter est que vos programmes,
+sauf contre-ordre, doivent pouvoir fonctionner correctement sur la machine
+turing mise à votre disposition\footnote {Vous pouvez vous connecter
+sur turing depuis les salles de TP, mais également à distance depuis
+chez vous ou ailleurs via \texttt {ssh}. Vous pouvez en outre transférer
+vos fichiers à l'aide de \texttt {scp} ou \texttt {sftp}.}.
+
+
+\subsection {Quel standard choisir ?}
+
+Le langage C a une longue histoire qui passe par plusieurs versions,
+dont certaines sont normalisées~:
+
+\begin {itemize}
+    \item la version originale, dite K\&R (pour Kernighan et Ritchie,
+	les deux concepteurs)~: cette version est aujourd'hui largement
+	obsolète~;
+
+    \item C89 (ou C90)~: la première version normalisée (en 1989 par
+	l'ANSI et en 1990 par l'ISO), elle apporte les prototypes de
+	fonctions~;
+
+    \item C99~: normalisé par l'ANSI en 2000, apporte beaucoup
+	d'améliorations comme les fonctions \texttt {inline}, les
+	variables pouvant être placées dans le code et non plus
+	seulement en début de bloc, les tableaux de taille variable ou
+	les commentaires avec \verb|//|. Nombre de ces améliorations
+	étaient déjà disponibles comme extensions (non portables)
+	de compilateurs comme GCC~;
+
+    \item C11~: dernière version, normalisée par l'ISO en 2011, n'est
+	pas encore très répandue. Si vous voulez programmer portable,
+	attendez encore quelques temps avant de l'utiliser.
+
+\end {itemize}
+
+Pour compliquer les choses, bon nombre de compilateurs supportent des
+extensions spécifiques qu'il vaut mieux ne pas utiliser pour des raisons
+évidentes de portabilité.
+
+Quel standard choisir~? Dans le cadre de vos études, hors besoin
+spécifique, le mieux est d'utiliser le compilateur par défaut
+sur turing, dans la version de langage par défaut fournie par ce
+compilateur (c'est à dire C89 avec extensions spécifiques dont
+certaines sont compatibles avec C99). Si vous utilisez une version de
+langage différente, n'oubliez pas de le préciser.
+
+
+\subsection {Laissez le compilateur optimiser}
+
+La plupart des compilateurs savent à présent bien optimiser le code
+généré. Cela vous permet de programmer en privilégiant la lisibilité
+plutôt qu'une optimisation hasardeuse, et vous pouvez ainsi vous
+concentrer sur des algorithmes plus efficaces.
+
+
+\subsection {Lisez les messages du compilateur}
+
+Le compilateur vous donne de précieuses indications («~warning~»)
+lorsqu'il compile. Ces messages sont à prendre au sérieux car ils
+indiquent presque à coup sûr un problème dans votre programme. Ne
+les ignorez pas, vous gagnerez ainsi un temps précieux !
+
+Si vous utilisez GCC, vous devriez toujours spécifier deux options~:
+\begin {itemize}
+    \item \texttt {-Wall}~: détecte des problèmes potentiels qu'il
+	faut presque toujours corriger. Encore mieux, utilisez
+	\texttt {-Wextra} en complément pour détecter davantage
+	de problèmes~;
+    \item \texttt {-Werror}~: refuse la compilation en présence de
+	«~warning~»
+\end {itemize}
+
+Ces deux options sont importantes. Ne négligez pas la deuxième~: elle
+n'est pas là pour vous embêter, mais pour vous inciter à corriger votre
+programme. Ce faisant, vous gagnerez du temps car plus un problème est
+détecté tôt et plus il est facile à corriger.
+
+\subsection {Pas de code dans des fichiers d'inclusion}
+
+Les fichiers suffixés par «~\texttt {.h}~» sont des fichiers inclus
+au moment de la compilation, leur contenu est compilé comme le reste
+du fichier source. Ils servent à mettre des définitions (de macros,
+de types, de prototypes de fonctions) qui peuvent servir dans plusieurs
+autres fichiers. Ne mettez jamais de code exécutable (i.e. code d'une
+fonction par exemple) dans un fichier «~\texttt {.h}~».
+
+
+\subsection {Utilisez les bons termes}
+
+Le langage C permet parfois plusieurs syntaxes pour atteindre le même
+objectif. Par exemple, les deux boucles suivantes génèrent le même
+code~:
+
+\begin {quote}
+\begin {minipage} {.4\textwidth}
+\begin {lstlisting}
+for (i = 0 ; i < N ; i++)
+    printf ("%d\n", i) ;
+\end{lstlisting}
+\end {minipage}
+\hfill
+\begin {minipage} {.4\textwidth}
+\begin {lstlisting}
+i = 0 ;
+while (i < N)
+{
+    printf ("%d\n", i) ;
+    i++ ;
+}
+\end{lstlisting}
+\end {minipage}
+\end {quote}
+
+Pourtant, elles ne sont pas équivalentes~: dans le cas d'une variable
+parcourant un intervalle entre deux bornes, la boucle \texttt {for}
+est beaucoup plus lisible. Dans la plupart des autres cas, cependant,
+la boucle \texttt {while} sera mieux adaptée.
+
+De la même manière, les formes \texttt {tab[i]} et \texttt {*(tab+i)}
+génèrent le même code, mais ne sont pas équivalentes en termes
+de lisibilité.
+
+
+\subsection {Ne dépassez pas les bornes}
+
+Le débordement de tampon est l'origine d'un des problèmes de sécurité
+les plus répandus. Grâce au débordement de tampon, un pirate peut
+injecter, par un moyen ou un autre, des données à un programme en vue
+de saturer un espace mémoire fini (tableau, zone mémoire allouée avec
+\texttt {malloc}, etc.) pour écraser la mémoire environnante et modifier
+le comportement prévu du programme.  Vous devez donc prendre l'habitude
+de vérifier que vous n'accédez jamais à la mémoire en dehors des
+zones prévues, ce qui condamne l'utilisation des fonctions comme
+\texttt {gets}, \texttt {strcpy}, \texttt {strcat}, \texttt {sprintf},
+etc. au profit de fonctions plus modernes prenant en paramètre la taille
+maximum des zones à modifier (comme \texttt {fgets}, \texttt {strncpy},
+\texttt {strncat}, \texttt {snprintf}, etc.)
+
+
+\subsection {Privilégiez la simplicité}
+
+Entre deux solutions équivalentes, choisissez systématiquement la plus
+simple si elle n'est pas moins efficace.
+
+Attention toutefois aux boucles cachées~: ainsi, par exemple~:
+
+\begin {quote}
+\begin {lstlisting}
+nb_a = 0 ;
+for (i = 0 ; i < strlen (chaine) ; i++)
+{
+    if (chaine [i] == 'a')
+	nb_a++ ;
+}
+\end{lstlisting}
+\end {quote}
+
+Cette boucle a une complexité en $O(n^2)$ où $n$ est la longueur de la
+chaîne, car la fonction \texttt {strlen} réalise un parcours itératif
+pour en déterminer la longueur à chaque itération. Il faut donc
+calculer la longueur une fois pour toutes avant la boucle pour avoir
+une complexité en $O(n)$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section {Les tests}
+
+\subsection {Un prérequis indispensable}
+
+Rendre pour l'évaluation un programme non testé, c'est prendre un très
+grand risque... Les tests constituent donc un prérequis indispensable
+pour vos programmes. En fait, vous devriez commencer par rédiger des
+scénarios de test avant même d'écrire la première ligne de votre
+programme. Cela vous permettra également de mieux vous imprégner du
+cahier des charges du programme à rédiger.
+
+\subsection {Utilisez de grands jeux de données}
+
+Si vous le pouvez, utilisez des jeux de données significatifs pour vos
+tests. Par exemple, supposons que vous deviez rédiger un programme qui
+compte le nombre de lignes. Testez-le non pas avec une ligne ou deux,
+mais avec quelques milliers voire quelques millions. Cela vous permettra
+de détecter plus rapidement les problèmes, que ce soit de performances
+ou simplement de résistance.
+
+
+\subsection {Automatisez vos jeux de tests}
+
+Tester peut devenir fastidieux car il faut rejouer les nombreux tests
+que vous avez conçus après chaque compilation pour vérifier que les
+dernières modifications n'ont pas généré de régression. Il est
+donc grandement recommandé d'automatiser les tests, via par exemple
+un simple script shell qui enchaîne les tests et vérifie la présence
+(ou l'absence) de motif dans la sortie.
+
+
+\subsection {Mesurez la couverture de vos jeux de tests}
+
+Au fur et à mesure que vous réalisez vos tests, la question est
+de savoir s'ils sont suffisants (c'est-à-dire s'ils permettent de
+parcourir toutes les lignes de votre programme) ou s'ils sont redondants
+(c'est-à-dire si deux scénarios testent les mêmes lignes). Pour cela,
+le compilateur GCC vous propose un outil intéressant~:
+
+\begin {enumerate}
+    \item compilez votre programme avec l'option \texttt {-coverage}
+    \item passez tous vos jeux de tests
+    \item utilisez l'utilitaire \texttt {gcov} pour générer des sources
+	annotés avec le nombre d'utilisation de chaque ligne.
+
+\end {enumerate}
+
+Grâce au résultat de \texttt {gcov}, vous pouvez repérer les lignes
+non exécutées, qui indiquent que la couverture des jeux de tests n'est
+pas complète. Toute ligne non exécutée recèle potentiellement des
+erreurs.  En recherchant la couverture maximale de vos jeux de tests,
+vous améliorerez donc significativement la qualité de vos programmes.
+
+
+\subsection {Utilisez systématiquement \texttt {valgrind}}
+
+Les erreurs de mémoire sont fréquentes en C~: fuite de mémoire,
+débordement de tampon, utilisation de mémoire déjà libérée,
+etc. Pour vous aider à traquer ces erreurs, même si elles ne sont
+pas visibles (c'est-à-dire que votre programme semble fonctionner
+normalement), testez systématiquement avec l'utilitaire \texttt
+{valgrind}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section {Le rapport}
+
+\subsection {Soignez la présentation et l'orthographe}
+
+Cela devrait aller de soi, mais un rapport doit être préparé avec
+soin, tant sur le plan de la présentation que de l'orthographe. Utilisez
+systématiquement le correcteur intégré dans votre traitement de texte,
+ou le programme \texttt {aspell} si vous utilisez \LaTeX.
+
+Au delà de quelques pages (une petite dizaine par exemple), votre
+rapport doit comporter un sommaire. Bien évidemment, les pages doivent
+être numérotées.
+
+
+\subsection {Expliquez les points importants, pas les détails}
+
+Un rapport est un exercice difficile : vous êtes dans le feu de l'action,
+peut-être même encore en train de déboguer votre programme, et vous
+devez prendre de la hauteur pour rédiger un document de synthèse.
+
+Un rapport doit permettre à une personne qui ne connaît pas votre
+programme de se faire une idée de son fonctionnement. Il doit expliquer
+les points importants et non les détails (pas de code, par exemple).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Plagiat
+% Google : no
+
+% \section {La remise}
+% 
+% \subsection {Respectez l'énoncé}
+% 
+% tar-gz
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\appendix
+
+\section {Annexe}
+
+\subsection {Fichier de configuration pour \texttt {indent}}
+    \label {indentpro}
+
+Le fichier ci-après est un exemple de fichier \verb|~/.indent.pro|
+servant à configurer les nombreuses options de l'utilitaire \texttt
+{indent}. Une fois installé, il suffit après de lancer \texttt
+{indent} sur vos sources C pour les voir ré-indentés suivant ce qui
+est spécifié ici.
+
+\begin {quote}
+    \lstinputlisting {indent.pro}
+\end {quote}
+
+\end {document}
