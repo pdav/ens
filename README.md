@@ -44,7 +44,7 @@ petit mail à l'adresse pda (at) unistra.fr.
 Erreurs, imperfections, coquilles, etc.
 ---------------------------------------
 
-Si vous notez des erreurs, des inperfections, des coquilles ou n'importe
+Si vous notez des erreurs, des imperfections, des coquilles ou n'importe
 quoi qui permette d'améliorer ces supports, vous pouvez :
 - me contacter par mail à l'adresse ci-dessus
 - utiliser le mécanisme de [bug tracking de github](../../issues)
