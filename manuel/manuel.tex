@@ -2500,6 +2500,66 @@ repère dans le passé (typiquement l'heure de boot), ou -1 en cas
 d'erreur.
 
 
+\separation
+\primitive {clock\_getres, clock\_gettime, clock\_settime} --- Heure pour extensions temps réel
+    \label {clockgettime}
+    \index{{\tt clock\_getres}}
+    \index{{\tt clock\_gettime}}
+    \index{{\tt clock\_settime}}
+
+\begin {quote}
+\begin {verbatim}
+#include <time.h>
+
+int clock_getres (clockid_t clkid, struct timespec *res)
+int clock_gettime (clockid_t clkid, struct timespec *tp)
+int clock_settime (clockid_t clkid, const struct timespec *tp)
+\end{verbatim}
+\end {quote}
+
+Ces primitives sont un ajout de POSIX pour unifier les primitives de
+gestion du temps. Pour bénéficier d'une précision accrue, elles
+utilisent le type \texttt {struct timespec} qui comprend les champs
+suivants :
+
+\begin {quote}
+    \small
+\begin {verbatim}
+struct timespec
+{
+    time_t tv_sec ;     /* secondes depuis l'époque (cf time()) */
+    long tv_nsec ;      /* et nanosecondes */
+} ;
+\end{verbatim}
+\end {quote}
+
+Les différentes « horloges » (valeurs du type \verb|clockid_t|) ou
+notions du temps gérées par ces primitives et spécifiées par POSIX
+sont :
+
+\begin {itemize}
+    \item \texttt {CLOCK\_REALTIME} : date et heure courante
+    \item \texttt {CLOCK\_MONOTONIC} : cette horloge croît de manière
+	monotonique (typiquement strictement croissante), depuis une date
+	de référence (qui peut être par exemple la date du démarrage
+	du système)
+    \item \texttt {CLOCK\_PROCESS\_CPUTIME\_ID} : temps CPU consommé par
+	le processus
+    \item \texttt {CLOCK\_THREAD\_CPUTIME\_ID} : temps CPU consommé par
+	le thread
+\end {itemize}
+
+Les autres valeurs de \verb|clockid_t| ne sont pas normalisées par POSIX
+et ne devraient pas être utilisées.
+
+Pour une horloge donnée, la primitive \texttt {clock\_getres} renvoie la
+résolution (i.e. précision) dans \texttt {res}, \texttt {clock\_gettime}
+renvoie la valeur dans \texttt {tp} et \texttt {clock\_settime} modifie
+la valeur à partir de \texttt {tp}.
+
+Ces primitives renvoient 0 en cas de succès, ou -1 en cas d'erreur.
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Disques et les périphériques
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -6235,19 +6295,10 @@ int nanosleep(const struct timespec *duree, struct timespec *reste)
 \end{verbatim}
 \end {quote}
 
-La fonction {\tt nanosleep} met le processus en attente pendant un temps
-spécifié par le paramètre {\tt duree}. La structure \texttt {timespec}
-contient les champs suivants~:
-\begin {quote}
-    \small
-\begin {verbatim}
-struct timespec
-{
-    time_t tv_sec ;     /* secondes depuis l'époque (cf time()) */
-    long tv_nsec ;      /* et nanosecondes */
-} ;
-\end{verbatim}
-\end {quote}
+La fonction {\tt nanosleep} met le processus en attente pendant un
+temps spécifié par le paramètre {\tt duree}. Pour la définition de
+la structure \texttt {timespec}, voir les fonctions \texttt {clock\_*}
+(page~\pageref {clockgettime}).  
 
 La structure pointée par le paramètre \texttt {reste} contient, si
 \texttt {nanosleep} est interrompue par un signal, le temps restant
@@ -6616,6 +6667,7 @@ La fonction \verb|pthread_mutex_destroy| détruit le mutex spécifié.
 
 \separation
 \primitive {pthread\_mutex\_lock, pthread\_mutex\_timedlock, pthread\_mutex\_trylock} --- verrouille un mutex
+    \label {pthreadmutextimedlock}
     \index{{\tt pthread\_mutex\_lock}}
     \index{{\tt pthread\_mutex\_timedlock}}
     \index{{\tt pthread\_mutex\_trylock}}
@@ -6636,8 +6688,8 @@ verrou indiqué par le paramètre devienne libre, et le verrouille.
 La fonction \verb|pthread_mutex_timedlock| fonctionne de même, mais
 attend au plus jusqu'à l'heure spécifiée par \texttt {habs}, qui
 doit être une heure absolue (et non une durée relative à l'heure
-courante). Voir la fonction \texttt {nanosleep} pour la définition
-de la structure \texttt {timespec}.
+courante). Voir les fonctions \texttt {clock\_*} (page~\pageref
+{clockgettime}) pour la définition de la structure \texttt {timespec}.
 
 La fonction \verb|pthread_mutex_trylock| tente de verrouiller le mutex
 indiqué par le paramètre sans attendre. Si l'opération n'est pas
@@ -6875,10 +6927,11 @@ La boucle \texttt {while} est nécessaire car il peut arriver que
 l'attente soit satisfaite (\textit {spurious wakeup}).
 
 La fonction \verb|pthread_cond_timedwait| fonctionne de manière
-similaire à \verb|pthread_cond_wait|, mais attend au plus jusqu'à
-l'heure spécifiée par \texttt {habs}, qui doit être une heure absolue
-(et non une durée relative à l'heure courante) comme avec
-\verb|pthread_mutex_timedlock|.
+similaire à \verb|pthread_cond_wait|, mais attend au plus
+jusqu'à l'heure spécifiée par \texttt {habs}, qui doit être
+une heure absolue (et non une durée relative à l'heure courante)
+comme avec \verb|pthread_mutex_timedlock| (voir page~\pageref
+{pthreadmutextimedlock}).
 
 Si \verb|pthread_cond_timedwait| se termine à l'expiration du délai
 sans que la condition soit réalisée, l'erreur retournée est \texttt
@@ -7348,7 +7401,8 @@ La fonction \verb|sem_timedwait| fonctionne de manière similaire à
 \verb|sem_wait|, mais attend au plus jusqu'à l'heure spécifiée par
 \texttt {habs}, qui doit être une heure absolue (et non une durée
 relative à l'heure courante) comme avec la fonction
-\verb|pthread_mutex_timedlock|.
+\verb|pthread_mutex_timedlock| (voir page~\pageref
+{pthreadmutextimedlock}).
 
 Ces fonctions renvoient 0 si tout s'est bien passé, ou -1 en cas d'erreur
 ou de sémaphore non verrouillé.

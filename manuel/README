@@ -8,4 +8,3 @@ ajouter getlogin/logname
 ajouter getpass/getpwdent/getpwnam
 ajouter getut
 ajouter termios/POSIX
-ajouter mmap
