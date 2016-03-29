@@ -32,12 +32,11 @@ faite dans la fonction \texttt {main}.
 \question
 
 Activez la génération des fichiers «~\texttt {core}~»\footnote
-{Avec \texttt {bash}, il faut utiliser la commande «~\texttt {ulimit
--c unlimited}~».}.  
-En utilisant le programme de l'exercice précédent, utilisez le signal
-\texttt {SIGQUIT} (obtenu avec {\small \framebox {CTRL}\framebox
-{\textbackslash}}) pour interrompre le programme et générer un
-fichier «~\texttt {core}~».
+{Avec \texttt {bash}, utilisez la commande «~\texttt {ulimit -c
+unlimited}~».}.  En utilisant le programme de l'exercice
+précédent, utilisez le signal \texttt {SIGQUIT} (obtenu avec \texttt
+{\^{}\textbackslash} dans un shell) pour interrompre le processus et
+générer un fichier «~\texttt {core}~».
 
 Utilisez \texttt {gdb} pour afficher l'endroit où le programme s'est
 arrêté (commandes \texttt {where}, \texttt {up}/\texttt {down} et
@@ -54,7 +53,7 @@ termine.
 
 \question
 
-Modifiez le programme de la question précédente pour traiter plusieurs
+Modifiez le programme de l'exercice précédent pour traiter plusieurs
 signaux consécutifs~: votre programme ne doit pas se terminer après
 l'arrivée d'un signal.
 
@@ -68,7 +67,8 @@ minute, le processus père affiche un message et prévient le fils qu'il
 doit s'arrêter en lui envoyant le signal \texttt {SIGUSR1}. Lorsque
 le processus fils reçoit l'ordre du père, il affiche un message et
 s'arrête effectivement, provoquant alors la terminaison du père. Vous
-utiliserez les primitives V7.
+utiliserez les primitives V7, avec le signal \texttt {SIGALRM} pour tout
+ce qui est temporisation.
 
 
 \question
@@ -86,15 +86,14 @@ primitives POSIX.
 \question
 
 Écrivez un programme composé d'une boucle sans fin qui affiche le
-message « traitement normal » à chaque seconde. Lorsqu'il reçoit
-un signal {\tt SIGINT} (envoyé par \texttt {\^{ }C} dans un shell),
-il exécute une fonction qui affiche le message « traitement du signal
-de niveau 1 », puis attend une seconde, cinq fois de suite. Lorsqu'il
-reçoit une nouvelle fois le signal \texttt {SIGINT}, il augmente la
-valeur du niveau affiché, puis revient au niveau précédent au bout de
-ses cinq affichages. Vous pouvez afficher des tabulations correspondant
-au niveau de traitement courant pour plus de lisibilité. Vous utiliserez
-les primitives POSIX.
+message « traitement normal » à chaque seconde. Lorsqu'il reçoit un
+signal {\tt SIGINT}, il exécute une fonction qui affiche le message
+« traitement du signal de niveau 1 », puis attend une seconde, cinq
+fois de suite. Lorsqu'il reçoit une nouvelle fois le signal \texttt
+{SIGINT}, il augmente la valeur du niveau affiché, puis revient au
+niveau précédent au bout de ses cinq affichages. Vous pouvez afficher
+des tabulations correspondant au niveau de traitement courant pour plus
+de lisibilité. Vous utiliserez les primitives POSIX.
 
 
 \question
@@ -129,7 +128,7 @@ qu'il peut passer au bit suivant.
 
 \question
 
-En utilisant un protocole similaire à celui de la question précédente,
+En utilisant un protocole similaire à celui de l'exercice précédent,
 on désire simuler le fonctionnement d'un tube, c'est à dire réaliser
 les fonctions suivantes~:
 
