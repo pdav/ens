@@ -10,6 +10,7 @@
 %   2007/04/19 : pda : séparation exercices 1 et 2
 %   2007/04/19 : pda : rédaction exercice envoyer/reception
 %   2013/09/23 : vincent : ajout exercice 5 (imbrication de signaux)
+%   2016/03/29 : pda : ajout exercices 1 et 2 (SIGINT x 5, SIGQUIT)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \td {Système~: Signaux}
@@ -17,6 +18,30 @@
 % \but
 % 
 % L'objet de ce TD est l'étude des signaux V7 et POSIX.
+
+
+\question
+
+À l'aide des primitives V7, écrivez un programme qui attend 5 fois
+le signal \texttt {SIGINT}. À chaque réception du signal, votre
+programme doit afficher la valeur du compteur, et au bout de 5 fois,
+il doit s'arrêter. L'incrémentation du compteur ne doit pas être
+faite dans la fonction \texttt {main}.
+
+
+\question
+
+Activez la génération des fichiers «~\texttt {core}~»\footnote
+{Avec \texttt {bash}, il faut utiliser la commande «~\texttt {ulimit
+-c unlimited}~».}.  
+En utilisant le programme de l'exercice précédent, utilisez le signal
+\texttt {SIGQUIT} (obtenu avec {\small \framebox {CTRL}\framebox
+{\textbackslash}}) pour interrompre le programme et générer un
+fichier «~\texttt {core}~».
+
+Utilisez \texttt {gdb} pour afficher l'endroit où le programme s'est
+arrêté (commandes \texttt {where}, \texttt {up}/\texttt {down} et
+\texttt {list}) et la valeur du compteur (command \texttt {print}).
 
 
 \question
@@ -38,10 +63,12 @@ l'arrivée d'un signal.
 
 Écrivez un programme composé de deux processus.  Le processus père
 génère un processus fils qui doit exécuter une fonction {\tt traite}
-toutes les secondes.  Au bout d'une minute, le processus père le
-prévient qu'il doit s'arrêter.  Lorsque le processus fils s'arrête
-effectivement, le processus père se termine. Vous utiliserez les
-primitives V7.
+toutes les secondes, qui ne fait qu'afficher un message.  Au bout d'une
+minute, le processus père affiche un message et prévient le fils qu'il
+doit s'arrêter en lui envoyant le signal \texttt {SIGUSR1}. Lorsque
+le processus fils reçoit l'ordre du père, il affiche un message et
+s'arrête effectivement, provoquant alors la terminaison du père. Vous
+utiliserez les primitives V7.
 
 
 \question
