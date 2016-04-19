@@ -6013,9 +6013,7 @@ Exemple~:
 
 \begin {quote}
 \begin {verbatim}
-main (argc, argv)
-int argc ;
-char *argv [] ;
+int main (int argc, char *argv [])
 {
     int c, errflg = 0 ;
     extern char *optarg ;
@@ -6028,14 +6026,14 @@ char *argv [] ;
             case 'a' :     /* option sans argument */
                 aflag++ ;
                 break ;
-            case 'b' :
+	    case 'b' :
                 bflag++ ;
                 break ;
             case 'f' :     /* option avec argument */
                 input = optarg ;
                 break ;
             case 'o' :
-                output = optarg ;
+                output = optarg
                 break ;
             case '?' :     /* option non reconnue */
                 errflg++ ;
@@ -6043,8 +6041,8 @@ char *argv [] ;
         }
         if (errflg)
         {
-            fprintf (stderr, "usage:....") ;
-            exit (2) ;
+            fprintf (stderr, "usage: %s ....", argv [0]) ;
+            exit (1) ;
         }
         for ( ; optind < argc; optind++)
         {
