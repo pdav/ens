@@ -24,10 +24,15 @@ Expliquez ce que vous constatez pour la taille de la structure.
 
 \question
 
-Donnez la définition d'une macro \verb|ADRESSE_RELATIVE_DE(s,c)|
-permettant d'obtenir l'adresse du champ \texttt {c} d'une structure
-\texttt {s} relativement au début de la structure. L'adresse relative
-renvoyée par votre macro doit être exprimée en octets.
+Soit une variable \texttt {v} de type \texttt {struct s} contenant, parmi
+d'autres, un champ \texttt {c}. Affichez l'adresse relative (en nombre
+d'octets) du champ {c} par rapport au début de la variable \texttt {v}.
+
+Donnez à présent la définition d'une macro
+\verb|ADRESSE_RELATIVE_DE(s,c)| permettant d'obtenir l'adresse du champ
+\texttt {c} d'une structure \texttt {s} relativement au début de la
+structure. L'adresse relative renvoyée par votre macro doit être
+exprimée en octets.
 
 Utilisez cette macro pour afficher les adresses relatives des différents
 champs de la structure décrite dans l'exercice précédent.
