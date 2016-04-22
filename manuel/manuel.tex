@@ -1048,6 +1048,35 @@ ou -1 en cas d'erreur.
 
 
 \separation
+\primitive {truncate, ftruncate} --- tronque la longueur d'un fichier
+    \index{{\tt truncate}}
+    \index{{\tt ftruncate}}
+
+\begin {quote}
+\begin {verbatim}
+#include <unistd.h>
+
+int truncate (const char *nom, off_t lg)
+int ftruncate (int desc, off_t lg)
+\end{verbatim}
+\end {quote}
+
+Les primitives {\tt truncate} et {\tt ftruncate} tronquent un
+fichier à la taille spécifiée par le paramètre \texttt {lg}.
+Si l'opération a pour effet de réduire le fichier, les données
+tronquées sont perdues. Si l'opération a pour effet d'augmenter
+la taille du fichier, tout se passe comme si le fichier avait
+complété avec des octets nuls.
+Le fichier est spécifié par son chemin avec \texttt {truncate},
+ou par un descripteur de fichier ouvert pour \texttt {ftruncate}.
+
+Ces primitives renvoient 0 en cas de succès
+ou -1 en cas d'erreur.
+
+
+
+
+\separation
 \primitive {unlink} --- supprime le fichier (enlève un lien)
     \index{{\tt unlink}}
 
