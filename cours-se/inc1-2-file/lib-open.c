@@ -5,7 +5,7 @@ fd1 = open ("toto", O_RDONLY) ;
 if (fd1 == -1)
     raler ("open toto") ;
 fd2 = open ("titi", O_WRONLY | O_CREAT | O_TRUNC, 0666) ;
-if (fd1 == -1)
+if (fd2 == -1)
     raler ("open titi") ;
 
 while ((n = read (fd1, &c, 1)) > 0)
