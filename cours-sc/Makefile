@@ -246,6 +246,6 @@ gencpu:
 	$(GENCPU) $(CPUDBDIR) inc1-intro/cpu-
 
 clean:
-	rm -f $(FIGall) *.bak */*.bak *.nav *.out *.snm *.vrb *.log
+	rm -f $(FIGall) *.bak */*.bak *.nav *.out *.aux *.snm *.vrb *.log
 	rm -f print-*.pdf ch*.pdf tout.pdf by-nc.pdf
 	rm -f inc?-*/a.out
