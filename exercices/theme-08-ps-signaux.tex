@@ -79,21 +79,35 @@ d'interruption (signal {\tt SIGINT}), le programme sauve la date en
 clair et la valeur courante du compteur dans un fichier,
 à la suite de ce qui s'y trouve déjà.
 Lorsque le signal {\tt SIGTERM} est reçu, le programme écrit
-le mot {\tt fin} dans le fichier, puis se termine. Vous utiliserez les
-primitives POSIX.
+le mot {\tt fin} à la fin du fichier, puis se termine.
+En dépit des règles de bon usage des signaux, vous grouperez les accès
+au fichier (ouverture, écriture, fermeture) dans les fonctions associées
+aux signaux.  Vous utiliserez les primitives POSIX, en veillant à ce
+que les traitements des deux signaux n'interfèrent pas.
+
+\clearpage
+
+
+\question
+
+Reprenez l'exercice précédent en appliquant cette fois-ci les règles
+de bon usage des signaux, c'est-à-dire en réalisant le minimum
+d'opérations dans les fonctions associées aux signaux.
 
 
 \question
 
 Écrivez un programme composé d'une boucle sans fin qui affiche le
-message « traitement normal » à chaque seconde. Lorsqu'il reçoit un
+message « traitement normal » toutes les secondes. Lorsqu'il reçoit un
 signal {\tt SIGINT}, il exécute une fonction qui affiche le message
 « traitement du signal de niveau 1 », puis attend une seconde, cinq
 fois de suite. Lorsqu'il reçoit une nouvelle fois le signal \texttt
 {SIGINT}, il augmente la valeur du niveau affiché, puis revient au
 niveau précédent au bout de ses cinq affichages. Vous pouvez afficher
 des tabulations correspondant au niveau de traitement courant pour plus
-de lisibilité. Vous utiliserez les primitives POSIX.
+de lisibilité. Vous utiliserez les primitives POSIX. On notera que le
+flag \texttt {SA\_NODEFER} (primitive \texttt {sigaction}) permet de ne
+pas masquer le signal en cours de traitement.
 
 
 \question
