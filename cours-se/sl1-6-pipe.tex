@@ -164,6 +164,27 @@
     \end {itemize}
 \end {frame}
 
+\begin {frame} {Ne pas oublier...}
+    %BESTPRACTICE
+
+    Principes à respecter :
+
+    \begin {itemize}
+	\item l'appel à \code {pipe} doit être fait \alert {avant}
+	    l'appel à \code {fork}
+	    \begin {itemize}
+		\item sinon le tube n'est pas hérité
+	    \end {itemize}
+	\item \alert {fermer} les descripteurs dès qu'ils ne sont
+	    plus utilisés
+	    \begin {itemize}
+		\item indispensable dans certains cas avec les tubes
+		\item \implique le faire systématiquement évite d'avoir
+		    à réfléchir !
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Tubes nommés
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

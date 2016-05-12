@@ -443,6 +443,7 @@
 \end {frame}
 
 \begin {frame} {Création des processus}
+    % BESTPRACTICE
     Exemple :
 
     \lstinputlisting [basicstyle=\fC\lstmonstyle] {\inc/ex-fork.c}
@@ -462,6 +463,7 @@
 		\item cas particulier pour les processus zombies (plus tard)
 	    \end {itemize}
 	\item Argument \code {code} $\in$ [0..255]
+	    % BESTPRACTICE
 	    \begin {itemize}
 		\item si vous voyez \code {\alert {exit (-1)}} dans un
 		    programme, c'est que son auteur n'a pas assimilé

@@ -59,6 +59,7 @@ LST1intro = \
 	inc1-1-intro/ex-errno1.c \
 	inc1-1-intro/perror.c \
 	inc1-1-intro/ex-errno2.c \
+	inc1-1-intro/ex-errno3.c \
 	inc1-1-intro/ex-ptr-ok.c \
 	inc1-1-intro/ex-ptr-bad.c \
 

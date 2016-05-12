@@ -270,7 +270,7 @@
 \end {frame}
 
 \begin {frame} {API Unix v7 -- Fonction appelée}
-    Recommandation pour la fonction :
+    Recommandations pour la fonction :
 
     \begin {itemize}
 	\item Limiter la fonction à la modification d'une variable
@@ -339,6 +339,29 @@
 		    vers le processus courant
 	    \end {itemize}
 
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {API Unix v7}
+    % BESTPRACTICES
+    
+    Recommandations / rappels :
+    \begin {itemize}
+	\item \code {signal} \textbf {n'attend pas} l'arrivée d'un signal
+	    \begin {itemize}
+		\item ne fait que modifier la fonction
+		\item ne pas confondre avec \code {pause}
+	    \end {itemize}
+	\item appeler \code {signal} avec l'\textbf {adresse} d'une fonction
+	    \begin {itemize}
+		\item ... et pas son résultat
+		\item \code {signal (SIGINT, f)} et non
+		    \code {signal (SIGINT, f(5))}
+	    \end {itemize}
+	\item en faire \textbf {le moins possible} dans la fonction
+	    \begin {itemize}
+		\item évite les problèmes de concurrence
+	    \end {itemize}
     \end {itemize}
 \end {frame}
 

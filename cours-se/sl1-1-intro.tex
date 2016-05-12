@@ -1149,6 +1149,93 @@
 
 \end {frame}
 
+\begin {frame} {POSIX -- Constantes}
+    Certaines constantes ne sont pas constantes...
+
+    \begin {itemize}
+	\item arguments sémantiques des primitives : fichiers d'inclusion
+	    \begin {center}
+		\fE
+		Exemples~:
+		\begin {tabular} {|l|l|l|} \hline
+		    \rca \code {R\_OK}
+			& test en lecture pour \code {access}
+			& \code {unicode.h}
+			\\
+		    \rcb \code {O\_WRONLY}
+			& ouverture en écriture pour \code {open}
+			& \code {fcntl.h}
+			\\
+		    \rca \code {S\_IFDIR}
+			& type de fichier « répertoire »
+			& \code {sys/stat.h}
+			\\
+		    \rcb ... & &
+			\\
+			\hline
+		\end {tabular}
+	    \end {center}
+
+	\item limites arbitraires : \code {limits.h}
+	    \begin {center}
+		\fE
+		Exemples~:
+		\begin {tabular} {|l|l|} \hline
+		    \rca \code {PATH\_MAX}
+			& taille maximum des chemins
+			\\
+		    \rca \code {LOGIN\_NAME\_MAX}
+			& nombre maximum d'ouvertures de fichier
+			\\
+		    \rcb \code {CHILD\_MAX}
+			& nombre maximum de processus fils
+			\\
+			\hline
+		\end {tabular}
+	    \end {center}
+
+	\item limites dépendant de la configuration du système \\
+	    \code {long sysconf (int paramètre})
+	    \begin {center}
+		\fE
+		Exemples~:
+		\begin {tabular} {|l|l|} \hline
+		    \rca \code {\_SC\_LOGIN\_NAME\_MAX}
+			& longueur maxium des noms d'utilisateur
+			\\
+		    \rcb \code {\_SC\_OPEN\_MAX}
+			& nombre maximum d'ouvertures de fichier
+			\\
+		    \rca \code {\_SC\_CHILD\_MAX}
+			& nombre maximum de processus fils
+			\\
+			\hline
+		\end {tabular}
+	    \end {center}
+
+	\item limites dépendant du système de fichiers \\
+	    \code {long pathconf (const char *chemin, int paramètre})
+	    \begin {center}
+		\fE
+		Exemples~:
+		\begin {tabular} {|l|l|} \hline
+		    \rca \code {\_PC\_LINK\_MAX}
+			& nombre maximum de liens sur un fichier
+			\\
+		    \rcb \code {\_PC\_NAME\_MAX}
+			& taille maximum d'un nom de fichier
+			\\
+		    \rcb \code {\_PC\_PATH\_MAX}
+			& taille maximum d'un chemin complet
+			\\
+			\hline
+		\end {tabular}
+	    \end {center}
+
+
+    \end {itemize}
+\end {frame}
+
 \begin {frame} {POSIX -- Gestion des erreurs}
     En cas d'erreur, les primitives :
     \begin {itemize}
@@ -1196,6 +1283,18 @@
     \lstinputlisting [basicstyle=\fD\lstmonstyle] {\inc/ex-errno2.c}
 \end {frame}
 
+\begin {frame} {POSIX -- Gestion des erreurs}
+    % BESTPRACTICE
+
+    Recommandations :
+    \begin {itemize}
+	\item \alert {toujours vérifier} les retours de primitives
+	\item \alert {toujours afficher} la raison des erreurs
+    \end {itemize}
+
+    \lstinputlisting [basicstyle=\fD\lstmonstyle] {\inc/ex-errno3.c}
+\end {frame}
+
 \begin {frame} {POSIX -- Paramètres de type « pointeur »}
 
     Certaines primitives retournent des résultats plus complexes
@@ -1205,15 +1304,16 @@
 	\item Paramètre de type pointeur (sur un objet à remplir)
 	\item Exemples :
 	    \begin {itemize}
-		\item \code {int stat (char *path,
+		\item \code {int stat (const char *path,
 				\alert {struct stat *stbuf})}
 		    \\
-		    Retourne dans l'emplacement repéré par \code {stbuf}
-		    les attributs du fichier
+		    Retourne dans l'emplacement repéré par \code
+		    {\alert {stbuf}} les attributs du fichier
 		\item \code {pid\_t wait (\alert {int *status})}
 		    \\
-		    Place dans l'emplacement repéré par \code {status}
-		    des informations sur la terminaison du processus
+		    Place dans l'emplacement repéré par \code {\alert
+		    {status}} des informations sur la terminaison du
+		    processus
 		\item etc.
 	    \end {itemize}
 
@@ -1227,8 +1327,8 @@
     \begin {center}
     \fC
     \begin {tabular} {|p{.49\textwidth}|p{.49\textwidth}|} \hline
-	\rca \multicolumn {1} {|c|} {Correct}
-	    & \multicolumn {1} {c|} {\alert {Faux}}
+	\rca \multicolumn {1} {|c|} {\textbf {Correct}}
+	    & \multicolumn {1} {c|} {\textbf {\alert {Faux}}}
 	    \\ \hline
 	\rcb
 	    \lstinputlisting [basicstyle=\fE\lstmonstyle] {\inc/ex-ptr-ok.c}
