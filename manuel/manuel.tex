@@ -2190,7 +2190,7 @@ de l'action associée au signal {\tt sig}.
 
 Le contenu de la structure {\tt sigaction} est défini comme suit~:
 
-\begin {tabular} {|l|l|p{70mm}|} \hline
+\begin {tabular} {|l|l|p{110mm}|} \hline
     \multicolumn {1} {|c|} {\bf Type}
 	& \multicolumn {1} {|c|} {\bf Nom}
 	& \multicolumn {1} {|c|} {\bf Description}
@@ -2206,10 +2206,22 @@ Le contenu de la structure {\tt sigaction} est défini comme suit~:
 	\\ \hline
     \verb:int:
 	& \verb:sa_flags:
-	& paramètres affectant le comportement du signal.
-	    POSIX n'en définit qu'un~: \verb:SA_NOCLDSTOP: pour ne pas
-	    envoyer le signal {\tt SIGCHLD} lorsqu'un processus fils est
-	    stoppé (en utilisant {\tt ptrace}).
+	& paramètres affectant le comportement du signal, en fonction
+	    des bits suivants :
+	    \begin {itemize}
+		\item \verb|SA_RESETHAND| : réinitialiser l'action
+		    associée au signal à l'appel de la fonction
+		\item \verb|SA_NODEFER| : ne pas masquer le signal
+		    \texttt {sig} pendant l'exécution de la fonction
+		\item \verb|SA_RESTART| : reprendre l'exécution de la
+		    primitive système (si elle le permet) interrompue
+		    par le signal à la fin de l'exécution de la
+		    fonction
+		\item \verb|SA_NOCLDWAIT| : si \texttt {sig} = \texttt
+		    {SIGCHLD}, les processus fils se terminant ne
+		    deviendront pas des processus zombies
+	    \end {itemize}
+	    \vspace* {-3mm}
 	\\ \hline
 \end {tabular}
 
