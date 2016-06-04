@@ -27,7 +27,9 @@
 # pdfjam directement avec des paramètres plus sophistiqués)
 PRINTCMD = pdfjam-slides3up --quiet --paper a4paper --keepinfo
 
-DEPS	= courspda.sty annee.tex logo-uds.pdf licence.tex by-nc.pdf
+DEPS	= courspda.sty casserole.pdf logo-uds.pdf \
+	annee.tex \
+	licence.tex by-nc.pdf
 
 ##############################################################################
 # Première partie
@@ -467,5 +469,5 @@ print: all tout1.pdf tout2.pdf
 clean:
 	rm -f $(FIG1all) $(FIG2all)
 	rm -f *.bak */*.bak *.nav *.out *.snm *.vrb *.log *.toc *.aux
-	rm -f print-*.pdf ch*.pdf tout*.pdf by-nc.pdf
+	rm -f print-*.pdf ch*.pdf tout*.pdf by-nc.pdf casserole.pdf
 	rm -f inc?-?-*/a.out

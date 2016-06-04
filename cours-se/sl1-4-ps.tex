@@ -423,7 +423,7 @@
 \end {frame}
 
 \begin {frame} {Création des processus}
-    Quelques conseils pour apprivoiser \code {fork} :
+    \begin {block} {\casseroler {Conseils pour apprivoiser \code {fork}}}
 
     \begin {itemize}
 	\item \code {switch} avec 3 cas : \code {-1}, \code {0} et
@@ -440,10 +440,10 @@
 		    n'exécute pas le code prévu pour le père
 	    \end {itemize}
     \end {itemize}
+    \end {block}
 \end {frame}
 
 \begin {frame} {Création des processus}
-    % BESTPRACTICE
     Exemple :
 
     \lstinputlisting [basicstyle=\fC\lstmonstyle] {\inc/ex-fork.c}
@@ -456,31 +456,49 @@
 
     \begin {itemize}
 	\item Termine le processus en cours
-	\item Pas de retour (et pas -1 en cas d'erreur)
+	\item Pas de retour
+	    \begin {itemize}
+		\item ... et donc pas -1 en cas d'erreur
+	    \end {itemize}
 	\item Presque toutes les ressources sont libérées
 	    \begin {itemize}
 		\item mémoire, CPU, etc.
 		\item cas particulier pour les processus zombies (plus tard)
 	    \end {itemize}
-	\item Argument \code {code} $\in$ [0..255]
-	    % BESTPRACTICE
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Terminaison des processus}
+
+    \begin {block} {\casseroler {Argument de \code {exit}}}
+    \begin {itemize}
+	\item code $\in$ [0..255]
 	    \begin {itemize}
 		\item si vous voyez \code {\alert {exit (-1)}} dans un
 		    programme, c'est que son auteur n'a pas assimilé
 		    son cours de système...
-		\item valeur 0 : ok (pour le Shell)
-		\item constantes POSIX : \code {EXIT\_SUCCESS} et \code
-		    {EXIT\_FAILURE}
-
 	    \end {itemize}
-	\item En réalité, \code {exit} est une fonction de bibliothèque
+	\item valeur 0 : ok
 	    \begin {itemize}
-		\item vide les buffers des fichiers ouverts par \code {fopen}
-		\item appelle les fonctions enregistrées par \code {atexit}
-		\item la vraie primitive s'appelle \code {\_exit}
-		    \begin {itemize}
-			\item jamais appelée directement
-		    \end {itemize}
+		\item convention utilisée par les shells
+		\item si le père n'est pas un shell, on peut
+		    utiliser une autre convention
+	    \end {itemize}
+	\item constantes POSIX : \code {EXIT\_SUCCESS} et \code
+	    {EXIT\_FAILURE}
+
+    \end {itemize}
+    \end {block}
+\end {frame}
+
+\begin {frame} {Terminaison des processus}
+    En réalité, \code {exit} est une fonction de bibliothèque
+    \begin {itemize}
+	\item vide les buffers des fichiers ouverts par \code {fopen}
+	\item appelle les fonctions enregistrées par \code {atexit}
+	\item la vraie primitive s'appelle \code {\_exit}
+	    \begin {itemize}
+		\item jamais appelée directement
 	    \end {itemize}
     \end {itemize}
 \end {frame}

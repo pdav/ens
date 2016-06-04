@@ -1284,13 +1284,12 @@
 \end {frame}
 
 \begin {frame} {POSIX -- Gestion des erreurs}
-    % BESTPRACTICE
-
-    Recommandations :
+    \begin {block} {\casseroler {Recommandations}}
     \begin {itemize}
 	\item \alert {toujours vérifier} les retours de primitives
-	\item \alert {toujours afficher} la raison des erreurs
+	\item \alert {afficher} la raison des erreurs
     \end {itemize}
+    \end {block}
 
     \lstinputlisting [basicstyle=\fD\lstmonstyle] {\inc/ex-errno3.c}
 \end {frame}
