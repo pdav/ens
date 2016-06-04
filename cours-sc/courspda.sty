@@ -17,7 +17,7 @@
 
 \NeedsTeXFormat {LaTeX2e}
 
-\ProvidesPackage {courspda} [2016/01/24 1.0 (pda)]
+\ProvidesPackage {courspda} [2016/01/24 1.1 (pda)]
 
 \RequirePackage {etoolbox}	% toggle + AtBeginDocument
 
@@ -116,6 +116,15 @@
 \newcommand {\fE} \tiny			% minuscule
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Quelques commandes pour se simplifier la vie
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand {\implique} {$\Rightarrow$\ }
+\renewcommand {\arraystretch} {1.2}
+
+\newcommand {\DESSIN} {\textbf {\huge {DESSIN}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Configuration de beamer
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -123,16 +132,9 @@
 \usefonttheme {structurebold}
 
 \setbeamercolor {frametitle} {fg=red}
-\setbeamerfont {frametitle} {series=\bfseries}
-\setbeamertemplate {frametitle} {
-    \textbf {\insertframetitle} \par
-}
+\setbeamertemplate {frametitle} {\insertframetitle \par}
 
-\pgfdeclareimage [height=5mm, interpolate=true] {logo} {logo-uds}
-
-\newcommand {\implique} {$\Rightarrow$\ }
-
-\renewcommand {\arraystretch} {1.2}
+\pgfdeclareimage [height=4mm, interpolate=true] {logo} {logo-uds}
 
 \setbeamertemplate {footline} {%
     \vskip 1ex
@@ -142,7 +144,7 @@
 	\insertframenumber %/\inserttotalframenumber
 	\hfill
 	\makebox [.4\textwidth] [r] {\textnormal {%
-		\copyright
+		% \copyright
 		Pierre David,
 		pda@unistra.fr}%
 	    }
@@ -151,9 +153,6 @@
 }
 
 \setbeamertemplate {navigation symbols} {}
-
-% \defbeamertemplate*{section in toc}{my theme}
-% {\leavevmode\leftskip=0.5em\large{\usebeamercolor[fg]{titlelike}\inserttocsectionnumber.} \inserttocsection\par}
 
 \iftoggle {multichap} {%%%%%%%%%%%%%%%%%%%% Multi-chapter
     \newcommand {\titreA} [1] {\section {#1}}
@@ -202,5 +201,3 @@
 	\end {frame}
     }
 } {}
-
-\newcommand {\DESSIN} {\textbf {\huge {DESSIN}}}
