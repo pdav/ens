@@ -629,20 +629,16 @@
 
     \begin {itemize}
 	\item Multics (MULtiplexed Information and Computing Service)
-	    \begin {center}
-		\fD
-		\begin {tabular} {|l|l|} \hline
-		    \rca 1963 & spécification (MIT) \\
-		    \rcb 1964 & démarrage du projet \\
-		    \rca 1964 & General Electric + Bell Labs rejoignent le MIT \\
-		    \rcb 1968 & première version « self-hosting » \\
-		    \rca 1969 & \textbf {Bell Labs} se retirent du projet \\
-		    \rcb 1973 & annonce commerciale \\
-		    \rca 1985 & fin du développement \\
-		    \rcb 2000 & fermeture du dernier site (Min Défense Canada) \\
-		    \hline
-		\end {tabular}
-	    \end {center}
+	    \ctableau {\fD} {|l|l|} {
+		\rca 1963 & spécification (MIT) \\
+		\rcb 1964 & démarrage du projet \\
+		\rca 1964 & General Electric + Bell Labs rejoignent le MIT \\
+		\rcb 1968 & première version « self-hosting » \\
+		\rca 1969 & \textbf {Bell Labs} se retirent du projet \\
+		\rcb 1973 & annonce commerciale \\
+		\rca 1985 & fin du développement \\
+		\rcb 2000 & fermeture du dernier site (Min Défense Canada) \\
+	    }
 
 	    \begin {itemize}
 		\item Système très ambitieux
@@ -665,21 +661,17 @@
 
     \begin {itemize}
 	\item Unix
-	    \begin {center}
-		\fD
-		\begin {tabular} {|l|l|} \hline
-		    \rca 1969 & Bell Labs se retirent du projet Multics \\
-		    \rca      & récupération d'un PDP-7, écriture en assembleur \\
-		    \rcb 1971 & achat PDP-11/20 en échange d'un formateur de texte \\
-		    \rca 1972 & création du langage C et réécriture d'Unix en C \\
-		    \rcb 1973 & premières diffusions \\
-		    \rca 1979 & Unix v7 (environ 10 000 lignes de C et un peu
-			d'assembleur) \\
-		    \rcb 1980 & distribution 4BSD \\
-		    \rca 1992 & procès AT\&T vs BSDi vs Berkeley (fin en 1994) \\
-		    \hline
-		\end {tabular}
-	    \end {center}
+	    \ctableau {\fD} {|l|l|} {
+		\rca 1969 & Bell Labs se retirent du projet Multics \\
+		\rca      & récupération d'un PDP-7, écriture en assembleur \\
+		\rcb 1971 & achat PDP-11/20 en échange d'un formateur de texte \\
+		\rca 1972 & création du langage C et réécriture d'Unix en C \\
+		\rcb 1973 & premières diffusions \\
+		\rca 1979 & Unix v7 (environ 10 000 lignes de C et un peu
+		    d'assembleur) \\
+		\rcb 1980 & distribution 4BSD \\
+		\rca 1992 & procès AT\&T vs BSDi vs Berkeley (fin en 1994) \\
+	    }
 
 	    \begin {itemize}
 		\item Beaucoup d'idées novatrices
@@ -881,9 +873,7 @@
 \end {frame}
 
 \begin {frame} {Interface utilisateur}
-    \begin {center}
-    \fD
-    \begin {tabular} {|l|l|l|} \hline
+    \ctableau {\fD} {|l|l|l|} {
 	\rca Date & \multicolumn {1} {c|} {Stations de travail}
 		& \multicolumn {1} {c|} {Ordinateurs personnels}
 	    \\ \hline
@@ -894,10 +884,8 @@
 	\rca 1983 & W Window System (Stanford) & Lisa (Apple) \\
 	\rcb 1984 & X Window System (MIT) & \\
 	\rca 1985 & HP Windows (HP),	& Amiga Workbench (Commodore), \\
-	\rca      & Sunview (Sun)	& Windows (Microsoft), etc \\
-	\hline
-    \end {tabular}
-    \end {center}
+	\rcb      & Sunview (Sun)	& Windows (Microsoft), etc \\
+    }
 
     La gestion d'une interface utilisateur « graphique » n'est pas
     du ressort du noyau :
@@ -1070,18 +1058,14 @@
 	    \vspace* {1mm}
 	    Quelques exemples :
 
-	    \begin {center}
-	    \fC
-	    \begin {tabular} {|l|l|} \hline
+	    \ctableau {\fC} {|l|l|} {
 		\rca \code {uid\_t} & numéro d'utilisateur \\
 		\rcb \code {gid\_t} & numéro de groupe \\
 		\rca \code {pid\_t} & numéro de processus \\
 		\rcb \code {mode\_t} & permissions \\
 		\rca \code {time\_t} & heure courante \\
 		\rcb \code {size\_t} & taille, résultat de sizeof (définie par ISO C) \\
-		\hline
-	    \end {tabular}
-	    \end {center}
+	    }
 
 	    Définitions des types : fichiers d'inclusion
     \end {itemize}
@@ -1093,20 +1077,16 @@
 	\item Certaines primitives nécessitent de spécifier une opération
 
 	\item Exemple~:
-	    \begin {center}
-		\fC
-		\begin {tabular} {|l|l|} \hline
-		    \rca \code {r = access ("toto", 0)}
-			& le fichier existe-t'il ? \\
-		    \rcb \code {r = access ("toto", 1)}
-		    	& puis-je exécuter le fichier ? \\
-		    \rca \code {r = access ("toto", 2)}
-		    	& puis-je modifier le fichier ? \\
-		    \rcb \code {r = access ("toto", 4)}
-			& puis-je lire le fichier ? \\
-		    \hline
-		\end {tabular}
-	    \end {center}
+	    \ctableau {\fC} {|l|l|} {
+		\rca \code {r = access ("toto", 0)}
+		    & le fichier existe-t'il ? \\
+		\rcb \code {r = access ("toto", 1)}
+		    & puis-je exécuter le fichier ? \\
+		\rca \code {r = access ("toto", 2)}
+		    & puis-je modifier le fichier ? \\
+		\rcb \code {r = access ("toto", 4)}
+		    & puis-je lire le fichier ? \\
+	    }
 
 	    \vspace* {3mm}
 
@@ -1124,20 +1104,16 @@
 	    \lstinputlisting [basicstyle=\fD\lstmonstyle] {\inc/unistd.h}
 
 	\item L'exemple précédent devient :
-	    \begin {center}
-		\fC
-		\begin {tabular} {|l|l|} \hline
-		    \rca \code {r = access ("toto", F\_OK)}
-			& le fichier existe-t'il ? \\
-		    \rcb \code {r = access ("toto", X\_OK)}
-		    	& puis-je exécuter le fichier ? \\
-		    \rca \code {r = access ("toto", W\_OK)}
-		    	& puis-je modifier le fichier ? \\
-		    \rcb \code {r = access ("toto", R\_OK)}
-			& puis-je lire le fichier ? \\
-		    \hline
-		\end {tabular}
-	    \end {center}
+	    \ctableau {\fC} {|l|l|} {
+		\rca \code {r = access ("toto", F\_OK)}
+		    & le fichier existe-t'il ? \\
+		\rcb \code {r = access ("toto", X\_OK)}
+		    & puis-je exécuter le fichier ? \\
+		\rca \code {r = access ("toto", W\_OK)}
+		    & puis-je modifier le fichier ? \\
+		\rcb \code {r = access ("toto", R\_OK)}
+		    & puis-je lire le fichier ? \\
+	    }
 	    \vspace* {2mm}
 
 	\item Utiliser les constantes rend les programmes plus lisibles
@@ -1157,7 +1133,7 @@
 	    \begin {center}
 		\fE
 		Exemples~:
-		\begin {tabular} {|l|l|l|} \hline
+		\tableau {} {|l|l|l|} {
 		    \rca \code {R\_OK}
 			& test en lecture pour \code {access}
 			& \code {unicode.h}
@@ -1172,26 +1148,24 @@
 			\\
 		    \rcb ... & &
 			\\
-			\hline
-		\end {tabular}
+		}
 	    \end {center}
 
 	\item limites arbitraires : \code {limits.h}
 	    \begin {center}
 		\fE
 		Exemples~:
-		\begin {tabular} {|l|l|} \hline
+		\tableau {} {|l|l|} {
 		    \rca \code {PATH\_MAX}
 			& taille maximum des chemins
 			\\
-		    \rca \code {LOGIN\_NAME\_MAX}
+		    \rcb \code {LOGIN\_NAME\_MAX}
 			& nombre maximum d'ouvertures de fichier
 			\\
-		    \rcb \code {CHILD\_MAX}
+		    \rca \code {CHILD\_MAX}
 			& nombre maximum de processus fils
 			\\
-			\hline
-		\end {tabular}
+		}
 	    \end {center}
 
 	\item limites dépendant de la configuration du système \\
@@ -1199,7 +1173,7 @@
 	    \begin {center}
 		\fE
 		Exemples~:
-		\begin {tabular} {|l|l|} \hline
+		\tableau {} {|l|l|} {
 		    \rca \code {\_SC\_LOGIN\_NAME\_MAX}
 			& longueur maxium des noms d'utilisateur
 			\\
@@ -1209,8 +1183,7 @@
 		    \rca \code {\_SC\_CHILD\_MAX}
 			& nombre maximum de processus fils
 			\\
-			\hline
-		\end {tabular}
+		}
 	    \end {center}
 
 	\item limites dépendant du système de fichiers \\
@@ -1218,20 +1191,18 @@
 	    \begin {center}
 		\fE
 		Exemples~:
-		\begin {tabular} {|l|l|} \hline
+		\tableau {} {|l|l|} {
 		    \rca \code {\_PC\_LINK\_MAX}
 			& nombre maximum de liens sur un fichier
 			\\
 		    \rcb \code {\_PC\_NAME\_MAX}
 			& taille maximum d'un nom de fichier
 			\\
-		    \rcb \code {\_PC\_PATH\_MAX}
+		    \rca \code {\_PC\_PATH\_MAX}
 			& taille maximum d'un chemin complet
 			\\
-			\hline
-		\end {tabular}
+		}
 	    \end {center}
-
 
     \end {itemize}
 \end {frame}
@@ -1323,9 +1294,7 @@
 \begin {frame} {POSIX -- Paramètres de type « pointeur »}
     Exemples d'utilisation~:
 
-    \begin {center}
-    \fC
-    \begin {tabular} {|p{.49\textwidth}|p{.49\textwidth}|} \hline
+    \ctableau {\fC} {|p{.49\textwidth}|p{.49\textwidth}|} {
 	\rca \multicolumn {1} {|c|} {\textbf {Correct}}
 	    & \multicolumn {1} {c|} {\textbf {\alert {Faux}}}
 	    \\ \hline
@@ -1339,8 +1308,6 @@
 		le noyau va écrire le résultat quelque part (où ?) en
 		mémoire
 	    \\
-	    \hline
-    \end {tabular}
-    \end {center}
+    }
 
 \end {frame}

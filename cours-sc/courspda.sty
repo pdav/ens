@@ -99,11 +99,17 @@
 % #1 : taille de police (ou vide)
 % #2 : colonnes (ex: |l|c|)
 % #3 : contenu
-\newcommand {\tableau} [3] {{#1 \begin {tabular} {#2} \hline #3 \hline
-	\end {tabular}}}
+\newcommand {\tableau} [3] {{%
+    #1 %
+    \begin {tabular} {#2} \hline
+	#3 %
+	\hline
+    \end {tabular}}}
 % tableau centré
-\newcommand {\ctableau} [3] {\begin {center} \tableau {#1} {#2} {#3}
-	\end {center}}
+\newcommand {\ctableau} [3] { %
+    \begin {center}
+	\tableau {#1} {#2} {#3}
+    \end {center}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Des commandes pour éviter d'avoir à se rappeler des tailles de fonte
