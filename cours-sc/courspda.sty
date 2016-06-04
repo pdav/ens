@@ -154,6 +154,18 @@
 
 \setbeamertemplate {navigation symbols} {}
 
+\setbeamercolor {block title} {fg=red!80, bg= blue!10}
+\setbeamercolor {block body} {fg=black, bg= blue!5}
+
+% pour les "recettes de cuisines" dans les "blocks". Repose sur
+% le fichier casserole.pdf
+\newsavebox {\Cbox}
+\newcommand {\casseroler} [1] {\sbox {\Cbox} {#1} %
+    \raisebox {-.1\ht\Cbox} {\includegraphics [height=1.6\ht\Cbox] {casserole}}
+    \hspace* {.5\ht\Cbox}
+    \usebox {\Cbox}
+}
+
 \iftoggle {multichap} {%%%%%%%%%%%%%%%%%%%% Multi-chapter
     \newcommand {\titreA} [1] {\section {#1}}
     \newcommand {\titreB} [1] {\subsection {#1}}
