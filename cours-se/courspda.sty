@@ -90,16 +90,12 @@
 % Pour avoir des zolis tableaux
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\RequirePackage {colortbl}	% pour \rowcolor
-% a mettre en debut de chaque ligne pour alterner les couleurs de fond
-\newcommand {\rca} {\rowcolor [rgb] {0.90, 0.95, 1.0}}
-\newcommand {\rcb} {\rowcolor [rgb] {0.80, 0.90, 1.0}}
-
 % tableau aligné à gauche
 % #1 : taille de police (ou vide)
 % #2 : colonnes (ex: |l|c|)
 % #3 : contenu
 \newcommand {\tableau} [3] {{%
+    \seta%
     #1 %
     \begin {tabular} {#2} \hline
 	#3 %
@@ -110,6 +106,18 @@
     \begin {center}
 	\tableau {#1} {#2} {#3}
     \end {center}}
+
+% à mettre en début de chaque ligne pour alterner les couleurs de fond
+% \rc : change automatiquement de couleur à chaque ligne
+%	(sauf pour les lignes débutant par un \multicolumn)
+% \rca, \rcb : changement de couleur manuel
+%
+\RequirePackage {colortbl}	% pour \rowcolor
+\def\seta{\gdef\rc{\rca\setb}}
+\def\setb{\gdef\rc{\rcb\seta}}
+\def\rca{\rowcolor [rgb] {0.90, 0.95, 1.0}}
+\def\rcb{\rowcolor [rgb] {0.80, 0.90, 1.0}}
+\seta
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Des commandes pour éviter d'avoir à se rappeler des tailles de fonte

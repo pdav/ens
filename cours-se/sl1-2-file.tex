@@ -175,9 +175,9 @@
 \begin {frame} {Ouverture de fichier}
     Trois ouvertures par défaut :
     \ctableau {} {|l|l|l|} {
-	\rca 0 & entrée standard \\
-	\rcb 1 & sortie standard \\
-	\rca 2 & sortie d'erreur standard \\
+	\rc 0 & entrée standard \\
+	\rc 1 & sortie standard \\
+	\rc 2 & sortie d'erreur standard \\
     }
 
     \vspace* {3mm}
@@ -256,11 +256,11 @@
 	\item \code {lseek} permet de modifier l'offset en fonction de \code {apartir}
 
 	    \ctableau {\fC} {|l|l|} {
-		\rca \code {SEEK\_SET}
+		\rc \code {SEEK\_SET}
 		    & déplacer à la position absolue \\
-		\rcb \code {SEEK\_CUR}
+		\rc \code {SEEK\_CUR}
 		    & avancer à partir de la position actuelle \\
-		\rca \code {SEEK\_END}
+		\rc \code {SEEK\_END}
 		    & avancer à partir de la fin du fichier \\
 	    }
 
@@ -530,19 +530,19 @@
 	    des attributs, parmi lesquels :
 
 	    \ctableau {\fD} {|l|l|} {
-		\rca \code {st\_mode}
+		\rc \code {st\_mode}
 		    & type et permissions \\
-		\rcb \code {st\_uid}
+		\rc \code {st\_uid}
 		    & propriétaire \\
-		\rca \code {st\_gid}
+		\rc \code {st\_gid}
 		    & groupe \\
-		\rcb \code {st\_size}
+		\rc \code {st\_size}
 		    & taille en octets \\
-		\rca \code {st\_atime}
+		\rc \code {st\_atime}
 		    & date de dernier accès \\
-		\rcb \code {st\_mtime}
+		\rc \code {st\_mtime}
 		    & date de dernière modification des données \\
-		\rca \code {st\_ctime}
+		\rc \code {st\_ctime}
 		    & date de dernière modification des attributs \\
 		\hline
 	    }
@@ -573,9 +573,9 @@
 
 	    \begin {minipage} [c] {.40\linewidth}
 		\ctableau {\fD} {|l|l|} {
-		    \rca 1 & répertoire \\
-		    \rcb 2 & fichier régulier \\
-		    \rca ... & ... \\
+		    \rc 1 & répertoire \\
+		    \rc 2 & fichier régulier \\
+		    \rc ... & ... \\
 		}
 	    \end {minipage}
 	    \hfill
@@ -651,10 +651,10 @@
 	\item le paramètre \code {mode} vaut :
 
 	    \ctableau {\fC} {|l|l|} {
-		\rca \code {F\_OK} & teste si le fichier existe \\
-		\rcb \code {X\_OK} & teste l'accès en exécution \\
-		\rca \code {W\_OK} & teste l'accès en écriture \\
-		\rcb \code {R\_OK} & teste l'accès en lecture \\
+		\rc \code {F\_OK} & teste si le fichier existe \\
+		\rc \code {X\_OK} & teste l'accès en exécution \\
+		\rc \code {W\_OK} & teste l'accès en écriture \\
+		\rc \code {R\_OK} & teste l'accès en lecture \\
 	    }
 
 	\item accès autorisé : retour = 0, interdit : retour = 1
@@ -694,8 +694,8 @@
 		\item Champs de \code {struct utimbuf} :
 
 		    \ctableau {\fD} {|l|l|} {
-			\rca \code {actime} & dernier accès \\
-			\rcb \code {modtime} & dernière modification \\
+			\rc \code {actime} & dernier accès \\
+			\rc \code {modtime} & dernière modification \\
 		    }
 
 		\item pas de troisième date (modification des
@@ -881,8 +881,8 @@
 	\item champs de la \code {struct dirent} normalisés par POSIX :
 
 	    \ctableau {\fC} {|l|l|} {
-		\rca \code {d\_ino} & numéro d'inode \\
-		\rcb \code {d\_name} & nom, terminé par un octet nul \\
+		\rc \code {d\_ino} & numéro d'inode \\
+		\rc \code {d\_name} & nom, terminé par un octet nul \\
 	    }
 
 	\item attention : il peut y avoir d'autres champs, mais ils

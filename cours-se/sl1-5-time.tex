@@ -179,9 +179,9 @@
 	\item précision accrue
 	\item contenu de la \code {struct timeval} :
 	    \ctableau {\fD} {|ll|l|} {
-		\rca \code {time\_t} & \code {tv\_sec}
+		\rc \code {time\_t} & \code {tv\_sec}
 		    & nombre de secondes depuis « The Epoch » \\
-		\rcb \code {suseconds\_t}  & \code {tv\_usec}
+		\rc \code {suseconds\_t}  & \code {tv\_usec}
 		    & nombre de micro-secondes \\
 	    }
 
@@ -228,16 +228,16 @@
 		    \vspace* {-3mm}
 
 		    \ctableau {\fD} {|l|l|} {
-			\rca \code {tms\_utime}
+			\rc \code {tms\_utime}
 			    & consommation CPU du processus
 				en mode utilisateur \\
-			\rcb \code {tms\_stime}
+			\rc \code {tms\_stime}
 			    & consommation CPU du processus
 				en mode système \\
-			\rca \code {tms\_cutime}
+			\rc \code {tms\_cutime}
 			    & consommation CPU cumulée des fils
 				en mode utilisateur \\
-			\rcb \code {tms\_cstime}
+			\rc \code {tms\_cstime}
 			    & consommation CPU cumulée des fils
 				en mode système \\
 		    }
@@ -292,20 +292,20 @@
 	    l'ensemble des ressources consommées par un processus
 	\item paramètre \code {qui} :
 	    \ctableau {\fD} {|l|l|} {
-		\rca \code {RUSAGE\_SELF}
+		\rc \code {RUSAGE\_SELF}
 		    & consommation du processus lui-même \\
-		\rcb \code {RUSAGE\_CHILDREN}
+		\rc \code {RUSAGE\_CHILDREN}
 		    & consommation cumulée des fils \\
 	    }
 	    \vspace* {1mm}
 	\item exemples (non exhaustifs) de champs de \code {struct rusage} :
 
 	    \ctableau {\fD} {|l|l|} {
-		\rca \code {ru\_utime} & CPU en mode utilisateur \\
-		\rcb \code {ru\_stime} & CPU en mode système \\
-		\rca \code {ru\_maxrss} & mémoire maximum utilisée \\
-		\rcb \code {ru\_inblock} & nombre de lectures disques \\
-		\rca \code {ru\_outblock} & nombre d'écritures disques \\
+		\rc\code {ru\_utime} & CPU en mode utilisateur \\
+		\rc \code {ru\_stime} & CPU en mode système \\
+		\rc \code {ru\_maxrss} & mémoire maximum utilisée \\
+		\rc \code {ru\_inblock} & nombre de lectures disques \\
+		\rc \code {ru\_outblock} & nombre d'écritures disques \\
 	    }
     \end {itemize}
 \end {frame}
@@ -330,11 +330,11 @@
 	\item Rappel des attributs des fichiers :
 
 	    \ctableau {\fD} {|l|l|} {
-		\rca \code {st\_mtime}
+		\rc \code {st\_mtime}
 		    & date de dernière modification des données \\
-		\rcb \code {st\_ctime}
+		\rc \code {st\_ctime}
 		    & date de dernière modification de l'inode \\
-		\rca \code {st\_atime}
+		\rc \code {st\_atime}
 		    & date de dernier accès \\
 	    }
 
@@ -344,8 +344,8 @@
 	    fichier
 	\item Champs de la \code {struct utimbuf} :
 	    \ctableau {\fD} {|l|l|} {
-		\rca \code {actime} & date de dernier accès \\
-		\rcb \code {modtime} & date de dernière modification des
+		\rc \code {actime} & date de dernier accès \\
+		\rc \code {modtime} & date de dernière modification des
 		    données \\
 	    }
 

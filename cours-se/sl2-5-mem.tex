@@ -540,30 +540,30 @@
     Plusieurs bits sont associés à chaque page dans la table des pages :
 
     \ctableau {\fC} {|c|p{.75\linewidth}|} {
-	\rca \textbf {Bit} &
+	\rc \textbf {Bit} &
 	    \multicolumn {1} {c|} {\textbf {Comportement de la MMU}}
 	    \\
-	\rcb \textit {valid} &
+	\rc \textit {valid} &
 	    générer une exception si le processeur tente
 	    d'accéder à une page n'ayant pas ce bit
 	    \\
-	\rca \textit {read-only} &
+	\rc \textit {read-only} &
 	    générer une exception si le processeur tente
 	    de modifier une page ayant ce bit
 	    \\
-	\rcb \textit {no-execute} &
+	\rc \textit {no-execute} &
 	    générer une exception si le processeur tente
 	    d'exécuter une instruction d'une page ayant ce bit
 	    \\
-	\rca \textit {supervisor} &
+	\rc \textit {supervisor} &
 	    générer une exception si le processeur tente d'accéder
 	    à la page alors qu'il est en mode non privilégié
 	    \\
-	\rcb \textit {accessed} &
+	\rc \textit {accessed} &
 	    positionner ce bit en cas d'accès
 	    (lecture, écriture ou exécution) à la page
 	    \\
-	\rca \textit {dirty} &
+	\rc \textit {dirty} &
 	    positionner ce bit en cas d'accès en écriture à
 	    la page
 	    \\

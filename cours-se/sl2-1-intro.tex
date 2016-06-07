@@ -94,10 +94,10 @@
     type de processeur) :
 
     \ctableau {\fC} {|l|l|} {
-	\rca IN, OUT & instructions d'E/S : accès direct aux périphériques \\
-	\rcb écriture dans SR & pourrait modifier le mode d'exécution courant \\
-	\rca RESET & réinitialise le processeur \\
-	\rcb RTI & retour d'interruption \\
+	\rc IN, OUT & instructions d'E/S : accès direct aux périphériques \\
+	\rc écriture dans SR & pourrait modifier le mode d'exécution courant \\
+	\rc RESET & réinitialise le processeur \\
+	\rc RTI & retour d'interruption \\
     }
 \end {frame}
 
@@ -306,10 +306,10 @@
 		\item retour en fonction de la retenue (bit « carry »)
 
 		    \ctableau {\fD} {|c|c|} {
-			\rca \textbf {carry} & \textbf {registre r0 en retour}
+			\rc \textbf {carry} & \textbf {registre r0 en retour}
 			    \\
-			\rcb 0 & valeur de retour de la primitive \\
-			\rca 1 & valeur à mettre dans \code {errno} \\
+			\rc 0 & valeur de retour de la primitive \\
+			\rc 1 & valeur à mettre dans \code {errno} \\
 		    }
 	    \end {itemize}
     \end {itemize}

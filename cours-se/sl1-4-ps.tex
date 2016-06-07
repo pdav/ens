@@ -578,10 +578,10 @@
 	\item POSIX simplifie le travail : macros les plus courantes
 
 	    \ctableau {\fC} {|l|l|} {
-		\rca Arrêt avec \code {exit} ? & WIFEXITED () \\
-		\rcb \implique si oui, code de retour & WEXITSTATUS () \\
-		\rca Arrêt sur signal ? & WIFSIGNALED () \\
-		\rcb \implique si oui, numéro du signal & WTERMSIG () \\
+		\rc Arrêt avec \code {exit} ? & WIFEXITED () \\
+		\rc \implique si oui, code de retour & WEXITSTATUS () \\
+		\rc Arrêt sur signal ? & WIFSIGNALED () \\
+		\rc \implique si oui, numéro du signal & WTERMSIG () \\
 	    }
     \end {itemize}
 \end {frame}
@@ -782,9 +782,9 @@
     \begin {itemize}
 	\item passage des arguments :
 	    \ctableau {\fC} {|l|l|} {
-		\rca \code {execl}
+		\rc \code {execl}
 		    & en liste : \code {execl (..., "echo", "a, "b", NULL)} \\
-		\rcb \code {execl}
+		\rc \code {execl}
 		    & en vecteur : \code {execv (..., tabargv)} \\
 	    }
 
@@ -792,9 +792,9 @@
 
 	\item recherche dans la variable shell \code {PATH} :
 	    \ctableau {\fC} {|l|l|} {
-		\rca \code {exec[vl]}
+		\rc \code {exec[vl]}
 		    & non : \code {execv ("/bin/echo", tabargv)} \\
-		\rcb \code {exec[vl]p}
+		\rc \code {exec[vl]p}
 		    & oui : \code {execvp ("echo", tabargv)} \\
 	    }
 
@@ -803,9 +803,9 @@
 	\item passage de l'environnement :
 
 	    \ctableau {\fC} {|l|l|} {
-		\rca \code {exec[vl]}
+		\rc \code {exec[vl]}
 		    & implicite : \code {execv ("/bin/echo", tabargv)} \\
-		\rcb \code {exec[vl]e}
+		\rc \code {exec[vl]e}
 		    & explicite : \code {execve ("echo", tabargv, tabenvp)} \\
 	    }
 
@@ -846,9 +846,9 @@
     Présence d'un « nombre magique » en début de fichier
 
     \ctableau {\fC} {|l|l|} {
-	\rca fichiers binaires
+	\rc fichiers binaires
 	    & \code {0x7f 'E' 'L' 'F'} (format ELF sous Linux) \\
-	\rcb fichiers interprétés
+	\rc fichiers interprétés
 	    &  \code {'\#' '!'} (suivi du chemin de l'interprète) \\
     }
 
@@ -966,11 +966,11 @@
 	    \vspace* {-2mm}
 
 	    \ctableau {\fC} {|l|l|l|} {
-		\rca uid réel
+		\rc uid réel
 		    & l'humain derrière son terminal
 		    & \code {uid\_t getuid (void)}
 		    \\
-		\rcb uid effectif
+		\rc uid effectif
 		    & l'uid servant à tester les droits
 		    & \code {uid\_t geteuid (void)}
 		    \\
@@ -1060,8 +1060,8 @@
 		\item Exemple sur turing.u-strasbg.fr (Ubuntu 14.04) :
 
 		    \ctableau {\fB} {|l|l|} {
-			\rca bit « suid » & 32 fichiers \\
-			\rcb bit « sgid » & 30 fichiers \\
+			\rc bit « suid » & 32 fichiers \\
+			\rc bit « sgid » & 30 fichiers \\
 		    }
 	    \end {itemize}
     \end {itemize}
@@ -1081,9 +1081,9 @@
 	\item \code {\$ wc -l < entree > resultat 2> erreurs}
 	\item Rappel : 3 ouvertures par défaut :
 	    \ctableau {\fC} {|l|l|} {
-		\rca 0 & entrée standard \\
-		\rcb 1 & sortie standard \\
-		\rca 2 & sortie d'erreur standard \\
+		\rc 0 & entrée standard \\
+		\rc 1 & sortie standard \\
+		\rc 2 & sortie d'erreur standard \\
 	    }
 	    \vspace* {1mm}
 	\item Redirection = modification du descripteur 0, 1 ou 2
