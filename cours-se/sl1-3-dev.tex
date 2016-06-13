@@ -32,25 +32,25 @@
 \begin {frame} {Nouveaux types de fichiers}
     Deux nouveaux types de fichiers spéciaux (périphériques) :
     \ctableau {\fD} {|p{.45\linewidth}|p{.45\linewidth}|} {
-	\rca \multicolumn {1} {|c|} {\textbf {mode « caractère »}}
+	\rc \multicolumn {1} {|c|} {\textbf {mode « caractère »}}
 	    & \multicolumn {1} {c|} {\textbf {mode « bloc »}}
 	    \\ \hline
-	\rcb avec \code {stat} : \code {S\_IFCHR} et \code {S\_ISCHR()}
+	\rc avec \code {stat} : \code {S\_IFCHR} et \code {S\_ISCHR()}
 	    & avec \code {stat} : \code {S\_IFBLK} et \code {S\_ISBLK()}
 	    \\
-	\rca aurait dû s'appeler : mode « brut »
+	\rc aurait dû s'appeler : mode « brut »
 	    & aurait dû s'appeler : mode « bufferisé »
 	    \\
-	\rcb toute suite d'octets passée à \code {read} ou
+	\rc toute suite d'octets passée à \code {read} ou
 		\code {write} est transférée immédiatement
 	    & toute suite d'octets passée à \code {read} ou
 		    \code {write} est bufferisée, avant d'être
 		    transférée sur le périphérique
 	    \\
-	\rca tous les périphériques ou presque
+	\rc tous les périphériques ou presque
 	    & essentiellement les disques durs
 	    \\
-	\rcb périphérique identifié par un couple
+	\rc périphérique identifié par un couple
 		<\textit {majeur}, \textit {mineur}>
 	    & périphérique identifié par un couple
 		<\textit {majeur}, \textit {mineur}>
@@ -141,10 +141,10 @@
 	    \end {itemize}
 	\item fonctions différentes suivant le type de pilote :
 	    \ctableau {\fC} {|p{.45\linewidth}|p{.45\linewidth}|} {
-		\rca \multicolumn {1} {|c|} {\textbf {mode « caractère »}}
+		\rc \multicolumn {1} {|c|} {\textbf {mode « caractère »}}
 		    & \multicolumn {1} {c|} {\textbf {mode « bloc »}}
 		    \\ \hline
-		\rcb fonctions \code {open}, \code {close}, \code {read},
+		\rc fonctions \code {open}, \code {close}, \code {read},
 		    \code {write}, \code {ioctl} et interruption
 		    & fonctions \code {open}, \code {close}, \code
 		    {strategy} et interruption

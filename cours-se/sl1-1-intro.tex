@@ -1295,14 +1295,14 @@
     Exemples d'utilisation~:
 
     \ctableau {\fC} {|p{.49\textwidth}|p{.49\textwidth}|} {
-	\rca\multicolumn {1} {|c|} {\textbf {Correct}}
+	\rc \multicolumn {1} {|c|} {\textbf {Correct}}
 	    & \multicolumn {1} {c|} {\textbf {\alert {Faux}}}
 	    \\ \hline
-	\rcb\lstinputlisting [basicstyle=\fE\lstmonstyle] {\inc/ex-ptr-ok.c}
+	\rc \lstinputlisting [basicstyle=\fE\lstmonstyle] {\inc/ex-ptr-ok.c}
 	    &
 	    \lstinputlisting [basicstyle=\fE\lstmonstyle] {\inc/ex-ptr-bad.c}
 	    \\
-	\rca La variable \code {stbuf} existe, on passe son adresse
+	\rc La variable \code {stbuf} existe, on passe son adresse
 	    & La variable \code {stbuf} est un pointeur non initialisé,
 		le noyau va écrire le résultat quelque part (où ?) en
 		mémoire

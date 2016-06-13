@@ -348,26 +348,26 @@
     Jeu des différences
 
     \ctableau {\fD} {|p{.45\linewidth}|p{.45\linewidth}|} {
-	\rca \multicolumn {1} {|c|} {\textbf {primitives systèmes}}
+	\rc \multicolumn {1} {|c|} {\textbf {primitives systèmes}}
 	    & \multicolumn {1} {c|} {\textbf {fonctions de bibliothèque}}
 	    \\ \hline
-	\rcb descripteur = \code {int} & descripteur = \code {FILE *}
+	\rc descripteur = \code {int} & descripteur = \code {FILE *}
 	    \\
-	\rca paramètres de \code {read}/\code {write} moins simples
+	\rc paramètres de \code {read}/\code {write} moins simples
 	    & utilisation de \code {getc}/\code {putc} simple
 	    \\
-	\rcb uniquement \code {read} ou \code {write} &
+	\rc uniquement \code {read} ou \code {write} &
 	    possibilité d'utilisation d'autres fonctions
 	    (\code {printf}, \code {puts}, etc.)
 	    \\
-	\rca but = sécuriser les données
+	\rc but = sécuriser les données
 	    & but = aide à la programmation
 	    \\
-	\rcb interface de plus bas niveau
+	\rc interface de plus bas niveau
 	    & les fonctions de bibliothèque utilisent les
 		primitives système (\implique haut niveau)
 	    \\
-	\rca code dans le noyau
+	\rc code dans le noyau
 	    & code ajouté au programme lors de l'édition de liens
 	    \\
     }

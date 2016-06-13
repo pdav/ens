@@ -100,18 +100,18 @@ f2:  mov r0, 1000
     Mais si les instructions sont exécutées concurremment~:
 
     \ctableau {\fB} {|c|l|c|c|c|} {
-	\rca \textbf {Proc} & \textbf {Instruction}
+	\rc \textbf {Proc} & \textbf {Instruction}
 	    & \textbf {\texttt {r0}$_A$}
 	    & \textbf {\texttt {r0}$_B$}
 	    & \textbf {Mém 1000}
 	    \\
-	\rcb \multicolumn {2} {|l|} {initialement} &  ?  &  ?  & 200 \\
-	\rca A & \texttt {mov r0,1000} & 200 &  ?  & 200 \\
-	\rcb B & \texttt {mov r0,1000} & 200 & 200 & 200 \\
-	\rca A & \texttt {add r0,50}   & 250 & 200 & 200 \\
-	\rcb B & \texttt {add r0,10}   & 250 & 210 & 200 \\
-	\rca A & \texttt {mov 1000,r0} & 250 & 210 & 250 \\
-	\rcb B & \texttt {mov 1000,r0} & 250 & 210 & 210 \\
+	\rc \multicolumn {2} {|l|} {initialement} &  ?  &  ?  & 200 \\
+	\rc A & \texttt {mov r0,1000} & 200 &  ?  & 200 \\
+	\rc B & \texttt {mov r0,1000} & 200 & 200 & 200 \\
+	\rc A & \texttt {add r0,50}   & 250 & 200 & 200 \\
+	\rc B & \texttt {add r0,10}   & 250 & 210 & 200 \\
+	\rc A & \texttt {mov 1000,r0} & 250 & 210 & 250 \\
+	\rc B & \texttt {mov 1000,r0} & 250 & 210 & 210 \\
     }
 
     Résultat~: \texttt {compte} est augmenté de 10~!
@@ -346,20 +346,20 @@ main () {
     en même temps (on suppose que le verrou est à l'adresse 1000)~:
 
     \ctableau {\fC} {|c|l|c|c|c|} {
-	\rca \textbf {Proc} & \textbf {Instruction}
+	\rc \textbf {Proc} & \textbf {Instruction}
 	    & \textbf {\texttt {r0}$_A$}
 	    & \textbf {\texttt {r0}$_B$}
 	    & \textbf {Mém 1000}
 	    \\
-	\rcb \multicolumn {2} {|l|} {initialement} & ? & ? & 0 \\
-	\rca A & \texttt {mov r0,(r1)} & 0 & ? & 0 \\
-	\rcb B & \texttt {mov r0,(r1)} & 0 & 0 & 0 \\
-	\rca A & \texttt {tst r0}      & 0 & 0 & 0 \\
-	\rcb B & \texttt {tst r0}      & 0 & 0 & 0 \\
-	\rca A & \texttt {mov r0,1}    & 1 & 0 & 0 \\
-	\rcb B & \texttt {mov r0,1}    & 1 & 1 & 0 \\
-	\rca A & \texttt {mov (r1),r0} & 1 & 1 & 1 \\
-	\rcb B & \texttt {mov (r1),r0} & 1 & 1 & 1 \\
+	\rc \multicolumn {2} {|l|} {initialement} & ? & ? & 0 \\
+	\rc A & \texttt {mov r0,(r1)} & 0 & ? & 0 \\
+	\rc B & \texttt {mov r0,(r1)} & 0 & 0 & 0 \\
+	\rc A & \texttt {tst r0}      & 0 & 0 & 0 \\
+	\rc B & \texttt {tst r0}      & 0 & 0 & 0 \\
+	\rc A & \texttt {mov r0,1}    & 1 & 0 & 0 \\
+	\rc B & \texttt {mov r0,1}    & 1 & 1 & 0 \\
+	\rc A & \texttt {mov (r1),r0} & 1 & 1 & 1 \\
+	\rc B & \texttt {mov (r1),r0} & 1 & 1 & 1 \\
     }
 
     \implique les deux processeurs sont entrés en section critique !
@@ -476,20 +476,20 @@ main () {
     en même temps (on suppose que le verrou est à l'adresse 1000)~:
 
     \ctableau {\fC} {|c|l|c|c|c|} {
-	\rca \textbf {Proc} & \textbf {Instruction}
+	\rc \textbf {Proc} & \textbf {Instruction}
 	    & \textbf {\texttt {r0}$_A$}
 	    & \textbf {\texttt {r0}$_B$}
 	    & \textbf {Mém 1000}
 	    \\
-	\rcb \multicolumn {2} {|l|} {initialement} & ? & ? & 0 \\
-	\rca A & \texttt {mov r0,1}    & 1 & ? & 0 \\
-	\rcb B & \texttt {mov r0,1}    & 1 & 1 & 0 \\
-	\rca B & \texttt {fas (r1),r0} & \textbf {0} & 0 & \textbf {1} \\
-	\rcb B & \texttt {fas (r1),r0} & 0 & \textbf {1} & \textbf {1} \\
-	\rca A & \texttt {tst r0}      & 0 & 1 & 1 \\
-	\rcb B & \texttt {tst r0}      & 0 & 1 & 1 \\
-	\rca A & \texttt {rtn}         & 0 & 1 & 1 \\
-	\rcb B & \texttt {jnz ...}     & 0 & 1 & 1 \\
+	\rc \multicolumn {2} {|l|} {initialement} & ? & ? & 0 \\
+	\rc A & \texttt {mov r0,1}    & 1 & ? & 0 \\
+	\rc B & \texttt {mov r0,1}    & 1 & 1 & 0 \\
+	\rc B & \texttt {fas (r1),r0} & \textbf {0} & 0 & \textbf {1} \\
+	\rc B & \texttt {fas (r1),r0} & 0 & \textbf {1} & \textbf {1} \\
+	\rc A & \texttt {tst r0}      & 0 & 1 & 1 \\
+	\rc B & \texttt {tst r0}      & 0 & 1 & 1 \\
+	\rc A & \texttt {rtn}         & 0 & 1 & 1 \\
+	\rc B & \texttt {jnz ...}     & 0 & 1 & 1 \\
     }
 
     \implique seul A est entré dans la section critique, B est toujours

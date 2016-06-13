@@ -95,7 +95,8 @@
 % #2 : colonnes (ex: |l|c|)
 % #3 : contenu
 \newcommand {\tableau} [3] {{%
-    \seta%
+    %\seta%
+    \gdef\rc{\rca\setb}
     #1 %
     \begin {tabular} {#2} \hline
 	#3 %
@@ -109,15 +110,14 @@
 
 % à mettre en début de chaque ligne pour alterner les couleurs de fond
 % \rc : change automatiquement de couleur à chaque ligne
-%	(sauf pour les lignes débutant par un \multicolumn)
-% \rca, \rcb : changement de couleur manuel
+% \rca, \rcb : couleur manuelle
 %
 \RequirePackage {colortbl}	% pour \rowcolor
-\def\seta{\gdef\rc{\rca\setb}}
-\def\setb{\gdef\rc{\rcb\seta}}
+\def\seta{\noalign {\gdef\rc{\rca\setb}}}
+\def\setb{\noalign {\gdef\rc{\rcb\seta}}}
 \def\rca{\rowcolor [rgb] {0.90, 0.95, 1.0}}
 \def\rcb{\rowcolor [rgb] {0.80, 0.90, 1.0}}
-\seta
+\gdef\rc{\rca\setb}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Des commandes pour éviter d'avoir à se rappeler des tailles de fonte
