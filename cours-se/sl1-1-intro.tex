@@ -630,14 +630,14 @@
     \begin {itemize}
 	\item Multics (MULtiplexed Information and Computing Service)
 	    \ctableau {\fD} {|l|l|} {
-		\rc 1963 & spécification (MIT) \\
-		\rc 1964 & démarrage du projet \\
-		\rc 1964 & General Electric + Bell Labs rejoignent le MIT \\
-		\rc 1968 & première version « self-hosting » \\
-		\rc 1969 & \textbf {Bell Labs} se retirent du projet \\
-		\rc 1973 & annonce commerciale \\
-		\rc 1985 & fin du développement \\
-		\rc 2000 & fermeture du dernier site (Min Défense Canada) \\
+		1963 & spécification (MIT) \\
+		1964 & démarrage du projet \\
+		1964 & General Electric + Bell Labs rejoignent le MIT \\
+		1968 & première version « self-hosting » \\
+		1969 & \textbf {Bell Labs} se retirent du projet \\
+		1973 & annonce commerciale \\
+		1985 & fin du développement \\
+		2000 & fermeture du dernier site (Min Défense Canada) \\
 	    }
 
 	    \begin {itemize}
@@ -661,16 +661,17 @@
 
     \begin {itemize}
 	\item Unix
-	    \ctableau {\fD} {|l|l|} {
-		\rc 1969 & Bell Labs se retirent du projet Multics \\
-		\rc      & récupération d'un PDP-7, écriture en assembleur \\
-		\rc 1971 & achat PDP-11/20 en échange d'un formateur de texte \\
-		\rc 1972 & création du langage C et réécriture d'Unix en C \\
-		\rc 1973 & premières diffusions \\
-		\rc 1979 & Unix v7 (environ 10 000 lignes de C et un peu
+	    \ctableau {\fD\rowcolors {2} {bleufonce} {bleuclair}} {|l|l|} {
+		\rca
+		1969 & Bell Labs se retirent du projet Multics \\
+		      & récupération d'un PDP-7, écriture en assembleur \\
+		1971 & achat PDP-11/20 en échange d'un formateur de texte \\
+		1972 & création du langage C et réécriture d'Unix en C \\
+		1973 & premières diffusions \\
+		1979 & Unix v7 (environ 10 000 lignes de C et un peu
 		    d'assembleur) \\
-		\rc 1980 & distribution 4BSD \\
-		\rc 1992 & procès AT\&T vs BSDi vs Berkeley (fin en 1994) \\
+		1980 & distribution 4BSD \\
+		1992 & procès AT\&T vs BSDi vs Berkeley (fin en 1994) \\
 	    }
 
 	    \begin {itemize}
@@ -874,17 +875,17 @@
 
 \begin {frame} {Interface utilisateur}
     \ctableau {\fD} {|l|l|l|} {
-	\rc Date & \multicolumn {1} {c|} {Stations de travail}
+	Date & \multicolumn {1} {c|} {Stations de travail}
 		& \multicolumn {1} {c|} {Ordinateurs personnels}
 	    \\ \hline
-	\rc 1968 & \multicolumn {2} {l|} {Prototype de souris par
+	1968 & \multicolumn {2} {l|} {Prototype de souris par
 		Douglas Englebart (Stanfort Research Institute)} \\
-	\rc 1973 & Alto (Xerox) & \\
-	\rc 1981 & Display Manager (Apollo Computer) & \\
-	\rc 1983 & W Window System (Stanford) & Lisa (Apple) \\
-	\rc 1984 & X Window System (MIT) & \\
-	\rc 1985 & HP Windows (HP),	& Amiga Workbench (Commodore), \\
-	\rc      & Sunview (Sun)	& Windows (Microsoft), etc \\
+	1973 & Alto (Xerox) & \\
+	1981 & Display Manager (Apollo Computer) & \\
+	1983 & W Window System (Stanford) & Lisa (Apple) \\
+	1984 & X Window System (MIT) & \\
+	1985 & HP Windows (HP),	& Amiga Workbench (Commodore), \\
+	     & Sunview (Sun)	& Windows (Microsoft), etc \\
     }
 
     La gestion d'une interface utilisateur « graphique » n'est pas
@@ -1059,12 +1060,12 @@
 	    Quelques exemples :
 
 	    \ctableau {\fC} {|l|l|} {
-		\rc \code {uid\_t} & numéro d'utilisateur \\
-		\rc \code {gid\_t} & numéro de groupe \\
-		\rc \code {pid\_t} & numéro de processus \\
-		\rc \code {mode\_t} & permissions \\
-		\rc \code {time\_t} & heure courante \\
-		\rc \code {size\_t} & taille, résultat de sizeof (définie par ISO C) \\
+		\code {uid\_t} & numéro d'utilisateur \\
+		\code {gid\_t} & numéro de groupe \\
+		\code {pid\_t} & numéro de processus \\
+		\code {mode\_t} & permissions \\
+		\code {time\_t} & heure courante \\
+		\code {size\_t} & taille, résultat de sizeof (définie par ISO C) \\
 	    }
 
 	    Définitions des types : fichiers d'inclusion
@@ -1078,13 +1079,13 @@
 
 	\item Exemple~:
 	    \ctableau {\fC} {|l|l|} {
-		\rc \code {r = access ("toto", 0)}
+		\code {r = access ("toto", 0)}
 		    & le fichier existe-t'il ? \\
-		\rc \code {r = access ("toto", 1)}
+		\code {r = access ("toto", 1)}
 		    & puis-je exécuter le fichier ? \\
-		\rc \code {r = access ("toto", 2)}
+		\code {r = access ("toto", 2)}
 		    & puis-je modifier le fichier ? \\
-		\rc \code {r = access ("toto", 4)}
+		\code {r = access ("toto", 4)}
 		    & puis-je lire le fichier ? \\
 	    }
 
@@ -1105,13 +1106,13 @@
 
 	\item L'exemple précédent devient :
 	    \ctableau {\fC} {|l|l|} {
-		\rc \code {r = access ("toto", F\_OK)}
+		\code {r = access ("toto", F\_OK)}
 		    & le fichier existe-t'il ? \\
-		\rc \code {r = access ("toto", X\_OK)}
+		\code {r = access ("toto", X\_OK)}
 		    & puis-je exécuter le fichier ? \\
-		\rc \code {r = access ("toto", W\_OK)}
+		\code {r = access ("toto", W\_OK)}
 		    & puis-je modifier le fichier ? \\
-		\rc \code {r = access ("toto", R\_OK)}
+		\code {r = access ("toto", R\_OK)}
 		    & puis-je lire le fichier ? \\
 	    }
 	    \vspace* {2mm}
@@ -1134,19 +1135,19 @@
 		\fE
 		Exemples~:
 		\tableau {} {|l|l|l|} {
-		    \rc \code {R\_OK}
+		    \code {R\_OK}
 			& test en lecture pour \code {access}
 			& \code {unicode.h}
 			\\
-		    \rc \code {O\_WRONLY}
+		    \code {O\_WRONLY}
 			& ouverture en écriture pour \code {open}
 			& \code {fcntl.h}
 			\\
-		    \rc \code {S\_IFDIR}
+		    \code {S\_IFDIR}
 			& type de fichier « répertoire »
 			& \code {sys/stat.h}
 			\\
-		    \rc ... & &
+		    ... & &
 			\\
 		}
 	    \end {center}
@@ -1156,13 +1157,13 @@
 		\fE
 		Exemples~:
 		\tableau {} {|l|l|} {
-		    \rc \code {PATH\_MAX}
+		    \code {PATH\_MAX}
 			& taille maximum des chemins
 			\\
-		    \rc \code {LOGIN\_NAME\_MAX}
+		    \code {LOGIN\_NAME\_MAX}
 			& nombre maximum d'ouvertures de fichier
 			\\
-		    \rc \code {CHILD\_MAX}
+		    \code {CHILD\_MAX}
 			& nombre maximum de processus fils
 			\\
 		}
@@ -1174,13 +1175,13 @@
 		\fE
 		Exemples~:
 		\tableau {} {|l|l|} {
-		    \rc \code {\_SC\_LOGIN\_NAME\_MAX}
+		    \code {\_SC\_LOGIN\_NAME\_MAX}
 			& longueur maxium des noms d'utilisateur
 			\\
-		    \rc \code {\_SC\_OPEN\_MAX}
+		    \code {\_SC\_OPEN\_MAX}
 			& nombre maximum d'ouvertures de fichier
 			\\
-		    \rc \code {\_SC\_CHILD\_MAX}
+		    \code {\_SC\_CHILD\_MAX}
 			& nombre maximum de processus fils
 			\\
 		}
@@ -1192,13 +1193,13 @@
 		\fE
 		Exemples~:
 		\tableau {} {|l|l|} {
-		    \rc \code {\_PC\_LINK\_MAX}
+		    \code {\_PC\_LINK\_MAX}
 			& nombre maximum de liens sur un fichier
 			\\
-		    \rc \code {\_PC\_NAME\_MAX}
+		    \code {\_PC\_NAME\_MAX}
 			& taille maximum d'un nom de fichier
 			\\
-		    \rc \code {\_PC\_PATH\_MAX}
+		    \code {\_PC\_PATH\_MAX}
 			& taille maximum d'un chemin complet
 			\\
 		}
@@ -1295,14 +1296,14 @@
     Exemples d'utilisation~:
 
     \ctableau {\fC} {|p{.49\textwidth}|p{.49\textwidth}|} {
-	\rc \multicolumn {1} {|c|} {\textbf {Correct}}
+	\multicolumn {1} {|c|} {\textbf {Correct}}
 	    & \multicolumn {1} {c|} {\textbf {\alert {Faux}}}
 	    \\ \hline
-	\rc \lstinputlisting [basicstyle=\fE\lstmonstyle] {\inc/ex-ptr-ok.c}
+	\lstinputlisting [basicstyle=\fE\lstmonstyle] {\inc/ex-ptr-ok.c}
 	    &
 	    \lstinputlisting [basicstyle=\fE\lstmonstyle] {\inc/ex-ptr-bad.c}
 	    \\
-	\rc La variable \code {stbuf} existe, on passe son adresse
+	La variable \code {stbuf} existe, on passe son adresse
 	    & La variable \code {stbuf} est un pointeur non initialisé,
 		le noyau va écrire le résultat quelque part (où ?) en
 		mémoire

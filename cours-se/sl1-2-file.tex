@@ -175,9 +175,9 @@
 \begin {frame} {Ouverture de fichier}
     Trois ouvertures par défaut :
     \ctableau {} {|l|l|l|} {
-	\rc 0 & entrée standard \\
-	\rc 1 & sortie standard \\
-	\rc 2 & sortie d'erreur standard \\
+	0 & entrée standard \\
+	1 & sortie standard \\
+	2 & sortie d'erreur standard \\
     }
 
     \vspace* {3mm}
@@ -256,11 +256,11 @@
 	\item \code {lseek} permet de modifier l'offset en fonction de \code {apartir}
 
 	    \ctableau {\fC} {|l|l|} {
-		\rc \code {SEEK\_SET}
+		\code {SEEK\_SET}
 		    & déplacer à la position absolue \\
-		\rc \code {SEEK\_CUR}
+		\code {SEEK\_CUR}
 		    & avancer à partir de la position actuelle \\
-		\rc \code {SEEK\_END}
+		\code {SEEK\_END}
 		    & avancer à partir de la fin du fichier \\
 	    }
 
@@ -348,26 +348,26 @@
     Jeu des différences
 
     \ctableau {\fD} {|p{.45\linewidth}|p{.45\linewidth}|} {
-	\rc \multicolumn {1} {|c|} {\textbf {primitives systèmes}}
+	\multicolumn {1} {|c|} {\textbf {primitives systèmes}}
 	    & \multicolumn {1} {c|} {\textbf {fonctions de bibliothèque}}
 	    \\ \hline
-	\rc descripteur = \code {int} & descripteur = \code {FILE *}
+	descripteur = \code {int} & descripteur = \code {FILE *}
 	    \\
-	\rc paramètres de \code {read}/\code {write} moins simples
+	paramètres de \code {read}/\code {write} moins simples
 	    & utilisation de \code {getc}/\code {putc} simple
 	    \\
-	\rc uniquement \code {read} ou \code {write} &
+	uniquement \code {read} ou \code {write} &
 	    possibilité d'utilisation d'autres fonctions
 	    (\code {printf}, \code {puts}, etc.)
 	    \\
-	\rc but = sécuriser les données
+	but = sécuriser les données
 	    & but = aide à la programmation
 	    \\
-	\rc interface de plus bas niveau
+	interface de plus bas niveau
 	    & les fonctions de bibliothèque utilisent les
 		primitives système (\implique haut niveau)
 	    \\
-	\rc code dans le noyau
+	code dans le noyau
 	    & code ajouté au programme lors de l'édition de liens
 	    \\
     }
@@ -530,19 +530,19 @@
 	    des attributs, parmi lesquels :
 
 	    \ctableau {\fD} {|l|l|} {
-		\rc \code {st\_mode}
+		\code {st\_mode}
 		    & type et permissions \\
-		\rc \code {st\_uid}
+		\code {st\_uid}
 		    & propriétaire \\
-		\rc \code {st\_gid}
+		\code {st\_gid}
 		    & groupe \\
-		\rc \code {st\_size}
+		\code {st\_size}
 		    & taille en octets \\
-		\rc \code {st\_atime}
+		\code {st\_atime}
 		    & date de dernier accès \\
-		\rc \code {st\_mtime}
+		\code {st\_mtime}
 		    & date de dernière modification des données \\
-		\rc \code {st\_ctime}
+		\code {st\_ctime}
 		    & date de dernière modification des attributs \\
 		\hline
 	    }
@@ -573,9 +573,9 @@
 
 	    \begin {minipage} [c] {.40\linewidth}
 		\ctableau {\fD} {|l|l|} {
-		    \rc 1 & répertoire \\
-		    \rc 2 & fichier régulier \\
-		    \rc ... & ... \\
+		    1 & répertoire \\
+		    2 & fichier régulier \\
+		    ... & ... \\
 		}
 	    \end {minipage}
 	    \hfill
@@ -651,10 +651,10 @@
 	\item le paramètre \code {mode} vaut :
 
 	    \ctableau {\fC} {|l|l|} {
-		\rc \code {F\_OK} & teste si le fichier existe \\
-		\rc \code {X\_OK} & teste l'accès en exécution \\
-		\rc \code {W\_OK} & teste l'accès en écriture \\
-		\rc \code {R\_OK} & teste l'accès en lecture \\
+		\code {F\_OK} & teste si le fichier existe \\
+		\code {X\_OK} & teste l'accès en exécution \\
+		\code {W\_OK} & teste l'accès en écriture \\
+		\code {R\_OK} & teste l'accès en lecture \\
 	    }
 
 	\item accès autorisé : retour = 0, interdit : retour = 1
@@ -694,8 +694,8 @@
 		\item Champs de \code {struct utimbuf} :
 
 		    \ctableau {\fD} {|l|l|} {
-			\rc \code {actime} & dernier accès \\
-			\rc \code {modtime} & dernière modification \\
+			\code {actime} & dernier accès \\
+			\code {modtime} & dernière modification \\
 		    }
 
 		\item pas de troisième date (modification des
@@ -881,8 +881,8 @@
 	\item champs de la \code {struct dirent} normalisés par POSIX :
 
 	    \ctableau {\fC} {|l|l|} {
-		\rc \code {d\_ino} & numéro d'inode \\
-		\rc \code {d\_name} & nom, terminé par un octet nul \\
+		\code {d\_ino} & numéro d'inode \\
+		\code {d\_name} & nom, terminé par un octet nul \\
 	    }
 
 	\item attention : il peut y avoir d'autres champs, mais ils

@@ -204,8 +204,8 @@
     \vspace* {-3mm}
 
     \ctableau {\fC} {|l|p{.8\linewidth}|} {
-	\rc \code {SIG\_IGN} & ignorer le signal \\
-	\rc \code {SIG\_DFL} & remettre l'action par défaut (plupart
+	\code {SIG\_IGN} & ignorer le signal \\
+	\code {SIG\_DFL} & remettre l'action par défaut (plupart
 	    des signaux : terminer le processus) \\
     }
 \end {frame}
@@ -398,9 +398,9 @@
 
     Trois registres du processeur impliqués :
     \ctableau {\fC} {|l|l|} {
-	\rc PC & Program Counter (compteur ordinal) \\
-	\rc SP & Stack Pointer (pointeur de pile) \\
-	\rc SR & Status Register (registre d'état) \\
+	PC & Program Counter (compteur ordinal) \\
+	SP & Stack Pointer (pointeur de pile) \\
+	SR & Status Register (registre d'état) \\
     }
 
 \end {frame}
@@ -519,13 +519,13 @@
     Bilan :
 
     \ctableau {\fC} {|p{.20\linewidth}|p{.35\linewidth}|p{.35\linewidth}|} {
-	\rc ~
+	~
 	    & \multicolumn {1} {c|} {\textbf {Interruptions}}
 	    & \multicolumn {1} {c|} {\textbf {Signaux}} \\
-	\rc Niveau & Matériel & Logiciel \\
-	\rc Émetteur & Périphérique & Noyau \\
-	\rc Destinataire & Processeur (noyau) & Processus \\
-	\rc Masquage & Oui & Non \\
+	Niveau & Matériel & Logiciel \\
+	Émetteur & Périphérique & Noyau \\
+	Destinataire & Processeur (noyau) & Processus \\
+	Masquage & Oui & Non \\
     }
 \end {frame}
 
@@ -574,14 +574,14 @@
 	\item \code {sigaction} remplace \code {signal}
 	\item action décrite par une \code {struct sigaction} :
 	    \ctableau {\fC} {|l|l|} {
-		\rc \code {sa\_handler}
+		\code {sa\_handler}
 		    & adresse de la fonction (ou \code {SIG\_IGN} ou
 			\code {SIG\_DFL})
 		    \\
-		\rc \code {sa\_mask}
+		\code {sa\_mask}
 		    & masque pendant l'exécution de la fonction
 		    \\
-		\rc \code {sa\_flags}
+		\code {sa\_flags}
 		    & comportements particuliers
 		    \\
 	    }
@@ -597,14 +597,14 @@
 
 \begin {frame} {API POSIX -- Primitive sigaction}
 	    \ctableau {\fC} {|l|l|} {
-		\rc \code {sa\_handler}
+		\code {sa\_handler}
 		    & adresse de la fonction (ou \code {SIG\_IGN} ou
 			\code {SIG\_DFL})
 		    \\
-		\rc \code {sa\_mask}
+		\code {sa\_mask}
 		    & masque pendant l'exécution de la fonction
 		    \\
-		\rc \code {sa\_flags}
+		\code {sa\_flags}
 		    & comportements particuliers
 		    \\
 	    }
@@ -625,18 +625,18 @@
 		\item signal $i \in$ ensemble $\Leftrightarrow$ bit $i$ à 1
 		\item manipulation avec des fonctions de bibliothèque
 		    \ctableau {\fD} {|l|l|} {
-			\rc \code {sigemptyset}
+			\code {sigemptyset}
 			    & vide l'ensemble \\
-			\rc \code {sigfillset}
+			\code {sigfillset}
 			    & remplit l'ensemble
 			    \\
-			\rc \code {sigaddset}
+			\code {sigaddset}
 			    & ajout un signal à l'ensemble
 			    \\
-			\rc \code {sigdelset}
+			\code {sigdelset}
 			    & retire un signal de l'ensemble
 			    \\
-			\rc \code {sigismember}
+			\code {sigismember}
 			    & teste si un signal fait partie de l'ensemble
 			    \\
 		    }
@@ -667,13 +667,13 @@
 	\item le masque est spécifié par l'ensemble \code {new}
 	\item valeurs possibles pour \code {comment} :
 	    \ctableau {\fD} {|l|l|} {
-		\rc \code {SIG\_BLOCK}
+		\code {SIG\_BLOCK}
 		    & signaux $\in$ \code {new} ajoutés au masque courant
 		    \\
-		\rc \code {SIG\_UNBLOCK}
+		\code {SIG\_UNBLOCK}
 		    & signaux $\in$ \code {new} retirés du masque courant
 		    \\
-		\rc \code {SIG\_SETMASK}
+		\code {SIG\_SETMASK}
 		    & masque courant $\leftarrow$ \code {new}
 		    \\
 	    }

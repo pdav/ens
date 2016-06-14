@@ -163,9 +163,9 @@
 	\item secteur 0 = MBR (\textit {Master Boot Record\/})
 
 	    \ctableau {\fE} {|r|l|} {
-		\rc 446 octets & code de démarrage \\
-		\rc 4 $\times$ 16 octets & table de 4 partitions « primaires » \\
-		\rc 2 octets & nombre magique \\
+		446 octets & code de démarrage \\
+		4 $\times$ 16 octets & table de 4 partitions « primaires » \\
+		2 octets & nombre magique \\
 	    }
 
 	\item partition primaire avec type « Extended » \implique elle
@@ -176,11 +176,11 @@
 		    secteur EBR (\textit {Extended Boot Record\/})
 
 		    \ctableau {\fE} {|r|l|} {
-			\rc 446 octets & inutilisé \\
-			\rc 16 octets & description de la partition \\
-			\rc 16 octets & lien vers la partition secondaire suivante \\
-			\rc 32 octets & inutilisé \\
-			\rc 2 octets & nombre magique \\
+			446 octets & inutilisé \\
+			16 octets & description de la partition \\
+			16 octets & lien vers la partition secondaire suivante \\
+			32 octets & inutilisé \\
+			2 octets & nombre magique \\
 		    }
 	    \end {itemize}
 
@@ -608,14 +608,14 @@
     Synthèse : plusieurs niveaux de cache
 
     \ctableau {\fD} {|l|c|c|c|} {
-	\rc & \textbf {cache CPU} & \textbf {buffer cache} & \textbf {cache disque} \\
-	\rc \textbf {géré par}
+	& \textbf {cache CPU} & \textbf {buffer cache} & \textbf {cache disque} \\
+	\textbf {géré par}
 	    & CPU & noyau & firmware disque \\
-	\rc \textbf {cache entre...}
+	\textbf {cache entre...}
 	    & mémoire centrale & disque & secteurs du disque \\
-	\rc \textbf {... et}
+	\textbf {... et}
 	    & SRAM CPU & mémoire centrale & mémoire interne disque \\
-	\rc \textbf {« invisible »\footnote {\fD la plupart du temps...
+	\textbf {« invisible »\footnote {\fD la plupart du temps...
 	    Par exemple, le noyau doit vider le cache CPU lors d'une
 	    commutation de processus, ou bien les processus constatent
 	    une différence de performance à l'utilisation du buffer
@@ -1135,15 +1135,15 @@
 	    \begin {itemize}
 		\item associées au système de fichiers lui-même :
 		    \ctableau {\fD} {|l|l|} {
-			\rc \code {mount}
+			\code {mount}
 			    & montage du système de fichiers \\
-			\rc \code {umount}
+			\code {umount}
 			    & démontage du système de fichiers \\
-			\rc \code {root}
+			\code {root}
 			    & obtenir la racine du système de fichiers \\
-			\rc \code {statvfs}
+			\code {statvfs}
 			    & lit les attributs du système de fichiers \\
-			\rc \code {...}
+			\code {...}
 			    & etc. \\
 		    }
 		\item associées aux fichiers :

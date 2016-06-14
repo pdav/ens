@@ -32,25 +32,25 @@
 \begin {frame} {Nouveaux types de fichiers}
     Deux nouveaux types de fichiers spéciaux (périphériques) :
     \ctableau {\fD} {|p{.45\linewidth}|p{.45\linewidth}|} {
-	\rc \multicolumn {1} {|c|} {\textbf {mode « caractère »}}
+	\multicolumn {1} {|c|} {\textbf {mode « caractère »}}
 	    & \multicolumn {1} {c|} {\textbf {mode « bloc »}}
 	    \\ \hline
-	\rc avec \code {stat} : \code {S\_IFCHR} et \code {S\_ISCHR()}
+	avec \code {stat} : \code {S\_IFCHR} et \code {S\_ISCHR()}
 	    & avec \code {stat} : \code {S\_IFBLK} et \code {S\_ISBLK()}
 	    \\
-	\rc aurait dû s'appeler : mode « brut »
+	aurait dû s'appeler : mode « brut »
 	    & aurait dû s'appeler : mode « bufferisé »
 	    \\
-	\rc toute suite d'octets passée à \code {read} ou
+	toute suite d'octets passée à \code {read} ou
 		\code {write} est transférée immédiatement
 	    & toute suite d'octets passée à \code {read} ou
 		    \code {write} est bufferisée, avant d'être
 		    transférée sur le périphérique
 	    \\
-	\rc tous les périphériques ou presque
+	tous les périphériques ou presque
 	    & essentiellement les disques durs
 	    \\
-	\rc périphérique identifié par un couple
+	périphérique identifié par un couple
 		<\textit {majeur}, \textit {mineur}>
 	    & périphérique identifié par un couple
 		<\textit {majeur}, \textit {mineur}>
@@ -67,9 +67,9 @@
     Périphériques identifiés par un couple <majeur, mineur>
 
     \ctableau {\fB} {|l|l|} {
-	\rc majeur & numéro de pilote (brut ou bufferisé) \\
-	\rc mineur & numéro de périphérique géré par ce pilote \\
-	\rc & (+ autres informations éventuellement)
+	majeur & numéro de pilote (brut ou bufferisé) \\
+	mineur & numéro de périphérique géré par ce pilote \\
+	& (+ autres informations éventuellement)
 	    \\
     }
 
@@ -141,10 +141,10 @@
 	    \end {itemize}
 	\item fonctions différentes suivant le type de pilote :
 	    \ctableau {\fC} {|p{.45\linewidth}|p{.45\linewidth}|} {
-		\rc \multicolumn {1} {|c|} {\textbf {mode « caractère »}}
+		\multicolumn {1} {|c|} {\textbf {mode « caractère »}}
 		    & \multicolumn {1} {c|} {\textbf {mode « bloc »}}
 		    \\ \hline
-		\rc fonctions \code {open}, \code {close}, \code {read},
+		fonctions \code {open}, \code {close}, \code {read},
 		    \code {write}, \code {ioctl} et interruption
 		    & fonctions \code {open}, \code {close}, \code
 		    {strategy} et interruption
@@ -332,9 +332,9 @@
     Exemples :
 
     \ctableau {\fB} {|l|l|} {
-	\rc \code {/dev/null} & poubelle \\
-	\rc \code {/dev/mem} & toute la mémoire de l'ordinateur \\
-	\rc \code {/dev/random} & source d'aléa \\
+	\code {/dev/null} & poubelle \\
+	\code {/dev/mem} & toute la mémoire de l'ordinateur \\
+	\code {/dev/random} & source d'aléa \\
     }
 
 \end {frame}

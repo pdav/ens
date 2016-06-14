@@ -547,27 +547,27 @@
     \begin {itemize}
 	\item Entier pointé par \code {raison} : raison de la terminaison
 	    \ctableau {\fE} {|p{.2\linewidth}|p{.2\linewidth}|p{.2\linewidth}|p{.2\linewidth}|} {
-		\rc \multicolumn {1}{|c|}{\textbf {}} & 
+		\multicolumn {1}{|c|}{\textbf {}} & 
 		    \multicolumn {1}{c|}{\textbf {code retour}} &
 		    \multicolumn {1}{c|}{\textbf {poids fort}} &
 		    \multicolumn {1}{c|}{\textbf {poids faible}}
 		    \\
-		\rc processus stoppé en mode trace &
+		processus stoppé en mode trace &
 		    identificateur~du pro\-ces\-sus &
 		    numéro du signal &
 		    \multicolumn {1}{c|}{0177}
 		    \\
-		\rc processus terminé par exit &
+		processus terminé par exit &
 		    identificateur~du pro\-ces\-sus &
 		    argument de exit sur 8 bits &
 		    \multicolumn {1}{c|}{0}
 		    \\
-		\rc processus terminé par signal &
+		processus terminé par signal &
 		    identificateur~du pro\-ces\-sus &
 		    \multicolumn {1}{c|}{0} &
 		    numéro du signal (+0200 si core)
 		    \\
-		\rc wait interrompue par signal &
+		wait interrompue par signal &
 		    \multicolumn {1}{c|}{-1} &
 		    \multicolumn {1}{c|}{?} &
 		    \multicolumn {1}{c|}{?}
@@ -578,10 +578,10 @@
 	\item POSIX simplifie le travail : macros les plus courantes
 
 	    \ctableau {\fC} {|l|l|} {
-		\rc Arrêt avec \code {exit} ? & WIFEXITED () \\
-		\rc \implique si oui, code de retour & WEXITSTATUS () \\
-		\rc Arrêt sur signal ? & WIFSIGNALED () \\
-		\rc \implique si oui, numéro du signal & WTERMSIG () \\
+		Arrêt avec \code {exit} ? & WIFEXITED () \\
+		\implique si oui, code de retour & WEXITSTATUS () \\
+		Arrêt sur signal ? & WIFSIGNALED () \\
+		\implique si oui, numéro du signal & WTERMSIG () \\
 	    }
     \end {itemize}
 \end {frame}
@@ -782,9 +782,9 @@
     \begin {itemize}
 	\item passage des arguments :
 	    \ctableau {\fC} {|l|l|} {
-		\rc \code {execl}
+		\code {execl}
 		    & en liste : \code {execl (..., "echo", "a, "b", NULL)} \\
-		\rc \code {execl}
+		\code {execl}
 		    & en vecteur : \code {execv (..., tabargv)} \\
 	    }
 
@@ -792,9 +792,9 @@
 
 	\item recherche dans la variable shell \code {PATH} :
 	    \ctableau {\fC} {|l|l|} {
-		\rc \code {exec[vl]}
+		\code {exec[vl]}
 		    & non : \code {execv ("/bin/echo", tabargv)} \\
-		\rc \code {exec[vl]p}
+		\code {exec[vl]p}
 		    & oui : \code {execvp ("echo", tabargv)} \\
 	    }
 
@@ -803,9 +803,9 @@
 	\item passage de l'environnement :
 
 	    \ctableau {\fC} {|l|l|} {
-		\rc \code {exec[vl]}
+		\code {exec[vl]}
 		    & implicite : \code {execv ("/bin/echo", tabargv)} \\
-		\rc \code {exec[vl]e}
+		\code {exec[vl]e}
 		    & explicite : \code {execve ("echo", tabargv, tabenvp)} \\
 	    }
 
@@ -846,9 +846,9 @@
     Présence d'un « nombre magique » en début de fichier
 
     \ctableau {\fC} {|l|l|} {
-	\rc fichiers binaires
+	fichiers binaires
 	    & \code {0x7f 'E' 'L' 'F'} (format ELF sous Linux) \\
-	\rc fichiers interprétés
+	fichiers interprétés
 	    &  \code {'\#' '!'} (suivi du chemin de l'interprète) \\
     }
 
@@ -966,11 +966,11 @@
 	    \vspace* {-2mm}
 
 	    \ctableau {\fC} {|l|l|l|} {
-		\rc uid réel
+		uid réel
 		    & l'humain derrière son terminal
 		    & \code {uid\_t getuid (void)}
 		    \\
-		\rc uid effectif
+		uid effectif
 		    & l'uid servant à tester les droits
 		    & \code {uid\_t geteuid (void)}
 		    \\
@@ -1060,8 +1060,8 @@
 		\item Exemple sur turing.u-strasbg.fr (Ubuntu 14.04) :
 
 		    \ctableau {\fB} {|l|l|} {
-			\rc bit « suid » & 32 fichiers \\
-			\rc bit « sgid » & 30 fichiers \\
+			bit « suid » & 32 fichiers \\
+			bit « sgid » & 30 fichiers \\
 		    }
 	    \end {itemize}
     \end {itemize}
@@ -1081,9 +1081,9 @@
 	\item \code {\$ wc -l < entree > resultat 2> erreurs}
 	\item Rappel : 3 ouvertures par défaut :
 	    \ctableau {\fC} {|l|l|} {
-		\rc 0 & entrée standard \\
-		\rc 1 & sortie standard \\
-		\rc 2 & sortie d'erreur standard \\
+		0 & entrée standard \\
+		1 & sortie standard \\
+		2 & sortie d'erreur standard \\
 	    }
 	    \vspace* {1mm}
 	\item Redirection = modification du descripteur 0, 1 ou 2

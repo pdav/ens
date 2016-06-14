@@ -7,8 +7,13 @@
 %	singlechap (ou multichap) : cours multiples chapitres (i.e. \titreA)
 %	title (ou notitle) : pas de page d'en-tête + plan général
 %
+% Attention : utiliser avec :
+%		\documentclass [xcolor=table] {beamer}
+% pour avoir les zolis tableaux colorés
+%
 % Historique
 %   2013/11/18 : pda    : separation dans un fichier
+%   2016/06/14 : pda    : utilisation de xcolor pour les tableaux coloréss
 %
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -17,7 +22,7 @@
 
 \NeedsTeXFormat {LaTeX2e}
 
-\ProvidesPackage {courspda} [2016/01/24 1.1 (pda)]
+\ProvidesPackage {courspda} [2016/01/24 1.2 (pda)]
 
 \RequirePackage {etoolbox}	% toggle + AtBeginDocument
 
@@ -87,37 +92,32 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Pour avoir des zolis tableaux
+% Pour avoir des zolis tableaux avec des lignes colorées
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% tableau aligné à gauche
-% #1 : taille de police (ou vide)
+\definecolor {bleuclair} {rgb} {0.90, 0.95, 1.0}
+\definecolor {bleufonce} {rgb} {0.80, 0.90, 1.0}
+
+\def\rca {\rowcolor {bleuclair}}
+\def\rcb {\rowcolor {bleufonce}}
+
+% tableau coloré aligné à gauche
+% #1 : taille de police (ou vide) ou autre déclaration
 % #2 : colonnes (ex: |l|c|)
 % #3 : contenu
 \newcommand {\tableau} [3] {{%
-    %\seta%
-    \gdef\rc{\rca\setb}
+    % \rowcolors : couleur pour les lignes impaires, pour les lignes paires
+    \rowcolors {1} {bleuclair} {bleufonce} %
     #1 %
     \begin {tabular} {#2} \hline
 	#3 %
 	\hline
     \end {tabular}}}
-% tableau centré
+% tableau coloré centré
 \newcommand {\ctableau} [3] { %
     \begin {center}
 	\tableau {#1} {#2} {#3}
     \end {center}}
-
-% à mettre en début de chaque ligne pour alterner les couleurs de fond
-% \rc : change automatiquement de couleur à chaque ligne
-% \rca, \rcb : couleur manuelle
-%
-\RequirePackage {colortbl}	% pour \rowcolor
-\def\seta{\noalign {\gdef\rc{\rca\setb}}}
-\def\setb{\noalign {\gdef\rc{\rcb\seta}}}
-\def\rca{\rowcolor [rgb] {0.90, 0.95, 1.0}}
-\def\rcb{\rowcolor [rgb] {0.80, 0.90, 1.0}}
-\gdef\rc{\rca\setb}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Des commandes pour éviter d'avoir à se rappeler des tailles de fonte
