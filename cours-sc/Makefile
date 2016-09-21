@@ -10,7 +10,7 @@
 .SUFFIXES:	.pdf .fig .svg .gnu .tex
 
 .fig.pdf:
-	fig2dev -L pdf $*.fig > $*.pdf
+	fig2dev -L pdf $*.fig $*.pdf
 
 .svg.pdf:
 	inkscape --export-pdf=$*.pdf $*.svg

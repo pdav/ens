@@ -40,7 +40,7 @@ FIGS = msg.pdf
 .SUFFIXES:	.fig .tex .svg .pdf
 
 .fig.pdf:
-	fig2dev -L pdf -l 2 $*.fig > $*.pdf
+	fig2dev -L pdf -l 2 $*.fig $*.pdf
 
 .tex.pdf:
 	pdflatex $*

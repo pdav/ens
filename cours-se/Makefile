@@ -11,7 +11,7 @@
 .SUFFIXES:	.pdf .fig .svg .gnu .tex
 
 .fig.pdf:
-	fig2dev -L pdf $*.fig > $*.pdf
+	fig2dev -L pdf $*.fig $*.pdf
 
 .svg.pdf:
 	inkscape --export-pdf=$*.pdf $*.svg
@@ -410,52 +410,52 @@ ch2-4-dev.pdf:	$(DEPS) $(FIG2dev) $(IMG2dev) $(LST2dev) $(SRC2dev)
 ch2-5-mem.pdf:	$(DEPS) $(FIG2mem) $(IMG2mem) $(LST2mem) $(SRC2mem)
 
 inc1-2-file/lien-1.pdf: inc1-2-file/lien.fig
-	figlayers 40-60       < $< | fig2dev -L pdf > $@
+	figlayers 40-60       < $< | fig2dev -L pdf /dev/stdin $@
 inc1-2-file/lien-2.pdf: inc1-2-file/lien.fig
-	figlayers 30-55       < $< | fig2dev -L pdf > $@
+	figlayers 30-55       < $< | fig2dev -L pdf /dev/stdin $@
 inc1-2-file/lien-3.pdf: inc1-2-file/lien.fig
-	figlayers 20-29 40-55 < $< | fig2dev -L pdf > $@
+	figlayers 20-29 40-55 < $< | fig2dev -L pdf /dev/stdin $@
 
 inc1-6-pipe/creation-0.pdf: inc1-6-pipe/creation.fig
-	figlayers           30 31 40-41 44-45 50-65 < $< | fig2dev -L pdf > $@
+	figlayers           30 31 40-41 44-45 50-65 < $< | fig2dev -L pdf /dev/stdin $@
 inc1-6-pipe/creation-1.pdf: inc1-6-pipe/creation.fig
-	figlayers 10 11 40-41 44-45 50-65 99 < $< | fig2dev -L pdf > $@
+	figlayers 10 11 40-41 44-45 50-65 99 < $< | fig2dev -L pdf /dev/stdin $@
 inc1-6-pipe/creation-2.pdf: inc1-6-pipe/creation.fig
-	figlayers 10 12 40-41 44-65 99 < $< | fig2dev -L pdf > $@
+	figlayers 10 12 40-41 44-65 99 < $< | fig2dev -L pdf /dev/stdin $@
 inc1-6-pipe/creation-3.pdf: inc1-6-pipe/creation.fig
-	figlayers 10 14 35 40 41 43 44-65 99 < $< | fig2dev -L pdf > $@
+	figlayers 10 14 35 40 41 43 44-65 99 < $< | fig2dev -L pdf /dev/stdin $@
 inc1-6-pipe/creation-4.pdf: inc1-6-pipe/creation.fig
-	figlayers 10 15 30 40 43 44-65 99 < $< | fig2dev -L pdf > $@
+	figlayers 10 15 30 40 43 44-65 99 < $< | fig2dev -L pdf /dev/stdin $@
 inc1-6-pipe/creation-5.pdf: inc1-6-pipe/creation.fig
-	figlayers 10 16 30 40 45-65 99 < $< | fig2dev -L pdf > $@
+	figlayers 10 16 30 40 45-65 99 < $< | fig2dev -L pdf /dev/stdin $@
 inc1-6-pipe/creation-6.pdf: inc1-6-pipe/creation.fig
-	figlayers 10 17 36 46-55 99 < $< | fig2dev -L pdf > $@
+	figlayers 10 17 36 46-55 99 < $< | fig2dev -L pdf /dev/stdin $@
 inc2-2-ps/mem-1.pdf: inc2-2-ps/mem.fig
-	figlayers 30-39       < $< | fig2dev -L pdf > $@
+	figlayers 30-39       < $< | fig2dev -L pdf /dev/stdin $@
 inc2-2-ps/mem-2.pdf: inc2-2-ps/mem.fig
-	figlayers 50-69       < $< | fig2dev -L pdf > $@
+	figlayers 50-69       < $< | fig2dev -L pdf /dev/stdin $@
 inc2-2-ps/mem-3.pdf: inc2-2-ps/mem.fig
-	figlayers 30-99       < $< | fig2dev -L pdf > $@
+	figlayers 30-99       < $< | fig2dev -L pdf /dev/stdin $@
 
 inc2-3-fs/pile-0.pdf: inc2-3-fs/pile.fig
-	figlayers       50-99    < $< | fig2dev -L pdf > $@
+	figlayers       50-99    < $< | fig2dev -L pdf /dev/stdin $@
 inc2-3-fs/pile-1.pdf: inc2-3-fs/pile.fig
-	figlayers 41    50-99    < $< | fig2dev -L pdf > $@
+	figlayers 41    50-99    < $< | fig2dev -L pdf /dev/stdin $@
 inc2-3-fs/pile-2.pdf: inc2-3-fs/pile.fig
-	figlayers 42    50-99    < $< | fig2dev -L pdf > $@
+	figlayers 42    50-99    < $< | fig2dev -L pdf /dev/stdin $@
 inc2-3-fs/pile-3.pdf: inc2-3-fs/pile.fig
-	figlayers 43    50-99    < $< | fig2dev -L pdf > $@
+	figlayers 43    50-99    < $< | fig2dev -L pdf /dev/stdin $@
 inc2-3-fs/pile-4.pdf: inc2-3-fs/pile.fig
-	figlayers 44    50-99    < $< | fig2dev -L pdf > $@
+	figlayers 44    50-99    < $< | fig2dev -L pdf /dev/stdin $@
 inc2-3-fs/pile-5.pdf: inc2-3-fs/pile.fig
-	figlayers 45    50-99    < $< | fig2dev -L pdf > $@
+	figlayers 45    50-99    < $< | fig2dev -L pdf /dev/stdin $@
 
 inc2-3-fs/mount-0.pdf: inc2-3-fs/mount.fig
-	figlayers       50-99    < $< | fig2dev -L pdf > $@
+	figlayers       50-99    < $< | fig2dev -L pdf /dev/stdin $@
 inc2-3-fs/mount-1.pdf: inc2-3-fs/mount.fig
-	figlayers 40    50-99    < $< | fig2dev -L pdf > $@
+	figlayers 40    50-99    < $< | fig2dev -L pdf /dev/stdin $@
 inc2-3-fs/mount-2.pdf: inc2-3-fs/mount.fig
-	figlayers 40-49 50-99    < $< | fig2dev -L pdf > $@
+	figlayers 40-49 50-99    < $< | fig2dev -L pdf /dev/stdin $@
 
 tout1.pdf:	$(DEPS) $(FIG1all) $(LST1all) $(SRC1all)
 

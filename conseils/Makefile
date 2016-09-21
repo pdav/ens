@@ -9,7 +9,7 @@
 	pdflatex $*.tex
 
 .fig.pdf:
-	fig2dev -Lpdf $*.fig > $*.pdf
+	fig2dev -Lpdf $*.fig $*.pdf
 
 # Les GNUeries...
 TEX	:= conseils.tex
