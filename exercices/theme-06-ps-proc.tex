@@ -40,6 +40,7 @@ première étape puis, dans une deuxième étape, attend leur terminaison
 à l'aide de la primitive {\tt wait}.
 \`A chaque fois qu'un processus se termine,
 le père affiche son numéro ({\em pid}) et son code de retour.
+Vous passerez $n$ en argument à votre programme.
 
 
 \question
@@ -147,7 +148,7 @@ l'une des commandes échoue (i.e. renvoie un code de retour non nul).
 en argument un nom d'utilisateur :
 
 \begin {quote}
-    \verb:ps eaux | grep "^$1 " > /dev/null && echo "$1 est connecté":
+    \verb:ps eaux > toto ; grep "^$1 " < toto > /dev/null && echo "$1 est connecté":
 \end {quote}
 
 Votre programme devra :
