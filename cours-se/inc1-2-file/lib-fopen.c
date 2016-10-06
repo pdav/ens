@@ -2,10 +2,10 @@ FILE *fp1, *fp2 ;
 int c ;
 
 fp1 = fopen ("toto", "r") ;
-if (fp1 == -1)
+if (fp1 == NULL)
     raler ("fopen toto") ;
 fp2 = fopen ("titi", "w") ;
-if (fp1 == -1)
+if (fp1 == NULL)
     raler ("fopen titi") ;
 
 while ((c = getc (fp1)) != EOF)
