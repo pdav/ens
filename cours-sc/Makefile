@@ -80,6 +80,7 @@ FIGapi = \
 	inc2-api/mmu-ipc.pdf \
 	inc2-api/mmu-pdp11a.pdf \
 	inc2-api/mmu-pdp11b.pdf \
+	inc2-api/mmu-pdp11ex.pdf \
 	inc2-api/mmu-i386.pdf \
 	inc2-api/mmu-tlb386.pdf \
 	inc2-api/msg.pdf \
