@@ -345,7 +345,7 @@
     \begin {itemize}
 	\item CPU présente une adresse logique sur le bus d'adresses
 	\item si adresse $\geq$ limite, alors exception
-	\item si adresse < limite, alors MMU calcule l'adresse physique \\
+	\item si adresse $<$ limite, alors MMU calcule l'adresse physique \\
 	    (adresse physique = adresse logique + limite)
     \end {itemize}
 \end {frame}
@@ -642,7 +642,7 @@
 
 	\item \code {shm\_open}/\code {shm\_unlink}
 
-	    \implique origine POSIX, simple et élégant, encore peu
+	    \implique origine POSIX, simple et élégante, encore peu
 		répandue
 
     \end {itemize}
