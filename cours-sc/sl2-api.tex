@@ -1270,6 +1270,32 @@ struct dirent *readdir (DIR *dirp) {
 
 \end {frame}
 
+\begin {frame} [fragile] {Fonctions «~thread-safe~» -- Variable errno}
+    Et la variable \code {errno}~?
+
+    \begin {itemize}
+	\item Avant les threads, \code {errno} était une variable
+	    globale
+
+	\item Avec les threads, \code {errno} devient une variable
+	    propre à chaque thread
+
+	    \vspace* {2mm}
+
+	    \implique il est donc possible d'écrire~:
+
+\begin {quote}
+\begin {lstlisting}
+errno = pthread_... (...) ;
+if (errno != 0)
+    raler ("pthread_...") ;
+\end{lstlisting}
+\end {quote}
+
+    \end {itemize}
+
+\end{frame}
+
 
 \begin {frame} {Attributs de threads}
     Les threads peuvent avoir des attributs \\
