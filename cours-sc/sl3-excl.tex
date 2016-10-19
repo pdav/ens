@@ -654,7 +654,7 @@ main () {
 	\item \code {\small int pthread\_mutex\_timedlock (pthread\_mutex\_t *, struct timespec *habs)}
 
 	    Avec \code {\small struct timespec \{ time\_t tv\_sec; long tv\_nsec; \}}
-	\item \code {\small int pthread\_mutex\_trylock (pthread\_mutex\_t *, struct timespec *habs)}
+	\item \code {\small int pthread\_mutex\_trylock (pthread\_mutex\_t *)}
     \end {itemize}
 \end {frame}
 
@@ -688,7 +688,7 @@ main () {
 
     \vspace* {3mm}
 
-    POSIX fournit également les fonctions \code {pthread\_spin\_*} 
+    POSIX fournit également les fonctions \code {pthread\_spin\_*}
     qui utilisent l'attente \textbf {active}
     \\
     (sauf \texttt {\small pthread\_spin\_timedlock} qui n'existe pas)
@@ -752,7 +752,7 @@ main () {
 \begin {frame} {Section critique -- Interruptions matérielles}
 
     \begin {minipage} {.58\textwidth}
-	Masquage des interruptions : 
+	Masquage des interruptions :
 	\begin {itemize}
 	    \item écriture dans le registre
 		d'état du processeur
@@ -801,7 +801,7 @@ main () {
 \begin {frame} {Section critique -- Signaux}
 
     \begin {minipage} {.48\textwidth}
-	Masquage du signal : 
+	Masquage du signal :
 	\begin {itemize}
 	    \item \code {sigprocmask} ou
 		\code {pthread\_sigmask}
