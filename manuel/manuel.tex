@@ -6195,13 +6195,35 @@ appels systèmes sont utilisés par les fonctions de la
 librairie), la variable externe {\tt errno} est initialisée avec
 le numéro de l'erreur.
 
-La fonction {\tt perror} affiche le message correspondant,
-précédé de la chaîne {\tt str} (qui est typiquement le nom du programme
-courant).
+La fonction {\tt perror} affiche sur la sortie d'erreur standard le
+message correspondant, précédé de la chaîne {\tt str} (qui est
+typiquement le nom du programme courant).
 
 La fonction {\tt strerror} retourne un pointeur sur une chaîne de
-caractères contenant le message correspond à l'erreur de numéro {\tt
+caractères contenant le message correspondant à l'erreur de numéro {\tt
 numero}. Cette chaîne ne doit pas être modifiée.
+
+
+
+\separation 
+\primitive {psignal, strsignal} --- messages d'erreur du système
+    \index{{\tt psignal}}
+    \index{{\tt strsignal}}
+
+\begin {quote}
+\begin {verbatim}
+void psignal (int numsig, const char *str)
+char *strsignal (int numsig)
+\end{verbatim}
+\end {quote}
+
+La fonction {\tt psignal} affiche sur la sortie d'erreur standard une
+description du signal numéro \texttt {signum} précédée de la chaîne
+{\tt str}.
+
+La fonction {\tt strsignal} retourne un pointeur sur une chaîne de
+caractères contenant une description du signal numéro \texttt {signum}.
+Cette chaîne ne doit pas être modifiée.
 
 
 
