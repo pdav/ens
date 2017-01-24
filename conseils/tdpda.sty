@@ -56,7 +56,7 @@
 
 \NeedsTeXFormat {LaTeX2e}
 
-\ProvidesPackage {tdpda} [2015/11/19 1.4 (pda)]
+\ProvidesPackage {tdpda} [2017/01/24 1.5 (pda)]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Options
@@ -87,15 +87,18 @@
 \parskip=2mm
 \parindent=0mm
 
+% \RequirePackage {microtype}		% meilleure typographie
 \RequirePackage {graphicx}
-\RequirePackage {epsfig}
-\RequirePackage {palatino}
+\RequirePackage {mathpazo}		% remplacement de palatino
+\RequirePackage [scaled] {helvet}	% remplacement de palatino
+\RequirePackage {courier}		% remplacement de palatino
 \RequirePackage {moreverb}
 \RequirePackage {marvosym}		% \EUR
 \RequirePackage {synttree}
 \RequirePackage {listings}
 \RequirePackage {amssymb}		% pour $\Box$ dans l'env qcm
 \RequirePackage {multicol}		% pour l'env qcmn
+\RequirePackage {hyperref}		% pour \url & co
 
 \lstset {language=c, basicstyle=\footnotesize\ttfamily, keywordstyle=}
 
@@ -124,7 +127,7 @@
     Universit\'e de Strasbourg \hfill #1 \\	% pas de caracteres iso ou utf
     #2 \hfill #3
     \par
-    \begin {center} \bf\huge #4 \end {center}
+    \begin {center} \huge\textbf {#4}\end {center}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
