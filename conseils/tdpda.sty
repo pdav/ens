@@ -48,6 +48,7 @@
 %   2015/10/11 : pda : env qcmn (v1.3)
 %   2015/10/30 : pda : \fichierexo/\titreexo et param opt de \question
 %   2015/11/19 : pda : nettoyage et commentaires (v1.4)
+%   2017/01/27 : pda : qcm prend un arg opt, plus besoin de qcmn (v1.5)
 %
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -56,7 +57,7 @@
 
 \NeedsTeXFormat {LaTeX2e}
 
-\ProvidesPackage {tdpda} [2017/01/24 1.5 (pda)]
+\ProvidesPackage {tdpda} [2017/01/27 1.5 (pda)]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Options
@@ -100,7 +101,8 @@
 \RequirePackage {multicol}		% pour l'env qcmn
 \RequirePackage {hyperref}		% pour \url & co
 
-\lstset {language=c, basicstyle=\footnotesize\ttfamily, keywordstyle=}
+% \lstset {language=c, basicstyle=\footnotesize\ttfamily, keywordstyle=}
+\lstset {language=c, basicstyle=\small\ttfamily, keywordstyle=}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Traitement des corrections
@@ -169,12 +171,22 @@
 % Environnement QCM
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% \begin {qcm} \item ... \end {qcm}
-\newenvironment {qcm}
-    {\begin {itemize} \renewcommand {\labelitemi} {$\Box$}}
-    {\end {itemize}}
+% \begin {qcm} \item ... \end {qcm}		=> 1 col
+% \begin {qcm} [25] \item ... \end {qcm}	=> 25 cols
+\newenvironment {qcm} [1] [1]
+    {%
+	\def\@qcmncol{#1}%
+	\ifnum#1=1\else\begin{multicols}{#1}\fi%
+	\begin{itemize}%
+	    \renewcommand{\labelitemi}{$\Box$}%
+    }
+    {%
+	\end{itemize}%
+	\ifnum\@qcmncol=1\else\end {multicols}\fi%
+    }
 
 % \begin {qcmn} {25} => 25 cols
+% pour compatibilite avec les qcm deja ecrits
 \newenvironment {qcmn} [1]
-    {\begin{multicols}{#1}\begin{itemize}\renewcommand{\labelitemi}{$\Box$}}
-    {\end{itemize}\end {multicols}}
+    {\begin {qcm} [#1]}
+    {\end {qcm}}
