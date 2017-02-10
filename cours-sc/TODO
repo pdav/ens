@@ -1,3 +1,6 @@
+pthread_attr_getguardsize/pthread_attr_setguardsize
+énumérer qq exemples de pthread_attr_*
+
 Revoir :
     - outils de vérification des threads (comparables à valgrind)
     - les pthread_* () ne modifient pas errno
