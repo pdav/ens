@@ -1,0 +1,10 @@
+ajouter vfprintf & co
+renommer librairie => bibliothèque
+passer en palatino et revoir le style (commun avec exos)
+
+pthread_detach
+pthread_attr_getguardsize
+pthread_attr_setguardsize
+
+thread local variables
+shm_*
