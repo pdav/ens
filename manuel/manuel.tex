@@ -4567,8 +4567,9 @@ commande {\tt commande}.
 
 
 \separation
-\primitive {printf, fprintf, sprintf, snprintf} --- écriture formattée
+\primitive {printf, fprintf, fprintf, sprintf, snprintf} --- écriture formattée
     \index{{\tt printf}}
+    \index{{\tt dprintf}}
     \index{{\tt fprintf}}
     \index{{\tt sprintf}}
     \index{{\tt snprintf}}
@@ -4578,6 +4579,7 @@ commande {\tt commande}.
 #include <stdio.h>
 
 int printf (const char *format, ...)
+int dprintf (int fd, const char *format, ...)
 int fprintf (FILE *flux, const char *format, ...)
 int sprintf (char *str, const char *format, ...)
 int snprintf (char *str, size_t taille, const char *format, ...)
@@ -4589,49 +4591,114 @@ vérifie pas le débordement de la chaîne fournie en paramètre. Il faut
 utiliser \texttt {snprintf} à la place.
 
 La fonction {\tt printf} affiche ses données sur la sortie standard, la
-fonction {\tt fprintf} écrit sur le flux {\tt flux}, la fonction {\tt
-snprintf} place le résultat dans la chaîne de caractères {\tt str} en
-vérifiant le non-débordement de cette chaîne.
+fonction {\tt fprintf} écrit sur le flux {\tt flux}, la fonction \texttt
+{dprintf} écrit dans un fichier référencé par l'entier \texttt {fd}
+(ouvert par la primitive système \texttt {open} ou équivalent) et la
+fonction {\tt snprintf} place le résultat dans la chaîne de caractères
+{\tt str} en vérifiant le non-débordement de cette chaîne.
 
-Chacune de ces fonctions affiche les arguments suivant {\tt format} en
-les convertissant suivant le format {\tt format}.  Le format est une
-chaîne de caractères qui contient deux sortes d'objets~:  les caractères
-simples, qui sont affichés normalement, et les formats de conversion
-commençant par un caractère {\tt \%}, régis par la syntaxe suivante (les
-éléments entre crochets sont optionnels, les accolades indiquent une
-lettre au choix)~:
+La valeur de retour est le nombre d'octets affichés pour \texttt
+{printf}, \texttt {dprintf} ou \texttt {fprintf}. Pour \texttt {snprintf},
+la valeur retournée est le nombre d'octets résultant de la conversion~:
+il suffit ainsi de tester si la valeur retournée est supérieure ou
+égale à \texttt {taille} pour déterminer si la chaîne est trop petite.
 
-{\tt \%} [{\tt -}] [ [{\tt 0}] $<$nombre$>$ [{\tt .} $<$nombre$>$] [{\tt l}] {{ {\tt doxufegcs\%} }}
+Chacune de ces fonctions affiche les arguments en les convertissant
+suivant le format {\tt format}.  Le format est une chaîne de caractères
+qui contient deux sortes d'objets~:  les caractères simples, qui sont
+affichés normalement, et les formats de conversion commençant par un
+caractère {\tt \%}, régis par la syntaxe suivante (les éléments entre
+crochets sont optionnels, les accolades indiquent une lettre au choix)~:
+
+{\tt \%} [\textit {flags}] [\textit {largeur-min}] [\verb|.| \textit {precision}] [\textit {taille}] \textit {conversion}
 
 \begin {itemize}
-    \item le caractère {\tt -} indique que l'argument doit être cadré à
-	gauche dans son champ,
+    \item les \textit {flags} sont constitués d'un nombre quelconque
+	(éventuellement nul) de caractères parmi~:
 
-    \item le premier nombre indique la dimension du champ.  Si
-	l'argument prend plus de place, l'espace est complété avec des
-	blancs, ou avec des {\tt 0} si le premier caractère du nombre
-	est {\tt 0},
+	\begin {quote}
+	\begin {tabular} {|c|l|} \hline
+	    \verb|-| & aligner la valeur à gauche
+		\\ \hline
+	    \verb|+| & préfixer la valeur par un signe, même pour
+		les valeurs positives
+		\\ \hline
+	    \verb*| |& laisser une position vide pour le signe s'il n'y en
+		a pas
+		\\ \hline
+	    \verb*|0|& ajuster la valeur à la dimension souhaitée avec
+		des chiffres \verb|0| à gauche
+		\\ \hline
+	    \verb*|#|& utiliser une forme alternative (ex : préfixer par
+		\verb|0x| pour l'hexadécimal)
+		\\ \hline
+	    \verb|'| & utiliser des séparateurs de milliers
+		\\ \hline
+	\end {tabular} 
+	\end {quote}
 
-    \item le point sert de séparateur avec le nombre suivant,
+    \item la \textit {largeur-min} est la largeur minimum (en caractères)
+	de la valeur affichée, complétée éventuellement suivant les
+	\textit {flags} par des espaces ou des \verb|0| d'en-tête ;
 
-    \item le nombre suivant indique le nombre de caractères maximum de
-	la chaîne (format {\tt s}), ou le nombre de chiffres après la
-	virgule dans le cas des formats {\tt f} ou {\tt e},
+    \item la \textit {précision} donne le nombre minimum de chiffres
+	à utiliser pour les conversions entières, ou le nombre de
+	chiffres après la virgule pour les conversions flottantes,
+	ou le nombre de caractères pour les chaînes
 
-    \item le caractère {\tt l} indique que l'argument est du type long
-	pour les formats {\tt d}, {\tt o}, {\tt x} ou {\tt u}.
+    \item la \textit {taille} donne la taille de l'argument :
 
-    \item le caractère suivant indique enfin le type de l'argument~:\\
-	\texttt {d} ou \texttt {i}~: conversion en décimal\\
-	\texttt {o}~: conversion en octal\\
-	\texttt {x}~: conversion en hexadécimal\\
-	\texttt {u}~: conversion en décimal non signé\\
-	\texttt {f}~: conversion en flottant sans exposant\\
-	\texttt {e}~: conversion en flottant avec exposant\\
-	\texttt {g}~: conversion d'un flottant en {\tt \%d}, {\tt \%e} ou {\tt \%f}\\
-	\texttt {c}~: conversion en caractère\\
-	\texttt {s}~: conversion en chaîne de caractères\\
-	\texttt {\%}~: affichage d'un caractère {\tt \%}
+	\begin {quote}
+	\begin {tabular} {|c|l|} \hline
+	    \verb|l| & l'argument est de type \texttt {long}
+		\\ \hline
+	    \verb|ll| & l'argument est de type \texttt {long long}
+		\\ \hline
+	    \verb|j| & l'argument est de type \texttt {intmax\_t}
+		\\ \hline
+	    \verb|z| & l'argument est de type \texttt {size\_t}
+		\\ \hline
+	    \verb|t| & l'argument est de type \texttt {ptrdiff\_t}
+		    (différence d'adresses)
+		\\ \hline
+	    \verb|L| & l'argument est de type \texttt {long double}
+		\\ \hline
+	\end {tabular} 
+	\end {quote}
+
+	En cas de conversion \texttt {u}, les types indiqués ci-dessus
+	s'entendent comme des types non signés.
+
+    \item enfin, le spécificateur de \textit {conversion} est l'un des
+	caractères de la liste (non exhaustive) ci-après :
+
+	\begin {quote}
+	\begin {tabular} {|c|l|} \hline
+	    \verb|d| & conversion en décimal
+		\\ \hline
+	    \verb|o| & conversion en octal
+		\\ \hline
+	    \verb|x| & conversion en hexadécimal
+		\\ \hline
+	    \verb|u| & conversion en décimal non signé
+		\\ \hline
+	    \verb|f| & conversion en flottant sans exposant
+		\\ \hline
+	    \verb|e| & conversion en flottant avec exposant
+		\\ \hline
+	    \verb|g| & conversion d'un flottant en {\tt \%d},
+		{\tt \%e} ou {\tt \%f} suivant le cas
+		\\ \hline
+	    \verb|c| & conversion en caractère
+		\\ \hline
+	    \verb|s| & conversion en chaîne de caractères
+		\\ \hline
+	    \verb|p| & conversion d'une adresse
+		\\ \hline
+	    \verb|%| & affichage d'un caractère {\tt \%}
+		\\ \hline
+	\end {tabular} 
+	\end {quote}
 
 \end {itemize}
 
