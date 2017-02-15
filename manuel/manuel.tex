@@ -369,6 +369,9 @@ les principaux types utilisés~:
     \item \texttt {time\_t} (entier long)~: nombre de secondes écoulées
 	depuis le premier janvier 1970.
     \item \texttt {uid\_t} (entier long)~: identificateur d'utilisateur
+    \item \texttt {intmax\_t}~: la plus grande taille d'entier,
+	pouvant contenir toute donnée d'un des types précédents
+
 \end {itemize}
 
 
@@ -4655,9 +4658,9 @@ crochets sont optionnels, les accolades indiquent une lettre au choix)~:
 
 	\begin {quote}
 	\begin {tabular} {|c|l|} \hline
-	    \verb|l| & l'argument est de type \texttt {long}
+	    \verb|l| & l'argument est de type \texttt {long int}
 		\\ \hline
-	    \verb|ll| & l'argument est de type \texttt {long long}
+	    \verb|ll| & l'argument est de type \texttt {long long int}
 		\\ \hline
 	    \verb|j| & l'argument est de type \texttt {intmax\_t}
 		\\ \hline
