@@ -494,24 +494,29 @@ réussie ou -1 en cas d'erreur.
 
 
 \separation
-\primitive {chown} --- change le propriétaire d'un fichier
+\primitive {chown, lchown} --- change le propriétaire d'un fichier
     \index{\texttt {chown}}
+    \index{\texttt {lchown}}
 
 \begin {quote}
 \begin {verbatim}
 #include <unistd.h>
 
 int chown (const char *nom, uid_t proprietaire, gid_t groupe)
+int lchown (const char *nom, uid_t proprietaire, gid_t groupe)
 \end{verbatim}
 \end {quote}
 
-La primitive \texttt {chown} change le propriétaire et
-le groupe d'un fichier.
+La primitive \texttt {chown} change le propriétaire et le groupe d'un
+fichier.  Seul le propriétaire d'un fichier (ou le super utilisateur)
+peut changer ces informations.  Passer \texttt {-1} pour le propriétaire
+ou pour le groupe indique de ne pas changer la valeur.
 
-Seul le propriétaire d'un fichier (ou le super
-utilisateur) peut changer ces informations.
+Lorsque le nom passé est un lien symbolique, \texttt {chown} modifie
+le fichier référencé par le lien, alors que \texttt {lchown} modifie
+le lien lui-même.
 
-Cette primitive renvoie 0 en cas de modification
+Ces primitives renvoient 0 en cas de modification
 réussie ou -1 en cas d'erreur.
 
 
