@@ -4570,7 +4570,7 @@ commande \texttt {commande}.
 
 
 \separation
-\primitive {printf, fprintf, fprintf, sprintf, snprintf} --- écriture formattée
+\primitive {printf, dprintf, fprintf, sprintf, snprintf} --- écriture formattée
     \index{\texttt {printf}}
     \index{\texttt {dprintf}}
     \index{\texttt {fprintf}}
@@ -4732,6 +4732,65 @@ Pour imprimer $\pi$ à 10$^{-5}$ près~:
 printf ("PI = %.5f", 4 * atan (1.0)) ;
 \end{verbatim}
 \end {quote}
+
+
+\separation
+\primitive {vprintf, vdprintf, vfprintf, vsprintf, vsnprintf} --- écriture formattée avec un nombre variable d'arguments
+    \index{\texttt {vprintf}}
+    \index{\texttt {vdprintf}}
+    \index{\texttt {vfprintf}}
+    \index{\texttt {vsprintf}}
+    \index{\texttt {vsnprintf}}
+
+\begin {quote}
+\begin {verbatim}
+#include <stdarg.h>
+#include <stdio.h>
+
+int vprintf (const char *format, va_list ap)
+int vdprintf (int fd, const char *format, va_list ap)
+int vfprintf (FILE *flux, const char *format, va_list ap)
+int vsprintf (char *str, const char *format, va_list ap)
+int vsnprintf (char *str, size_t taille, const char *format, va_list ap)
+\end{verbatim}
+\end {quote}
+
+Ces fonctions sont analogues aux fonctions de type \texttt {printf}, mais
+sont appelées avec une liste d'arguments, permettant d'être utilisées
+à l'intérieur de fonctions prenant un nombre variable d'arguments
+(avec \texttt {stdarg.h}), comme par exemple :
+
+\begin {quote}
+\small
+\begin {verbatim}
+#include <stdarg.h>
+
+void erreur (const char *fn, const char *fmt, ...)  /* ... : syntaxe C */
+{
+    va_list ap ;                                    /* pointeur dans la liste d'arguments */
+
+    fprintf (stderr, "Erreur dans la fonction %s\n", fn) ;
+    va_start (ap, fmt) ;                            /* ap pointe sur l'argument après fmt */
+    vfprintf (stderr, fmt, ap) ;
+    va_end (ap) ;                                   /* fin d'utilisation de ap */
+    exit (1) ;
+}
+
+int main (int argc, char *argv [])
+{
+    if (argc > 2)
+        erreur (__FUNCTION__, "usage: %s [n]\n", argv [0]) ;
+    if (atoi (argv [1]) == 0)
+        erreur (__FUNCTION__, "l'argument ne peut être nul\n") ;
+    ...
+}
+\end{verbatim}
+\end {quote}
+
+Attention : comme pour \texttt {sprintf}, la fonction \texttt {vsprintf}
+est \textbf {obsolète}, car elle ne vérifie pas le débordement de la
+chaîne fournie en paramètre. Il faut donc utiliser \texttt {vsnprintf}
+à la place.
 
 
 \separation
