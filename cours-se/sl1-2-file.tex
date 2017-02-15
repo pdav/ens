@@ -673,13 +673,9 @@
 
 	\item modifier le propriétaire ou le groupe
 	    \prototype {
-		\code {int chown (const char *path, uid\_t uid)} \\
-		\code {int fchown (int fd, uid\_t uid)} \\
-		\code {int chgrp (const char *path, gid\_t gid)} \\
-		\code {int fchgrp (int fd, gid\_t gid)} \\
+		\code {int chown (const char *path, uid\_t uid, git\_t gid)} \\
+		\code {int fchown (int fd, uid\_t uid, git\_t gid)} \\
 	    }
-	    \vspace* {-4mm}
-	    \implique primitives restreintes à l'administrateur
     \end {itemize}
 \end {frame}
 
