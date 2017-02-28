@@ -3,6 +3,7 @@
 \documentclass {article}
 
     \usepackage [utf8] {tdpda}
+    \lstset {basicstyle=\footnotesize\ttfamily}
 
 \begin {document}
 
@@ -53,7 +54,7 @@ future, les programmes que vous écrivez seront inévitablement
 lus par d'autres. Dès lors, la lisibilité de vos programmes
 est cruciale\footnote {Il n'y a qu'un seul cas où la lisibilité
 n'est pas requise, bien au contraire, c'est le concours IOCCC (\url
-{http://www.ioccc.org/}). Ne prenez pas ça comme modèle pour vos
+{http://www.ioccc.org/}). Ne prenez surtout pas ça comme modèle pour vos
 propres programmes...}. Dans le cadre de vos études, en particulier,
 vous écrivez des programmes destinés à être évalués, c'est-à-dire
 à être lus et compris par une autre personne que vous : la lisibilité
@@ -193,6 +194,7 @@ Pour le formalisme, vous pourrez utiliser avec profit celui de \texttt
 {doxygen}\footnote {\url {http://www.doxygen.org}}, comme par exemple~:
 
 \begin {quote}
+\footnotesize
 \begin {lstlisting}
 /**
  * @brief Construit une liste des nombres premiers
@@ -328,24 +330,25 @@ lorsqu'il compile. Ces messages sont à prendre au sérieux car ils
 indiquent presque à coup sûr un problème dans votre programme. Ne
 les ignorez pas, vous gagnerez ainsi un temps précieux !
 
-Si vous utilisez GCC, vous devriez toujours spécifier deux options~:
+Si vous utilisez GCC, vous devriez toujours spécifier trois options~:
 \begin {itemize}
     \item \texttt {-Wall}~: détecte des problèmes potentiels qu'il
-	faut presque toujours corriger. Encore mieux, utilisez
-	\texttt {-Wextra} en complément pour détecter davantage
+	faut presque toujours corriger~;
+    \item \texttt {-Wextra}~: encore mieux, utilisez
+	cette option en complément pour détecter davantage
 	de problèmes~;
     \item \texttt {-Werror}~: refuse la compilation en présence de
-	«~warning~»
+	«~warning~».
 \end {itemize}
 
-Ces deux options sont importantes. Ne négligez pas la deuxième~: elle
-n'est pas là pour vous embêter, mais pour vous inciter à corriger votre
+Ces trois options sont importantes. Ne les négligez pas~: elles
+ne sont pas là pour vous embêter, mais pour vous inciter à corriger votre
 programme. Ce faisant, vous gagnerez du temps car plus un problème est
 détecté tôt et plus il est facile à corriger.
 
 \subsection {Pas de code dans des fichiers d'inclusion}
 
-Les fichiers suffixés par «~\texttt {.h}~» sont des fichiers inclus
+Les fichiers suffixés par «~\texttt {.h}~» sont inclus
 au moment de la compilation, leur contenu est compilé comme le reste
 du fichier source. Ils servent à mettre des définitions (de macros,
 de types, de prototypes de fonctions) qui peuvent servir dans plusieurs
@@ -513,12 +516,14 @@ rapport doit comporter un sommaire. Bien évidemment, les pages doivent
 
 \subsection {Expliquez les points importants, pas les détails}
 
-Un rapport est un exercice difficile : vous êtes dans le feu de l'action,
+Rédiger un rapport est un exercice difficile :
+vous êtes dans le feu de l'action,
 peut-être même encore en train de déboguer votre programme, et vous
 devez prendre de la hauteur pour rédiger un document de synthèse.
 
-Un rapport doit permettre à une personne qui ne connaît pas votre
-programme de se faire une idée de son fonctionnement. Il doit expliquer
+Votre rapport doit permettre à une personne qui ne connaît pas votre
+programme de se faire une idée de son fonctionnement. Vous devez faire
+l'effort de vous mettre à la place du lecteur pour expliquer
 les points importants et non les détails (pas de code, par exemple).
 
 
