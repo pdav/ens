@@ -91,18 +91,15 @@
 	    \begin {itemize}
 		\item Epoch : premier janvier 1970, 0h 0m 0s, UTC
 		\item UTC : temps universel coordonné
+		    \\
+		    {\fC (avant 1986 : GMT = heure du méridien de
+		    Greenwich)}
+
 	    \end {itemize}
 
 	\item l'heure est conservée en UTC
 	    \begin {itemize}
 		\item indépendamment du fuseau horaire
-		\item indépendamment des changements d'heure été/hiver
-	    \end {itemize}
-
-	\item conversion en temps « humain »
-	    \begin {itemize}
-		\item à la charge des fonctions de bibliothèque
-		\item \code {localtime}, \code {asctime}, \code {strftime}
 	    \end {itemize}
 
 	\item \code {time\_t} historiquement sur 32 bits
@@ -112,6 +109,46 @@
 		\item nombreux formats de fichiers avec des dates
 		    sur 32 bits
 	    \end {itemize}
+
+	\item valeur de type \code {time\_t}...
+	    \begin {itemize}
+		\item ... facile à tenir à jour par le noyau
+		\item ... pas facile à lire pour un humain
+		    \begin {itemize}
+			\item ce n'est pas le problème du noyau
+		    \end {itemize}
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Unités de temps -- time\_t}
+
+    Conversion d'un \code {time\_t} en une valeur intelligible :
+    \begin {itemize}
+	\item problème «~intéressant~», car prise en compte :
+	    \begin {itemize}
+		\item du fuseau horaire
+		\item de l'heure d'été et de l'heure d'hiver
+		\item des changements de dates des heures d'été et d'hiver
+		    \begin {itemize}
+			\item ex : pas de changement d'heure avant 1976
+			    en France
+		    \end {itemize}
+		\item des années bissextiles
+		\item des secondes intercalaires
+		    \begin {itemize}
+			\item variations de la vitesse de rotation de la Terre
+			\item ex : 1 seconde ajoutée après 23h 59m 59s
+			    le 31/12/2016
+		    \end {itemize}
+	    \end {itemize}
+
+	\item ... mais ne concerne pas le noyau
+	\item \implique à la charge des fonctions de bibliothèque
+	    \begin {itemize}
+		\item \code {localtime}, \code {asctime}, \code {strftime}, etc.
+	    \end {itemize}
+
     \end {itemize}
 \end {frame}
 
