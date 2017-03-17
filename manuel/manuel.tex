@@ -481,7 +481,9 @@ dans \texttt {mode}~:
 \end {quote}
 
 Par exemple, \verb/chmod("toto",S_IRUSR|S_IWUSR|S_IRGRP)/ est
-équivalent, mais plus portable, à \verb/chmod("toto",0640)/.
+équivalent à \verb/chmod("toto",0640)/.
+Toutefois, l'usage des valeurs numériques est tellement répandu que
+POSIX a exceptionnellement normalisé ces valeurs.
 
 Seul le propriétaire du fichier (ou le
 super-utilisateur) a le droit de modifier les
