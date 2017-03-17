@@ -148,6 +148,7 @@ LST1ps = \
 SRC1time = ch1-5-time.tex sl1-5-time.tex
 
 FIG1time = \
+	inc1-5-time/timeval.pdf \
 	inc1-5-time/times.pdf \
 	inc1-5-time/precision.pdf \
 

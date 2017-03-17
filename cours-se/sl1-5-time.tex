@@ -206,7 +206,7 @@
     (i.e. l'heure qu'on peut lire sur l'horloge murale)
 \end {frame}
 
-\begin {frame} {Heure courante}
+\begin {frame} {Heure courante -- gettimeofday}
     \prototype {
 	\code {int gettimeofday (struct timeval *tv, struct timezone *tz)}
     }
@@ -233,6 +233,35 @@
 
     \end {itemize}
 \end {frame}
+
+\begin {frame} {Heure courante -- gettimeofday}
+    Exemple de \code {struct timeval}~:
+
+    \vspace* {3mm}
+    
+    \begin {minipage} {.35\linewidth}
+    \ctableau {\fD} {|l|r|} {
+	\code {tv\_sec}
+	    & 1$\thinspace$500$\thinspace$000$\thinspace$000$\thinspace$
+	    \\
+	\code {tv\_usec}
+	    & 123$\thinspace$456
+	    \\
+    }
+    \end {minipage}
+    \hfill
+    $\Leftrightarrow$
+    \hfill
+    \begin {minipage} {.55\linewidth}
+	\fC 14/07/2017 à 2h40'00" et 123456 $\mu s$ UTC
+    \end {minipage}
+
+
+    \begin {center}
+	\includegraphics [width=.9\linewidth] {\inc/timeval}
+    \end {center}
+\end {frame}
+
 
 \begin {frame} {Heure courante}
     Exemple d'utilisation :
