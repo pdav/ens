@@ -1,9 +1,18 @@
+*.pdf
 # TeX output files
-*.ps
-*.cb
 *.aux
-*.dvi
-*.out
-*.toc
-*.log
 *.bak
+*.cb
+*.dvi
+*.idx
+*.ilg
+*.ind
+*.log
+*.nav
+*.out
+*.ps
+*.snm
+*.toc
+*.vrb
+# Vim intermediate files
+.*.swp
