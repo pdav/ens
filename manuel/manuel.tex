@@ -463,8 +463,8 @@ dans \texttt {mode}~:
 \begin {quote}
     \begin {tabular} {|lll|} \hline
 	\texttt {S\_ISUID} & 04000 & bit \textit {set user id} \\
-	\texttt {S\_IGUID} & 02000 & bit \textit {set group id} \\
-	                   & 01000 & bit \textit {sticky bit} \\
+	\texttt {S\_ISGID} & 02000 & bit \textit {set group id} \\
+	\texttt {S\_ISVTX} & 01000 & bit \textit {sticky bit} \\
 	\texttt {S\_IRWXU} & 00700 & droits pour le propriétaire \\
 	\texttt {S\_IRUSR} & 00400 & lecture pour le propriétaire \\
 	\texttt {S\_IWUSR} & 00200 & écriture pour le propriétaire \\
@@ -1045,6 +1045,7 @@ Le champ \texttt {st\_mode} est composé de~:
 	    \texttt {S\_ISDIR(\emph {mode})} & répertoire \\
 	    \texttt {S\_ISFIFO(\emph {mode})} & tube ou tube nommé \\
 	    \texttt {S\_ISLNK(\emph {mode})} & lien symbolique \\
+	    \texttt {S\_ISSOCK(\emph {mode})} & socket \\
 	    \hline
 	\end {tabular}
 
@@ -1585,7 +1586,7 @@ du processus père du processus appelant.
 
 
 \separation
-\primitive {getuid, geteuid, getgid, getegid} --- renvoie les process-id effectifs
+\primitive {getuid, geteuid, getgid, getegid} --- renvoie l'identificateur de l'utilisateur/du groupe du processus
     \index{\texttt {getuid}}
     \index{\texttt {geteuid}}
     \index{\texttt {getgid}}
