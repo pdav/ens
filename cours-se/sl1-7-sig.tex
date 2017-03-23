@@ -248,6 +248,25 @@
 \end {frame}
 
 \begin {frame} {API Unix v7 -- Fonction appelée}
+    La fonction appelée doit avoir le prototype suivant :
+
+    \lstinputlisting [basicstyle=\fD\lstmonstyle] {\inc/proto.c}
+
+    Notes :
+    \begin {itemize}
+	\item pas de possibilité de changer le type de retour
+	\item pas de possibilité de changer les arguments
+
+	\item avec les options \code {-Wall -Werror} du
+	    compilateur \code {gcc}, il faut éviter de générer une
+	    erreur si l'argument n'est pas utilisé
+
+	    \lstinputlisting [basicstyle=\fD\lstmonstyle] {\inc/unused.c}
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {API Unix v7 -- Fonction appelée}
     Attention à la fonction appelée lors de la réception d'un signal :
 
     \begin {itemize}

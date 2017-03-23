@@ -192,6 +192,8 @@ FIG1sig = \
 IMG1sig = \
 
 LST1sig = \
+	inc1-7-sig/proto.c \
+	inc1-7-sig/unused.c \
 	inc1-7-sig/compteur.c \
 	inc1-7-sig/volatile.c \
 	inc1-7-sig/sigaction.c \
