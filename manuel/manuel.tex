@@ -2151,8 +2151,9 @@ Le signal \texttt {SIGKILL} ne peut être ni ignoré ni
 traité.
 
 Cette primitive renvoie l'adresse de l'ancienne
-fonction en cas de modification réussie, ou -1 en
-cas d'erreur.
+fonction en cas de modification réussie, ou la valeur
+numérique -1 en cas d'erreur (à tester avec la constante
+\texttt {SIG\_ERR} pour avoir le bon type).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
