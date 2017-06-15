@@ -49,6 +49,7 @@
 %   2015/10/30 : pda : \fichierexo/\titreexo et param opt de \question
 %   2015/11/19 : pda : nettoyage et commentaires (v1.4)
 %   2017/01/27 : pda : qcm prend un arg opt, plus besoin de qcmn (v1.5)
+%   2017/06/05 : pda : ajout environnement reponse (v1.6)
 %
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -57,7 +58,7 @@
 
 \NeedsTeXFormat {LaTeX2e}
 
-\ProvidesPackage {tdpda} [2017/01/27 1.5 (pda)]
+\ProvidesPackage {tdpda} [2017/01/27 1.6 (pda)]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Options
@@ -190,3 +191,26 @@
 \newenvironment {qcmn} [1]
     {\begin {qcm} [#1]}
     {\end {qcm}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% espace (vide ou non) de la hauteur specifiee pour la reponse
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \begin {cadrereponse} [20mm] .... \end {cadrereponse}
+
+\newsavebox {\boxcadrep}
+\newlength {\boxcadrepwidth}
+
+\newenvironment {cadrereponse} [1] [10\baselineskip]
+    {%
+	\setlength {\boxcadrepwidth} {\linewidth} %
+	\addtolength {\boxcadrepwidth} {-2\fboxrule} %
+	\addtolength {\boxcadrepwidth} {-2\fboxsep} %
+	\begin {lrbox} {\boxcadrep} %
+	    \begin {minipage} [t] [#1] {\boxcadrepwidth} %
+    }
+    {%
+	    \end {minipage} %
+	\end {lrbox} %
+	\framebox [\linewidth] [t] {\usebox {\boxcadrep}} %
+    }
