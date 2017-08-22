@@ -4,7 +4,7 @@
 #include <sys/ipc.h>
 #include <sys/msg.h>
 
-void erreur (char *msg)
+void raler (char *msg)
 {
     perror (msg) ;
     exit (1) ;
@@ -17,11 +17,11 @@ int creer_file (void)
 
     k = ftok ("/etc/passwd", 'F') ;
     if (k == -1)
-	erreur ("ftok") ;
+	raler ("ftok") ;
 
     id = msgget (k, IPC_CREAT | 0666) ;
     if (id == -1)
-	erreur ("msgget") ;
+	raler ("msgget") ;
 
     return id ;
 }
@@ -33,11 +33,11 @@ int acceder_file (void)
 
     k = ftok ("/etc/passwd", 'F') ;
     if (k == -1)
-	erreur ("ftok") ;
+	raler ("ftok") ;
 
     id = msgget (k, 0) ;
     if (id == -1)
-	erreur ("msgget") ;
+	raler ("msgget") ;
 
     return id ;
 }
@@ -48,7 +48,7 @@ void supprimer_file (int id)
 
     r = msgctl (id, IPC_RMID, NULL) ;
     if (r == -1)
-	erreur ("msgctl") ;
+	raler ("msgctl") ;
 }
 
 struct message
@@ -65,7 +65,7 @@ void ecrire_valeur (int id, int val)
     m.val = val ;
     r = msgsnd (id, &m, sizeof m - sizeof m.mtype, 0) ;
     if (r == -1)
-	erreur ("msgsnd") ;
+	raler ("msgsnd") ;
 }
 
 int lire_valeur (int id)
@@ -74,7 +74,7 @@ int lire_valeur (int id)
 
     r = msgrcv (id, &m, sizeof m - sizeof m.mtype, 25, 0) ;
     if (r == -1)
-	erreur ("msgrcv") ;
+	raler ("msgrcv") ;
     return m.val ;
 }
 

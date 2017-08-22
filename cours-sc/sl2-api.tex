@@ -1067,16 +1067,27 @@
 	\item \code {pthread\_t}~: identificateur de thread
 	\item \code {pthread\_attr\_t}~: attribut de thread
     \end {itemize}
+
+    \vspace* {2mm}
+
+    Attention : contrairement aux primitives systèmes classiques, les
+    fonctions \texttt {pthread\_*} renvoient 0 en cas de succès ou un
+    numéro d'erreur ($> 0$) sinon.
+
 \end {frame}
 
-\begin {frame} {Threads}
+\begin {frame} [fragile] {Threads}
     Fonctions de l'API~:
 
     \begin {itemize}
 	\item création de thread~:
 
-	    \code {int pthread\_create (pthread\_t *id, const
-		pthread\_attr\_t *attr, void *(*fonction)(void *), void *arg)}
+\begin {lstlisting} [basicstyle=\small\lstmonstyle]
+int pthread_create (pthread_t *id,
+		const pthread_attr_t *attr,
+		void *(*fonction) (void *),
+		void *arg)
+\end{lstlisting}
 
 	\item fin de thread~:
 
@@ -1088,7 +1099,7 @@
 
     \end {itemize}
 
-\end {frame}
+\end{frame}
 
 \begin {frame} {Threads}
     Illustration~: 4 threads (principal + 3 nouveaux)
@@ -1098,11 +1109,11 @@
 \end {frame}
 
 \begin {frame} [fragile] {Threads}
-    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle, firstline=5, lastline=19] {\inc/thr.c}
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle, firstline=8, lastline=22] {\inc/thr.c}
 \end{frame}
 
 \begin {frame} [fragile] {Threads}
-    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle, firstline=27, lastline=50] {\inc/thr.c}
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle, firstline=33, lastline=56] {\inc/thr.c}
 \end{frame}
 
 \begin {frame} {Fonctions «~thread-safe~»}
@@ -1323,14 +1334,17 @@ Exemple~:
 \begin {lstlisting}
 pthread_attr_t pa ;
 
-if (pthread_attr_init (&pa) != 0)
-    erreur ("pthread_attr_init") ;
+errno = pthread_attr_init (&pa) ;
+if (errno != 0)
+    raler ("pthread_attr_init") ;
 
-if (pthread_attr_setstacksize (&pa, 2 * PAGE_SIZE) != 0)
-    erreur ("pthread_attr_setstacksize") ;
+errno = pthread_attr_setstacksize (&pa, 2 * PAGE_SIZE) ;
+if (errno != 0)
+    raler ("pthread_attr_setstacksize") ;
 
-if (pthread_create (..., &pa, ....) != 0)
-    erreur ("pthread_create") ;
+errno = pthread_create (..., &pa, ....) ;
+if (errno != 0)
+    raler ("pthread_create") ;
 
 pthread_attr_destroy (&pa) ;
 \end{lstlisting}
@@ -1488,15 +1502,18 @@ Exemple~:
 pthread_barrier b ;
 pthread_barrierattr_t ba ;
 
-if (pthread_barrierattr_init (&ba) != 0)
-    erreur ("pthread_barrierattr_init") ;
+errno = pthread_barrierattr_init (&ba) ;
+if (errno != 0)
+    raler ("pthread_barrierattr_init") ;
 
-if (pthread_barrierattr_setpshared (&ba,
-                           PTHREAD_PROCESS_SHARED) != 0)
-    erreur ("pthread_barrierattr_setpshared") ;
+errno = pthread_barrierattr_setpshared (&ba,
+                           PTHREAD_PROCESS_SHARED) ;
+if (errno != 0)
+    raler ("pthread_barrierattr_setpshared") ;
 
-if (pthread_barrier_init (&b, &ba, 4) != 0)
-    erreur ("pthread_barrier_init") ;
+errno = pthread_barrier_init (&b, &ba, 4) ;
+if (errno != 0)
+    raler ("pthread_barrier_init") ;
 
 pthread_barrierattr_destroy (&ba) ;
 \end{lstlisting}

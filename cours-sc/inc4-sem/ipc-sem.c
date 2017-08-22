@@ -4,7 +4,7 @@
 #include <sys/ipc.h>
 #include <sys/sem.h>
 
-void erreur (char *msg)
+void raler (char *msg)
 {
     perror (msg) ;
     exit (1) ;
@@ -17,14 +17,14 @@ int creer_semaphore (int val)
 
     k = ftok ("/etc/passwd", 'S') ;
     if (k == -1)
-	erreur ("ftok") ;
+	raler ("ftok") ;
 
     id = semget (k, 1, IPC_CREAT | 0666) ;
     if (id == -1)
-	erreur ("semget") ;
+	raler ("semget") ;
 
     if (semctl (id, 0, SETVAL, val) == -1)
-	erreur ("semctl setval") ;
+	raler ("semctl setval") ;
 
     return id ;
 }
@@ -36,11 +36,11 @@ int acceder_semaphore (void)
 
     k = ftok ("/etc/passwd", 'S') ;
     if (k == -1)
-	erreur ("ftok") ;
+	raler ("ftok") ;
 
     id = semget (k, 0, 0) ;
     if (id == -1)
-	erreur ("semget") ;
+	raler ("semget") ;
 
     return id ;
 }
@@ -51,7 +51,7 @@ void supprimer_semaphore (int id)
 
     r = semctl (id, 0, IPC_RMID, NULL) ;
     if (r == -1)
-	erreur ("semctl") ;
+	raler ("semctl") ;
 }
 
 void P (int id)
@@ -59,7 +59,7 @@ void P (int id)
     struct sembuf s [1] = { {0, -1, 0} } ;
 
     if (semop (id, s, 1) == -1)
-	erreur ("semop") ;
+	raler ("semop") ;
 }
 
 void V (int id)
@@ -67,7 +67,7 @@ void V (int id)
     struct sembuf s [1] = { {0, 1, 0} } ;
 
     if (semop (id, s, 1) == -1)
-	erreur ("semop") ;
+	raler ("semop") ;
 }
 
 

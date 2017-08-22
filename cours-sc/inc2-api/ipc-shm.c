@@ -4,7 +4,7 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 
-void erreur (char *msg)
+void raler (char *msg)
 {
     perror (msg) ;
     exit (1) ;
@@ -17,11 +17,11 @@ int creer_segment (void)
 
     k = ftok ("/etc/passwd", 'M') ;
     if (k == -1)
-	erreur ("ftok") ;
+	raler ("ftok") ;
 
     id = shmget (k, 4096, IPC_CREAT | 0666) ;
     if (id == -1)
-	erreur ("shmget") ;
+	raler ("shmget") ;
 
     return id ;
 }
@@ -33,11 +33,11 @@ int acceder_segment (void)
 
     k = ftok ("/etc/passwd", 'M') ;
     if (k == -1)
-	erreur ("ftok") ;
+	raler ("ftok") ;
 
     id = shmget (k, 0, 0) ;
     if (id == -1)
-	erreur ("shmget") ;
+	raler ("shmget") ;
 
     return id ;
 }
@@ -48,7 +48,7 @@ void supprimer_segment (int id)
 
     r = shmctl (id, IPC_RMID, NULL) ;
     if (r == -1)
-	erreur ("shmctl") ;
+	raler ("shmctl") ;
 }
 
 void ecrire_valeurs (int id, int v1, int v2)
@@ -57,13 +57,13 @@ void ecrire_valeurs (int id, int v1, int v2)
 
     adr = shmat (id, NULL, 0) ;
     if (adr == NULL)
-	erreur ("shmat") ;
+	raler ("shmat") ;
 
     adr [0] = v1 ;
     adr [1] = v2 ;
 
     if (shmdt (adr) == -1)
-	erreur ("shmdt") ;
+	raler ("shmdt") ;
 }
 
 void lire_valeurs (int id, int *v1, int *v2)
@@ -72,13 +72,13 @@ void lire_valeurs (int id, int *v1, int *v2)
 
     adr = shmat (id, NULL, 0) ;
     if (adr == NULL)
-	erreur ("shmat") ;
+	raler ("shmat") ;
 
     *v1 = adr [0] ;
     *v2 = adr [1] ;
 
     if (shmdt (adr) == -1)
-	erreur ("shmdt") ;
+	raler ("shmdt") ;
 }
 
 
