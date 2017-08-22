@@ -77,7 +77,7 @@
 	\huge\bf
 	Notice simplifiée \\
 	\vspace* {5mm}
-	Primitives système et fonctions de librairie \\
+	Primitives système et fonctions de bibliothèque \\
 	\vspace* {5mm}
 	\input {annee}
     \end {center}
@@ -175,7 +175,7 @@ L'accès à la signification en clair de ces
 messages d'erreur se fait souvent par
 l'intermédiaire des fonctions \texttt {perror}
 ou \texttt {strerror} de la
-librairie standard.
+bibliothèque standard.
 
 La liste suivante est la description
 des principales erreurs pouvant intervenir. Il faut noter que
@@ -342,7 +342,7 @@ ignoré.
 
 \section {Définition des types}
 
-Certaines primitives et fonctions de librairie utilisent des paramètres
+Certaines primitives et fonctions de bibliothèque utilisent des paramètres
 représentant des identificateurs de processus, des numéros d'utilisateur
 ou d'autres informations.  Même s'il s'agit le plus souvent d'entiers,
 il est intéressant d'utiliser des types définis pour faciliter la
@@ -391,7 +391,8 @@ ordres~:
 \end {itemize}
 
 Il y a deux façons d'accéder à un fichier. La première nécessite un
-chemin d'accès au fichier, c'est-à-dire son nom sous forme d'une chaîne
+chemin d'accès au fichier, c'est-à-dire son nom (chemin absolu ou
+relatif) sous forme d'une chaîne
 de caractères terminée par un octet nul.  La deuxième nécessite
 l'ouverture préalable du fichier, c'est-à-dire nécessite un petit
 entier obtenu par les primitives \texttt {open}, \texttt {creat}, \texttt {dup},
@@ -415,7 +416,7 @@ standard, et 2 pour les erreurs.
 \begin {verbatim}
 #include <unistd.h>
 
-int access (const char *nom, int motif)
+int access (const char *chemin, int motif)
 \end{verbatim}
 \end {quote}
 
@@ -452,7 +453,7 @@ ou -1 en cas d'erreur.
 
 \begin {quote}
 \begin {verbatim}
-int chmod (const char *nom, mode_t mode)
+int chmod (const char *chemin, mode_t mode)
 \end{verbatim}
 \end {quote}
 
@@ -504,8 +505,8 @@ réussie ou -1 en cas d'erreur.
 \begin {verbatim}
 #include <unistd.h>
 
-int chown (const char *nom, uid_t proprietaire, gid_t groupe)
-int lchown (const char *nom, uid_t proprietaire, gid_t groupe)
+int chown (const char *chemin, uid_t proprietaire, gid_t groupe)
+int lchown (const char *chemin, uid_t proprietaire, gid_t groupe)
 \end{verbatim}
 \end {quote}
 
@@ -514,7 +515,7 @@ fichier.  Seul le propriétaire d'un fichier (ou le super utilisateur)
 peut changer ces informations.  Passer \texttt {-1} pour le propriétaire
 ou pour le groupe indique de ne pas changer la valeur.
 
-Lorsque le nom passé est un lien symbolique, \texttt {chown} modifie
+Lorsque le chemin passé est un lien symbolique, \texttt {chown} modifie
 le fichier référencé par le lien, alors que \texttt {lchown} modifie
 le lien lui-même.
 
@@ -554,7 +555,7 @@ réussie ou -1 en cas d'erreur.
 \begin {verbatim}
 #include <fcntl.h>
 
-int creat (const char *nom, mode_t mode)
+int creat (const char *chemin, mode_t mode)
 \end{verbatim}
 \end {quote}
 
@@ -721,6 +722,13 @@ int getdirentries (int fd, struct direct *buf, int taille, off_t *offset)
 \end{verbatim}
 \end {quote}
 
+Attention~:  cette primitive n'étant pas spécifiée par POSIX, les
+fonctions \texttt {opendir}, \texttt {readdir} etc.  de la bibliothèque
+doivent être utilisées de préférence (voir page~\pageref {opendir}).
+Cette primitive est uniquement citée ici comme exemple d'interface de
+bas niveau pour comprendre l'implémentation des fonctions de la famille
+\texttt {opendir}.
+
 Cette primitive renvoie des entrées dans un répertoire dans une
 forme indépendante du format natif du répertoire ouvert par \texttt {open}.
 Les entrées sont placées dans un tableau de structures \texttt {direct},
@@ -751,10 +759,6 @@ lu.
 La valeur de retour est le nombre d'octets transférés en cas d'opération
 réussie, -1 sinon.
 
-Note~:  cette primitive n'étant pas spécifiée par POSIX, les
-fonctions \texttt {opendir}, \texttt {readdir} etc.  de la librairie doivent
-être utilisées de préférence (voir page~\pageref {opendir}).
-
 
 \separation
 \primitive {link} --- établit un nouveau lien sur un fichier
@@ -762,14 +766,14 @@ fonctions \texttt {opendir}, \texttt {readdir} etc.  de la librairie doivent
 
 \begin {quote}
 \begin {verbatim}
-int link (const char *nom, const char *nouveaunom)
+int link (const char *chemin, const char *nouveauchemin)
 \end{verbatim}
 \end {quote}
 
 La primitive \texttt {link} crée un nouveau lien pour
-fichier existant de nom \texttt {nom}. Le nouveau lien
+fichier existant de nom \texttt {chemin}. Le nouveau lien
 (la nouvelle entrée dans le répertoire) porte
-le nom \texttt {nouveaunom}.
+le nom \texttt {nouveauchemin}.
 
 Cette primitive renvoie 0 en cas de liaison
 réussie ou -1 en cas d'erreur.
@@ -793,13 +797,13 @@ La primitive \texttt {lseek} déplace le pointeur du
 fichier repéré par \texttt {desc} (obtenu par
 \texttt {open},\texttt {creat}, \texttt {dup}, \texttt {fctnl} ou \texttt {pipe}).
 Le déplacement est régi par par la valeur de
-\texttt {àpartir}~:
+\texttt {apartir}~:
 
 \begin {quote}
     \begin {tabular} {|lll|} \hline
-	\texttt {SEEK\_SET} 0 & à partir du début \\
-	\texttt {SEEK\_CUR} 0 & à partir de la position courante \\
-	\texttt {SEEK\_END} 0 & à partir de la fin \\ \hline
+	\texttt {SEEK\_SET} & 0 & à partir du début \\
+	\texttt {SEEK\_CUR} & 1 & à partir de la position courante \\
+	\texttt {SEEK\_END} & 2 & à partir de la fin \\ \hline
     \end {tabular}
 \end {quote}
 
@@ -818,11 +822,11 @@ en cas d'erreur.
 \begin {verbatim}
 #include <sys/stat.h>
 
-int mkdir (const char *nom, mode_t mode)
+int mkdir (const char *chemin, mode_t mode)
 \end{verbatim}
 \end {quote}
 
-La primitive \texttt {mkdir} crée le répertoire de nom \texttt {nom}. Les 
+La primitive \texttt {mkdir} crée le répertoire de nom \texttt {chemin}. Les 
 protections initiales sont spécifiée en binaire avec l'argument
 \texttt {mode} (voir \texttt {chmod}).
 
@@ -841,8 +845,8 @@ ou -1 en cas d'erreur.
 #include <sys/stat.h>
 #include <fcntl.h>
 
-int open (const char *nom, int flags)
-int open (const char *nom, int flags, mode_t mode)
+int open (const char *chemin, int flags)
+int open (const char *chemin, int flags, mode_t mode)
 \end{verbatim}
 \end {quote}
 
@@ -937,12 +941,12 @@ réussie, ou -1 en cas d'erreur.
 \begin {verbatim}
 #include <unistd.h>
 
-int rmdir (const char *nom)
+int rmdir (const char *chemin)
 \end{verbatim}
 \end {quote}
 
 La primitive \texttt {rmdir} supprime le répertoire (qui doit être vide)
-spécifié par l'argument \texttt {nom}.
+spécifié par l'argument \texttt {chemin}.
 
 Cette primitive renvoie 0 en cas de suppression réussie
 ou -1 en cas d'erreur.
@@ -961,8 +965,8 @@ ou -1 en cas d'erreur.
 \begin {verbatim}
 #include <sys/stat.h>
 
-int stat (const char *nom, struct stat *buf)
-int lstat (const char *nom, struct stat *buf)
+int stat (const char *chemin, struct stat *buf)
+int lstat (const char *chemin, struct stat *buf)
 int fstat (int desc, struct stat *buf)
 \end{verbatim}
 \end {quote}
@@ -970,8 +974,8 @@ int fstat (int desc, struct stat *buf)
 Les primitives \texttt {stat}, \texttt {lstat} et \texttt {fstat} lisent la partie
 système d'un fichier (son \textit {inode}) et placent ces informations dans
 la structure pointée par \texttt {buf}. Le fichier peut être spécifié
-par son nom (\texttt {stat} et \texttt {lstat}) ou par le descripteur de fichier
-qui lui est associé (\texttt {fstat}).
+par son chemin (\texttt {stat} et \texttt {lstat}) ou par le descripteur
+de fichier qui lui est associé (\texttt {fstat}).
 
 Lorsque le fichier est un lien symbolique, \texttt {stat} et \texttt {fstat}
 renvoient des informations sur la cible du lien alors que \texttt {lstat}
@@ -1063,12 +1067,13 @@ ou -1 en cas d'erreur.
 \primitive {truncate, ftruncate} --- tronque la longueur d'un fichier
     \index{\texttt {truncate}}
     \index{\texttt {ftruncate}}
+    \label {ftruncate}
 
 \begin {quote}
 \begin {verbatim}
 #include <unistd.h>
 
-int truncate (const char *nom, off_t lg)
+int truncate (const char *chemin, off_t lg)
 int ftruncate (int desc, off_t lg)
 \end{verbatim}
 \end {quote}
@@ -1096,7 +1101,7 @@ ou -1 en cas d'erreur.
 \begin {verbatim}
 #include <unistd.h>
 
-int unlink (const char *nom)
+int unlink (const char *chemin)
 \end{verbatim}
 \end {quote}
 
@@ -1153,6 +1158,7 @@ réussie, ou -1 en cas d'erreur.
 \separation
 \primitive {mmap} --- établit une correspondance entre fichier et mémoire
     \index{\texttt {mmap}}
+    \label {mmap}
 
 \begin {quote}
 \begin {verbatim}
@@ -1281,7 +1287,7 @@ de les changer.
 \begin {verbatim}
 #include <unistd.h>
 
-int chdir (const char *nom)
+int chdir (const char *chemin)
 \end{verbatim}
 \end {quote}
 
@@ -1303,7 +1309,7 @@ réussi, ou -1 en cas d'erreur.
 \begin {verbatim}
 #include <unistd.h>
 
-int chroot (const char *nom)
+int chroot (const char *chemin)
 \end{verbatim}
 \end {quote}
 
@@ -1907,7 +1913,7 @@ cela, le système envoie le signal \texttt {SIGPIPE} dans ce cas.
 On rencontre deux sortes de tubes : les tubes anonymes et
 les tubes nommés. Les premiers sont créés à l'aide de la
 primitive système \texttt {pipe}, alors que les seconds sont créés par
-la fonction de librairie \texttt {mkfifo} (voir page~\pageref {mkfifo}).
+la fonction de bibliothèque \texttt {mkfifo} (voir page~\pageref {mkfifo}).
 
 
 \separation
@@ -2255,7 +2261,7 @@ l'action, l'action reste associée au signal mais l'ancien masque est
 réinstallé.
 
 Les objets de type \texttt {sigset\_t} sont manipulés avec les fonctions de
-librairie \emph {sigsetopts} (voir page~\pageref {sigsetopts}).
+bibliothèque \emph {sigsetopts} (voir page~\pageref {sigsetopts}).
 
 Cette primitive renvoie 0 en cas d'opération réussie, ou -1 en cas
 d'erreur.
@@ -2309,7 +2315,7 @@ l'appel à \texttt {sigprocmask}).  Si ce paramètre est nul, rien n'est
 recopié.
 
 Les objets de type \texttt {sigset\_t} sont manipulés avec les fonctions de
-librairie \emph {sigsetopts}.
+bibliothèque \emph {sigsetopts}.
 
 Cette primitive renvoie 0 en cas d'opération réussie, ou -1 en cas
 d'erreur.
@@ -2353,7 +2359,7 @@ La zone pointée par \texttt {signaux} est remplie avec les signaux bloqués
 en attente.
 
 Les objets de type \texttt {sigset\_t} sont manipulés avec les fonctions de
-librairie \emph {sigsetopts}.
+bibliothèque \emph {sigsetopts}.
 
 Cette primitive renvoie 0 en cas d'opération réussie, ou -1 en cas
 d'erreur.
@@ -2381,7 +2387,7 @@ est terminée, le masque de signaux est alors remis à sa valeur
 antérieure.
 
 Les objets de type \texttt {sigset\_t} sont manipulés avec les fonctions de
-librairie \emph {sigsetopts}.
+bibliothèque \emph {sigsetopts}.
 
 Cette primitive renvoie toujours -1 pour indiquer une opération
 interrompue par l'arrivée d'un signal.
@@ -2799,7 +2805,7 @@ réussi, ou -1 en cas d'erreur.
 
 Les ajouts de l'Université de Berkeley dans le domaine du
 réseau sont, pour le programmeur, de nouvelles primitives
-systèmes et de nouvelles fonctions de librairie. Ces nouvelles
+systèmes et de nouvelles fonctions de bibliothèque. Ces nouvelles
 primitives sont décrites ci-après.
 
 \section* {Erreurs}
@@ -3551,6 +3557,7 @@ réussie, ou -1 en cas d'erreur.
 \separation
 \primitive {shmget} --- retourne l'identificateur d'un segment de mémoire partagée
     \index{\texttt {shmget}}
+    \label {shmget}
 
 \begin {quote}
 \begin {verbatim}
@@ -3758,6 +3765,103 @@ d'opérations réussies, ou -1 en cas d'erreur.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Mémoire partagée POSIX
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section {Mémoire partagée POSIX}
+
+Les fonctions de gestion de mémoire partagée ci-après font partie d'une
+extension «~temps réel~» de la norme POSIX. À ce titre, elles
+ne sont pas forcément disponibles sur tous les systèmes et peuvent
+nécessiter une option spécifique de compilation ou d'édition de liens
+(\verb|-lrt| par exemple sur Linux). Pour une portabilité maximale et
+des fonctions largement répandues, on privilégiera en pratique les
+IPC System V (voir \texttt {shmget}, page~\pageref {shmget}) même si
+elles sont moins faciles d'utilisation.
+
+
+
+\separation
+\primitive {shm\_open} --- ouvre (et crée éventuellement) un objet de mémoire partagée
+    \index{\texttt {shm\_open}}
+
+\begin {quote}
+\begin {verbatim}
+#include <sys/mman.h>
+
+int shm_open (const char *chemin, int flags, mode_t mode)
+\end{verbatim}
+\end {quote}
+
+Cette fonction ouvre (avec création préalable éventuellement)
+un objet de mémoire partagée dont le nom est spécifié par \texttt
+{chemin} et retourne un descripteur analogue à un descripteur de
+fichier.
+
+Un objet de mémoire partagée est repéré par un chemin.  Certains
+systèmes implémentent les objets de mémoire partagée comme des
+fichiers dans le système de fichiers (les objets de mémoire partagée
+sont alors visibles), mais ce n'est pas forcément toujours le cas. Si
+le chemin commence par le caractère «~\texttt {/}~», l'objet sera
+le même pour tous les processus accédant à ce chemin. Pour cela, il
+est suggéré d'utiliser des chemins de la forme «~\texttt {/}\textit
+{nom}~» où \textit {nom} ne contient pas de caractère «~\texttt {/}~»
+(exemple~: \verb|"/toto"|).
+
+Le descripteur de fichier retourné par \texttt {shm\_open} sert à
+la fois avec \texttt {ftruncate} (voir page~\pageref {ftruncate}) pour
+spécifier la quantité de données de l'objet de mémoire partagée,
+et avec \texttt {mmap} (voir page~\pageref {mmap}) pour réaliser
+l'attachement de l'objet en mémoire.
+
+L'ouverture de l'objet de mémoire partagée est spécifiée avec le
+paramètre \texttt {flags} contenant un sous-ensemble compatible avec
+\texttt {open}~:
+
+\begin {itemize}
+    \item \texttt {O\_RDONLY}~: ouverture en lecture seulement,
+    \item \texttt {O\_RDWR}~: ouverture en lecture et écriture,
+    \item \texttt {O\_CREAT}~: l'objet est créé s'il n'existait pas
+	(dans ce cas, le mode est initialisé à partir du paramètre
+	\texttt {mode}),
+    \item \texttt {O\_EXCL}~: si \texttt {O\_EXCL} et \texttt {O\_CREAT}
+	sont spécifiés, \texttt {shm\_open} échoue si l'objet existe,
+    \item \texttt {O\_TRUNC}~: si l'objet existe, sa taille est remise à 0,
+\end {itemize}
+
+L'objet de mémoire partagée (avec ses données) reste jusqu'à ce
+qu'il soit supprimé (voir \texttt {shm\_unlink}) ou jusqu'à ce que
+plus aucun processus ne le référence.
+
+Cette primitive renvoie le descripteur
+(non négatif) en cas d'ouverture
+réussie, ou -1 en cas d'erreur.
+
+
+\separation
+\primitive {shm\_unlink} --- supprime un objet de mémoire partagée
+    \index{\texttt {shm\_unlink}}
+
+\begin {quote}
+\begin {verbatim}
+#include <sys/mman.h>
+
+int shm_unlink (const char *chemin)
+\end{verbatim}
+\end {quote}
+
+Cette fonction ordonne la destruction de l'objet de mémoire partagée
+référencé par le paramètre \texttt {chemin}. Comme pour les fichiers,
+l'objet ne peut plus être réouvert, mais il reste utilisable par tous
+les processus y accédant déjà.
+
+Cette primitive retourne 0 en cas de réussite
+et -1 en cas d'erreur.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Divers
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -3781,14 +3885,14 @@ du nom du système.
 \begin {verbatim}
 #include <sys/acct.h>
 
-int acct (const char *nom)
+int acct (const char *chemin)
 \end{verbatim}
 \end {quote}
 
 La primitive \texttt {acct} valide ou invalide la
 surveillance des processus (\textit {process
 accounting}). Si la surveillance est validée, une
-ligne sera écrite dans le fichier \texttt {nom} chaque
+ligne sera écrite dans le fichier \texttt {chemin} chaque
 fois qu'un processus se terminera.
 
 Il faut être super utilisateur pour utiliser cet
@@ -3822,7 +3926,7 @@ soit une adresse valide dans l'espace de données usager.
 La primitive \texttt {sbrk} ajoute \texttt {incrément} octets à la taille du
 segment de données.
 
-La fonction \texttt {malloc} de la librairie standard réalise une allocation
+La fonction \texttt {malloc} de la bibliothèque standard réalise une allocation
 d'espace de manière plus souple pour le programmeur.
 
 En cas de réussite, \texttt {brk} renvoie 0 et \texttt {sbrk} l'ancienne adresse
@@ -3841,12 +3945,12 @@ renvoyée.
 #include <mknod.h>
 #include <sys/stat.h>
 
-int mknod (const char *nom, int mode, dev_t peripherique)
+int mknod (const char *chemin, int mode, dev_t peripherique)
 \end{verbatim}
 \end {quote}
 
 La primitive \texttt {mknod} crée un nouveau fichier de
-nom \texttt {nom}. Le mode du fichier (son type et ses
+nom \texttt {chemin}. Le mode du fichier (son type et ses
 protections) est initialisé avec \texttt {mode}. Les
 différents bits constituant \texttt {mode} sont~:
 
@@ -4167,12 +4271,12 @@ cas de réussite, ou -1 en cas d'erreur.
 \begin {verbatim}
 #include <utime.h>
 
-int utime (const char *nom, const struct utimbuf *buf)
+int utime (const char *chemin, const struct utimbuf *buf)
 \end{verbatim}
 \end {quote}
 
 La primitive \texttt {utime} modifie les dates d'accès
-et de modification d'un fichier de nom \texttt {nom}.
+et de modification d'un fichier de nom \texttt {chemin}.
 
 Si \texttt {buf} est une adresse nulle, ces dates sont
 mises à la date courante. Un processus doit être
@@ -4199,12 +4303,12 @@ Cette primitive renvoie 0 si la modification a
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%% LES FONCTIONS DE LA LIBRAIRIE
+%%%%%%%%%%%%% LES FONCTIONS DE LA bibliothèque
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \cleardoublepage
 
-\chapter {Les fonctions de la librairie standard}
+\chapter {Les fonctions de la bibliothèque standard}
 
 
 Le langage C ne définit que le langage proprement dit. Ceci
@@ -4212,13 +4316,13 @@ permet une plus grande souplesse dans le traitement des
 entrées/sorties et dans l'interface avec le système.
 
 Pour accéder au système ou à certaines caractéristiques
-intéressantes, l'utilisateur dispose de librairies. Le
+intéressantes, l'utilisateur dispose de bibliothèque. Le
 système UNIX en comprend de nombreuses, depuis la gestion de
 la vidéo jusqu'aux fonctions mathématiques, en passant par
-les librairies spécialisées pour tel ou tel outil.
+les bibliothèque spécialisées pour tel ou tel outil.
 
-Cependant, une librairie est distinguée. Il s'agit de la
-\emph {librairie standard}, ou encore \emph {librairie C}. L'éditeur
+Cependant, une bibliothèque est distinguée. Il s'agit de la
+\emph {bibliothèque standard}, ou encore \emph {bibliothèque C}. L'éditeur
 de liens la cherche automatiquement.
 
 Ses fonctions peuvent être classées en grandes catégories~:
@@ -4250,7 +4354,7 @@ l'inclusion du fichier \emph {stdio.h}. Un fichier sous UNIX est
 une suite ininterrompue de caractères. L'accès est aussi
 bien séquentiel qu'aléatoire.
 
-Les fonctions de la librairie sont implémentées de manière
+Les fonctions de la bibliothèque sont implémentées de manière
 sûre et efficace. Il ne faut pas hésiter à les utiliser
 quand c'est possible.
 
@@ -4335,13 +4439,13 @@ la primitive système.
 \begin {verbatim}
 #include <stdio.h>
 
-FILE *fopen (const char *nom, const char *mode)
-FILE *freopen (const char *nom, const char *mode, FILE *flux)
+FILE *fopen (const char *chemin, const char *mode)
+FILE *freopen (const char *chemin, const char *mode, FILE *flux)
 FILE *fdopen (int descripteur, const char *mode)
 \end{verbatim}
 \end {quote}
 
-La fonction \texttt {fopen} ouvre le fichier \texttt {nom} suivant le
+La fonction \texttt {fopen} ouvre le fichier \texttt {chemin} suivant le
 mode sélectionné par \texttt {mode}, qui peut être~: \par
 \texttt {r  }: ouverture en lecture \\
 \texttt {w  }: effacement et ouverture en écriture \\
@@ -4506,7 +4610,7 @@ rencontrée sans qu'aucun caractère n'ait été lu.
 \begin {verbatim}
 #include <dirent.h>
 
-DIR *opendir (const char *nom)
+DIR *opendir (const char *chemin)
 struct dirent *readdir (DIR *dp)
 long int telldir (DIR *dp)
 void seekdir (DIR *dp, long offset)
@@ -4515,7 +4619,8 @@ int closedir (DIR *dp)
 \end{verbatim}
 \end {quote}
 
-La fonction \texttt {opendir} ouvre un répertoire identifié par son nom, et
+La fonction \texttt {opendir} ouvre un répertoire identifié par son
+chemin, et
 renvoie un descripteur utilisable dans les autres fonctions. Le résultat
 est \texttt {NULL} si le répertoire ne peut être ouvert.
 
@@ -4532,7 +4637,7 @@ contient les champs suivants~:
 Note~: certaines implémentations comportent un champ \texttt {d\_type}
 indiquant le type (fichier, répertoire, etc.) de l'entrée. Ce champ
 n'est pas spécifié par POSIX, aussi son utilisation est \textbf
-{déconseillée} pour obtenir des programmes portables. On utilisera à
+{à proscrire} pour obtenir des programmes portables. On utilisera à
 la place la primitive \texttt {stat} (voir page~\pageref {stat}).
 
 Le résultat est \texttt {NULL} en cas d'erreur ou lorsque la fin du
@@ -6139,7 +6244,7 @@ char *getcwd (char *buffer, size_t taille)
 \end{verbatim}
 \end {quote}
 
-La fonction \texttt {getcwd} calcule le nom du répertoire courant et le
+La fonction \texttt {getcwd} calcule le chemin du répertoire courant et le
 place dans le tableau de caractères (déclaré par l'appelant). La
 fonction \texttt {getcwd} n'essayera pas de placer plus de \texttt {taille}
 caractères dans ce tableau.
@@ -6273,7 +6378,7 @@ appel.
 \begin {verbatim}
 #include <sys/stat.h>
 
-int mkfifo (const char *nom, mode_t mode)
+int mkfifo (const char *chemin, mode_t mode)
 \end{verbatim}
 \end {quote}
 
@@ -6336,7 +6441,7 @@ extern int errno ;
 
 Lorsqu'une erreur survient dans un appel système (les
 appels systèmes sont utilisés par les fonctions de la
-librairie), la variable externe \texttt {errno} est initialisée avec
+bibliothèque), la variable externe \texttt {errno} est initialisée avec
 le numéro de l'erreur.
 
 La fonction \texttt {perror} affiche sur la sortie d'erreur standard le
