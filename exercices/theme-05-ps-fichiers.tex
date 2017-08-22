@@ -171,6 +171,32 @@ fichiers originaux.
 
 \question
 
+Rédigez un programme pour afficher tous les noms des fichiers d'une
+arborescence dont le contenu comprend une chaîne de caractères. Votre
+programme doit admettre la syntaxe suivante :
+
+\begin {quote}
+\texttt {chercher \emph {chaine répertoire}}
+\end {quote}
+
+Par exemple «~\verb|chercher "struct utimbuf" /usr/include|~»
+doit afficher :
+
+\begin {quote}
+\begin {verbatim}
+/usr/include/utime.h
+/usr/include/linux/utime.h
+....
+\end{verbatim}
+\end {quote}
+
+Vous utiliserez les primitives systèmes pour rechercher la chaîne dans
+chaque fichier, en utilisant une méthode efficace (i.e. pas une lecture
+octet par octet). Pour afficher le nom de chaque fichier trouvé, vous
+pouvez utiliser la fonction de bibliothèque printf.
+
+\question
+
 Reprenez la fonction développée lors de l'exercice~\ref {getpath} pour écrire
 un programme {\tt which} afin de chercher où une commande est trouvée.
 Par exemple, ``{\tt which~ls}'' doit donner~: {\tt /bin/ls}.

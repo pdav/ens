@@ -144,6 +144,43 @@ l'une des commandes échoue (i.e. renvoie un code de retour non nul).
 
 \question
 
+Rédigez un programme qui prend en argument deux nombres $n$ et $m$.
+
+\begin {itemize}
+    \item Dans une première étape, votre programme doit générer
+	$n$ processus fils. Chaque processus fils $i$ (avec $1 \leq
+	i \leq n$) doit générer un nombre aléatoire $a_i$ (avec la
+	fonction de bibliothèque \texttt {rand}) compris entre 1 et $m$,
+	bornes incluses, attendre (avec la fonction de bibliothèque
+	\texttt {sleep}) $a_i$ secondes, puis se terminer avec un code de
+	retour égal à $a_i$.
+
+    \item Dans une deuxième étape, votre programme doit attendre la
+	terminaison des $n$ processus fils et récupérer les différentes
+	valeurs $a_i$ retournées.
+
+    \item Dans une troisième étape, votre programme doit générer un
+	nouveau processus pour exécuter la commande \texttt {expr}
+	(\texttt {/usr/bin/expr}) en lui passant en arguments $a_1$,
+	puis \texttt {+}, puis $a_2$ , puis \texttt {+}, etc jusqu'à
+	$a_n$, soit $2n-1$ arguments en plus de \texttt {expr} (ex:
+	\verb*|expr 1 + 7 + 2 + 3|), et en redirigeant la sortie
+	standard de cette commande vers un fichier de nom \texttt {toto}.
+
+    \item Enfin, dans une quatrième et dernière étape, votre programme
+	attend la terminaison de ce dernier processus, puis lit le
+	fichier \texttt {toto} et affiche son contenu.
+
+\end {itemize}
+
+Bien sûr, vous n'utiliserez dans votre programme que des primitives
+systèmes (à l'exception de \texttt {rand} et \texttt {sleep}, ou des
+fonctions de manipulation de chaînes de caractères comme \texttt {atoi}
+ou \texttt {snprintf}).
+
+
+\question
+
 Écrivez un programme C équivalent au script shell suivant, qui prend
 en argument un nom d'utilisateur :
 

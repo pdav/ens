@@ -22,8 +22,8 @@ THEMES = \
 	theme-05-ps-fichiers.tex \
 	theme-06-ps-proc.tex \
 	theme-07-ps-envproc.tex \
-	theme-08-ps-signaux.tex \
-	theme-09-ps-tubes.tex \
+	theme-08-ps-tubes.tex \
+	theme-09-ps-signaux.tex \
 	theme-10-ps-mem.tex \
 	theme-11-ps-ipc-sysv.tex msg.pdf \
 	theme-12-threads.tex \

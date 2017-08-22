@@ -129,16 +129,20 @@ qu'il peut passer au bit suivant.
 	Cette fonction envoie les 8 bits constituant un octet au
 	processus désigné.
 
-    \item \verb:void preparer_reception (pid_t emetteur):
+    \item \verb:void preparer_reception (void):
 
 	Cette fonction prépare le récepteur à recevoir un octet.
 
-    \item \verb:void int recevoir (void):
+    \item \verb:int recevoir (pid_t emetteur):
 
 	Cette fonction attend que suffisamment de bits soient reçus
 	pour constituer un octet,  et renvoie alors la valeur reçue.
 
 \end {enumerate}
+
+Rédigez un programme de test dans lequel le processus père envoie
+une valeur (passée en argument du programme) et le fils affiche la
+valeur reçue.
 
 
 \question
