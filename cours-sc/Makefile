@@ -94,6 +94,7 @@ FIGapi = \
 LSTapi = \
 	inc2-api/ipc-msg.c \
 	inc2-api/ipc-shm.c \
+	inc2-api/thr.c \
 
 ##############################################################################
 # Exclusion mutuelle
