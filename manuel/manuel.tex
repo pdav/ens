@@ -29,26 +29,12 @@
 
 \documentclass [twoside] {report}
     \usepackage {makeidx}
-
-    \usepackage [francais] {babel}
-    \usepackage [utf8] {inputenc}
-    \usepackage [T1] {fontenc}
-    \usepackage {times}
+    \usepackage {tdpda}
     \renewcommand {\ttdefault}{cmtt}
-    \usepackage [a4paper, margin=20mm] {geometry}
-    \usepackage {hyperref}
-    \usepackage {graphicx}
-
-    \raggedbottom	% par défaut, babel aligne les bas de page. Pas bôôôôô !
-
-    \setlength {\parskip} {2mm}
-    \setlength {\parindent} {0mm}
-
     \makeindex
     \renewcommand {\arraystretch} {1.1}
 
     \newcommand {\tassertoc} {{ \setlength {\parskip} {0cm} \tableofcontents }}
-
 
     \newcommand {\primitive} [1]
     {
