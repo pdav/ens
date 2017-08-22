@@ -1177,10 +1177,10 @@ souhaité, par une combinaison des bits suivants~:
 
 \begin {quote}
     \begin {tabular} {|ll|} \hline
-	\texttt {PROT\_NONE} aucun accès autorisé \\
-	\texttt {PROT\_READ} accès en lecture \\
-	\texttt {PROT\_WRITE} accès en écriture \\
-	\texttt {PROT\_EXEC} accès en exécution \\
+	\texttt {PROT\_NONE} & aucun accès autorisé \\
+	\texttt {PROT\_READ} & accès en lecture \\
+	\texttt {PROT\_WRITE} & accès en écriture \\
+	\texttt {PROT\_EXEC} & accès en exécution \\
 	\hline
     \end {tabular}
 \end {quote}
@@ -1420,13 +1420,12 @@ résume les 6 possibilités~:
 	\multicolumn {1}{|c|}{passage environnement} &
 	\multicolumn {1}{|c|}{recherche PATH} \\
 	\hline
-	\hline
-	execl	&    liste	& automatique &  non \\
-	execv	&  vecteur	& automatique &  non \\
-	execle	&    liste	&      manuel &  non \\
-	execve	&  vecteur	&      manuel &  non \\
-	execlp	&    liste	& automatique &  oui \\
-	execvp	&  vecteur	& automatique &  oui \\
+	\texttt {execl}		&    liste	& automatique &  non \\
+	\texttt {execv}		&  vecteur	& automatique &  non \\
+	\texttt {execle}	&    liste	&      manuel &  non \\
+	\texttt {execve}	&  vecteur	&      manuel &  non \\
+	\texttt {execlp}	&    liste	& automatique &  oui \\
+	\texttt {execvp}	&  vecteur	& automatique &  oui \\
 	\hline
     \end {tabular}
 \end {center}
