@@ -3784,10 +3784,13 @@ un objet de mémoire partagée dont le nom est spécifié par \texttt
 fichier.
 
 Un objet de mémoire partagée est repéré par un chemin.  Certains
-systèmes implémentent les objets de mémoire partagée comme des
-fichiers dans le système de fichiers (les objets de mémoire partagée
-sont alors visibles), mais ce n'est pas forcément toujours le cas. Si
-le chemin commence par le caractère «~\texttt {/}~», l'objet sera
+systèmes implémentent les objets de mémoire partagée comme
+des fichiers dans le système de fichiers (les objets de mémoire
+partagée sont alors visibles), mais ce n'est pas forcément toujours
+le cas\footnote {Par exemple, Linux représente les objets de mémoire
+partagée comme des fichiers dans \texttt {/dev/shm/}, alors que
+l'implémentation de FreeBSD ne fait pas une telle correspondance.}.
+Si le chemin commence par le caractère «~\texttt {/}~», l'objet sera
 le même pour tous les processus accédant à ce chemin. Pour cela, il
 est suggéré d'utiliser des chemins de la forme «~\texttt {/}\textit
 {nom}~» où \textit {nom} ne contient pas de caractère «~\texttt {/}~»
