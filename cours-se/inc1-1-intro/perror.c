@@ -7,7 +7,7 @@ void perror (const char *msg)
 	    fprintf (stderr, "Operation not permitted\n") ;
 	    break ;
 	case ENOENT :
-	    fprintf (stderr, "No such file or directory") ;
+	    fprintf (stderr, "No such file or directory\n") ;
 	    break ;
 	...
     }

@@ -544,7 +544,6 @@
 		    & date de dernière modification des données \\
 		\code {st\_ctime}
 		    & date de dernière modification des attributs \\
-		\hline
 	    }
 	\item d'autres attributs sont dans cette structure
 	\item ... mais pas tous (localisation des données sur le disque
@@ -847,14 +846,13 @@
 
 	\item nouvelle primitive système BSD : \code {\alert {getdirentries}}
 	    \begin {itemize}
-		\item non normalisée par POSIX
+		\item non normalisée par POSIX \implique ne pas utiliser
 	    \end {itemize}
 	
 	\item BSD propose de nouvelles fonctions de bibliothèque :
 	    \begin {itemize}
 		\item \code {opendir}, \code {readdir}, \code {closedir}
-		\item normalisées par POSIX
-		\item \implique à utiliser !
+		\item normalisées par POSIX \implique \textbf {à utiliser} !
 	    \end {itemize}
 
 	\item nouveaux systèmes de fichiers
