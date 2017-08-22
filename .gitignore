@@ -16,3 +16,4 @@
 *.vrb
 # Vim intermediate files
 .*.swp
+*/ignore.tex
