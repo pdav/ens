@@ -86,14 +86,20 @@ au fichier (ouverture, écriture, fermeture) dans les fonctions associées
 aux signaux.  Vous utiliserez les primitives POSIX, en veillant à ce
 que les traitements des deux signaux n'interfèrent pas.
 
-\clearpage
-
 
 \question
 
 Reprenez l'exercice précédent en appliquant cette fois-ci les règles
 de bon usage des signaux, c'est-à-dire en réalisant le minimum
 d'opérations dans les fonctions associées aux signaux.
+
+
+\question
+
+Écrivez un programme qui lance une commande chaque seconde en vous aidant
+du signal \texttt {SIGALRM}. Vous ferez en sorte d'éviter les processus
+«~\textit {zombies}~», en vous aidant du signal \texttt {SIGCHLD}.
+Vous utiliserez les signaux POSIX.
 
 
 \question

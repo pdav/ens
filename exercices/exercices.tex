@@ -29,7 +29,7 @@
     \usepackage [francais] {babel}
     \usepackage [utf8] {inputenc}
     \usepackage [T1] {fontenc}
-    \usepackage {times}
+    \usepackage {palatino}
     \renewcommand {\ttdefault}{cmtt}
     \usepackage [a4paper, margin=20mm] {geometry}
     \usepackage {hyperref}
@@ -37,7 +37,7 @@
 
     \raggedbottom	% par défaut, babel aligne les bas de page. Pas bôôôôô !
 
-    \setlength {\parskip} {3mm}
+    \setlength {\parskip} {2mm}
     \setlength {\parindent} {0mm}
 
     \renewcommand {\arraystretch} {1.1}
@@ -94,20 +94,9 @@
         \bigskip
         {\Large\bf Exercice \thequestion} % {\Large\bf Question \thequestion}
         \nopagebreak
-        \bigskip
-
+        \medskip
         \nopagebreak
     }
-
-    \newcommand {\examen} [2]
-    {
-	\chapitresanstitre {Examen : #2}
-	\input {#1}
-    }
-
-    \newcounter {tp}
-    \newcounter {exercice} [tp]
-    \renewcommand {\theexercice} {\arabic{tp}.\arabic {exercice}}
 
     \newcommand {\fig} [1]
     {

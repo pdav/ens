@@ -57,10 +57,8 @@ Programmez les fonctions~:
 \begin {quote}
 \begin {verbatim}
     int ouvrir (key_t clef)
-    int envoyer (int msqid, int moi, int lui,
-                        void *message, size_t taille)
-    int recevoir (int msqid, int moi, int *lui,
-                        void *message, size_t *taille)
+    int envoyer (int msqid, int moi, int lui, void *message, size_t taille)
+    int recevoir (int msqid, int moi, int *lui, void *message, size_t *taille)
 \end{verbatim}
 \end {quote}
 
@@ -148,8 +146,9 @@ placée au début de la zone des messages.
 L'en-tête contient la taille de la zone des messages, les références au
 premier message et au dernier message.
 
-% \fig {msg} {Segment de mémoire partagée}
-\fig {msg}
+\begin {center}
+    \includegraphics [height=30mm] {msg}
+\end {center}
 
 Par convention, le groupe de sémaphores a une clef égale à la
 clef du segment de mémoire partagée + 1. Il contient~:
