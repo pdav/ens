@@ -95,12 +95,12 @@
 
 \cleardoublepage
 
-\chapter {Les appels système}
+\chapter {Les primitives système}
 
 
-L'accès aux services du système Unix est réalisée
-au moyen des \textit {appels système}, encore appelés
-\textit {primitives système}.
+L'accès aux services du système Unix est réalisé
+au moyen des \textit {primitives système}, encore appelées
+\textit {appels système}.
 
 Ces primitives sont l'outil de plus bas niveau
 dont dispose le programmeur. Quand cela est
@@ -109,7 +109,7 @@ les fonctions de la bibliothèque standard.
 
 
 La liste ci-dessous donne une classification de
-ces appels par catégorie. Ce sont~:
+ces primitives par catégorie. Ce sont~:
 
 \begin {itemize}
     \item les numéros d'erreur (catégorie spéciale),
@@ -124,7 +124,7 @@ ces appels par catégorie. Ce sont~:
 \end {itemize}
 
 Cette classification ne prétend pas être
-rigoureuse. Certains appels auraient pu être dans
+rigoureuse. Certains primitives auraient pu être dans
 plusieurs catégories, il a bien fallu choisir.
 D'autre part, cette liste n'est pas exhaustive,
 mais elle donne néanmoins toutes les primitives
@@ -165,8 +165,8 @@ bibliothèque standard.
 
 La liste suivante est la description
 des principales erreurs pouvant intervenir. Il faut noter que
-la variable \texttt {errno} n'est pas remise à 0 avant un
-appel système. Ceci implique donc que sa valeur ne
+la variable \texttt {errno} n'est pas remise à 0 avant une
+primitive système. Ceci implique donc que sa valeur ne
 doit être testée que si l'appel signale une
 erreur au moyen de la valeur de retour.
 
@@ -187,8 +187,8 @@ n'est pas accessible.
 \texttt {EINTR}~: Interrupted system call \\
 Un signal asynchrone (interruption de
 l'utilisateur par exemple) traité par
-l'utilisateur est arrivé pendant un appel système.
-Si l'exécution reprend après l'appel système, la
+l'utilisateur est arrivé pendant une primitive système.
+Si l'exécution reprend après la primitive système, la
 valeur de retour indiquera une erreur.
 
 \texttt {EIO}~: I/O error \\
@@ -259,13 +259,13 @@ Survient lorsqu'un lien est demandé entre deux
 systèmes de fichiers.
 
 \texttt {ENODEV}~: No such device \\
-Survient lorsqu'un appel système est inapproprié
+Survient lorsqu'une primitive système est inappropriée
 au périphérique, comme par exemple une lecture sur
 un périphérique en écriture seulement.
 
 \texttt {ENOTDIR}~: Not a directory \\
 Survient lorsqu'un répertoire est nécessaire et
-n'est pas fourni à l'appel système, comme par
+n'est pas fourni à la primitive système, comme par
 exemple un argument à \texttt {chdir}.
 
 \texttt {EISDIR}~: Is a directory \\
@@ -1305,7 +1305,7 @@ départ des chemins absolus. Le répertoire courant
 n'est pas affecté par cette opération.
 
 L'utilisateur \emph {effectif} doit être le super
-utilisateur pour pouvoir utiliser cet appel.
+utilisateur pour pouvoir utiliser cette primitive.
 
 Cette primitive renvoie 0 en cas de changement
 réussi, ou -1 en cas d'erreur.
@@ -3881,10 +3881,10 @@ accounting}). Si la surveillance est validée, une
 ligne sera écrite dans le fichier \texttt {chemin} chaque
 fois qu'un processus se terminera.
 
-Il faut être super utilisateur pour utiliser cet
-appel.
+Il faut être super utilisateur pour utiliser cette
+primitive.
 
-Cette primitive renvoie 0 en cas de réussite, ou
+Elle renvoie 0 en cas de réussite, ou
 -1 en cas d'erreur.
 
 
@@ -4007,7 +4007,7 @@ déterminer le mot à incrémenter.
 Une \texttt {échelle} nulle ou égale à 1 invalide la
 mesure.
 
-L'appel \texttt {profil} est (presque ?) exclusivement
+La primitive \texttt {profil} est (presque ?) exclusivement
 utilisée par l'option \texttt {-p} du compilateur \texttt {cc}.
 
 
@@ -4410,8 +4410,8 @@ La fonction \texttt {clearerr} efface les indicateurs de fin de
 fichier ou d'erreur associés au flux \texttt {flux}.
 
 La fonction \texttt {fileno} renvoie le numéro du descripteur de
-fichier qui est associé au flux \texttt {flux} pour utiliser un
-appel système. Attention à utiliser \texttt {fflush} avant d'appeler
+fichier qui est associé au flux \texttt {flux} pour utiliser une
+primitive système. Attention à utiliser \texttt {fflush} avant d'appeler
 la primitive système.
 
 
@@ -5448,7 +5448,7 @@ Sun Sep 16 01:03:52 1973\n\0
 \end{verbatim}
 \end {quote}
 L'argument de \texttt {ctime} est la valeur de l'horloge telle
-que renvoyée par l'appel système \texttt {time}. Le plus simple est
+que renvoyée par la primitive système \texttt {time}. Le plus simple est
 habituellement de procéder comme suit~:
 
 \begin {quote}
@@ -6425,8 +6425,8 @@ extern int errno ;
 \end{verbatim}
 \end {quote}
 
-Lorsqu'une erreur survient dans un appel système (les
-appels systèmes sont utilisés par les fonctions de la
+Lorsqu'une erreur survient dans une primitive système (les
+primitives systèmes peuvent être utilisées par les fonctions de la
 bibliothèque), la variable externe \texttt {errno} est initialisée avec
 le numéro de l'erreur.
 
