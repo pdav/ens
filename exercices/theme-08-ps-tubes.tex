@@ -49,8 +49,11 @@ ci-dessus.
 
 Écrivez un programme qui crée deux processus fils, redirige les
 entrées/sorties et appelle la fonction execlp, pour faire l'équivalent
-de ce que fait le shell lorsqu'on tape la commande~: {\tt ps eaux |
-grep "\^{ }<nom>" | wc -l}.
+de ce que fait le shell lorsqu'on tape la commande~:
+
+\begin {quote}
+    \texttt {ps eaux | grep "\^{ }<nom>" | wc -l}
+\end {quote}
 
 Le nom sera donné par l'utilisateur en argument du programme, ou
 prendra la valeur de la variable d'environnement {\tt USER} par défaut.
