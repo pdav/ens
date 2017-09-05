@@ -29,30 +29,12 @@
     \setkeys {Gin} {keepaspectratio}	% par défaut : conserver les proportions
 
     % Définition des marges
-%    \usepackage {geometry}
     \usepackage [margin=25mm, foot=15mm] {geometry}
-%    \geometry {
-%      left=25mm,
-%      right=25mm,
-%      top=25mm,
-%      bottom=25mm,
-%      foot=15mm
-%    }
 
     \parskip=2mm
     \parindent=0mm
 
     \pagestyle {plain}
-
-    \newcounter {regle}
-    \newenvironment {regle} {
-	\refstepcounter {regle}
-	\begin {quote}
-	Règle \theregle :
-	\em
-    } {
-	\end {quote}
-    }
 
 \begin{document}
 
