@@ -11,7 +11,7 @@ rapport.pdf: rapport.tex rapport.bib $(FIGS)
 	pdflatex rapport
 
 # pour reconstruire le fichier entonnoir.pdf (pas necessaire normalement)
-entonnoir.pdf: entoinnoir.fig
+entonnoir.pdf: entonnoir.fig
 	fig2dev -L pdf entonnoir.fig entonnoir.pdf
 
 clean:
