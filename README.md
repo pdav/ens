@@ -1,9 +1,9 @@
 Supports de cours de systèmes d'exploitation de Pierre David
 ============================================================
 
-Bienvenue sur cette page qui regroupe mes supports de cours de **systèmes
-d'exploitation** et **systèmes concurrents** en licence d'informatique
-à l'université de Strasbourg (France).
+Bienvenue sur cette page qui regroupe mes divers supports de cours
+(notamment de **systèmes d'exploitation** et **systèmes concurrents**
+en licence d'informatique) à l'université de Strasbourg (France).
 
 
 Licence
@@ -65,6 +65,7 @@ trouverez dans les liens suivants :
 | [cours-se1.pdf](http://dpt-info.u-strasbg.fr/~pda/cours-se1.pdf) | transparents du cours de systèmes d'exploitation de L2S4 (partie 1 : utilisation des primitives systèmes) |
 | [cours-se2.pdf](http://dpt-info.u-strasbg.fr/~pda/cours-se2.pdf) | transparents du cours de systèmes d'exploitation de L2S4 (partie 2 : le noyau) |
 | [cours-sc.pdf](http://dpt-info.u-strasbg.fr/~pda/cours-sc.pdf) | transparents du cours de systèmes concurrents en L3S5 |
+| [memoire.pdf](http://dpt-info.u-strasbg.fr/~pda/memoire.pdf) | conseils pour faire un bon mémoire de stage |
 
 
 Sources LaTeX
