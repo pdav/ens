@@ -1,3 +1,6 @@
+% Pour vérifier qu'on écrit du LaTeX moderne
+% \RequirePackage [orthodox] {nag}
+
 \documentclass [twoside,openright,a4paper,11pt,french] {report}
 
     % Règles de typographie françaises
@@ -15,13 +18,13 @@
     % pour \EUR
     \usepackage {marvosym}
 
-    \usepackage{emptypage}
+    % \usepackage {emptypage}
 
     % Utilisation de tableaux
     \usepackage {tabularx}
 
     % Utilisation d'url
-    \usepackage {url}
+    \usepackage {hyperref}
     \urlstyle {sf}
 
     % Utilisation d'images
@@ -45,21 +48,23 @@
 \thispagestyle{empty}
 
 \begin{center}
-    \includegraphics [width=10.1cm] {logo-ufr.pdf}       
+    % le ".1" est juste là pour montrer qu'on peut mettre des
+    % dimensions non entières...
+    \includegraphics [width=8.1cm] {logo-ufr.pdf}       
 
     \vfill\vfill
 
     {
 	\large
 	\textsc {
-	    Licencemaster 2 de Science, mention Informatique \\
+	    Licencemaster 4 de Science, mention Informatique \\
 	    spécialité Réseaux Informatiques et Systèmes Embarqués
 	}
     }
 
     \bigskip\bigskip
 
-    {\large Présenté par}
+    {\large Mémoire de stage présenté par}
 
     \medskip
 
@@ -67,11 +72,11 @@
     {\large Jacques \textsc {Sélère}}
 
     % Contact mail ou téléphone   
-    {\small \url{jselere@unistra.fr}}
+    {\small jselere@unistra.fr}
 
-    \vfill\vfill
+    \vfill
 
-    % Titre du stage
+    % Titre du stage : mettez un titre utile
     {
 	\huge
 	\textsc {
@@ -81,9 +86,9 @@
 	}
     }
 
-    \vfill\vfill
+    \vfill
 
-    {\large Encadré par}
+    {\large Stage encadré par}
 
     \medskip
 
@@ -105,15 +110,38 @@
 	\textsc {Société de propulsion aéroportée des escargots}
     }
 
-    \vfill\vfill\vfill
+    \bigskip
+    \bigskip
 
     % Logo de votre structure d'accueil
     \includegraphics [height=2.5cm] {logo-entreprise.pdf}       
 
+    % Supprimez le reste de cette page si vous vous servez de ce
+    % fichier source comme modèle
+    \vfill
+    \begin {center}
+	\tiny
+	\copyright Pierre David,
+	avec des contributions de 
+	Cristel Pelsser, Stéphane Cateloin et Vincent Loechner
+
+	Disponible sur \url {http://github.com/pdav/ens}.
+
+        Ce texte est placé sous licence « Creative Commons Attribution
+	-- Pas d’Utilisation Commerciale 4.0 International » \\
+	Pour accéder à une copie de cette licence,
+	merci de vous rendre à l'adresse suivante
+	\url {http://creativecommons.org/licenses/by-nc/4.0/}
+
+	\includegraphics [scale=.5] {by-nc}
+    \end {center}
+    % Supprimez jusqu'ici
+
+
 \end{center}
 
 % Page blanche au dos de la page de garde
-\cleardoublepage
+%\cleardoublepage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Table des matières
@@ -145,6 +173,10 @@ mémoire pour comprendre le contexte dans lequel vous avez évolué,
 et votre contribution (réalisation technique, travail scientifique ou
 autre) ainsi que son adéquation vis-à-vis de la formation.
 
+Il est rappelé que le plagiat est une sanctionné par la loi, par
+l'université et par vos rapporteurs : si les courtes citations sont
+autorisées, vous devez en donner la source.
+
 Ce document a pour but de rappeler les éléments attendus par le
 rapporteur pour évaluer votre travail. Il est de votre intérêt de
 fournir tous ces éléments.
@@ -165,7 +197,8 @@ forcément un chapitre en soi). Les enchaînements entre les chapitres
 et les sections doivent être compréhensibles.
 
 N'omettez pas la table des matières, et numérotez vos chapitres et
-vos sections (1, 1.1, 1.1.1, etc.), cela aide à se repérer.
+vos sections (1, 1.1, 1.1.1, etc.), cela aide à se repérer. Et bien
+évidemment, numérotez les pages, sinon ça ne sert à rien.
 
 \section {L'organisme d'accueil}
 
@@ -181,7 +214,7 @@ jusqu'à votre place en tant que stagiaire. Un organigramme peut aider
 
 \begin {figure} [htbp]
     \begin {center}
-	\includegraphics [width=.4\textwidth] {entonnoir.pdf}
+	\includegraphics [width=.35\textwidth] {entonnoir.pdf}
     \end {center}
     \label {fig:entonnoir}
     \caption {Description de l'organisme : du plus large jusqu'à vous.}
@@ -204,15 +237,16 @@ rapporteur (par exemple pour un stage réalisé dans le laboratoire
 ICube). L'exercice imposé est de présenter cette structure, et tous
 les stagiaires sont évalués sur ce critère, sans exception.
 
-\section {La mission}
+\section {La ou les missions}
     \label {sec:mission}
 
-En tant que stagiaire, vous avez une mission définie correspondant à
-la durée de votre stage. Décrivez cette mission, en la mettant en
-perspective par rapport aux besoins de l'organisme. De plus, donnez
-les contraintes particulières (financières, technique ou autres)
-ainsi que les objectifs à atteindre, qui permettront d'évaluer ou
-non la réussite du projet.
+En tant que stagiaire, vous avez une ou plusieurs missions définies
+correspondant à la durée de votre stage. Le rapporteur ne connaît
+vraisemblablement pas ces missions. Décrivez les, de préférence assez
+tôt dans le mémoire, en les mettant en perspective par rapport aux
+besoins de l'organisme. De plus, donnez les contraintes particulières
+(financières, technique ou autres) ainsi que les objectifs à atteindre,
+qui permettront d'évaluer ou non la réussite du projet.
 
 \section {Le contexte}
 
@@ -232,8 +266,9 @@ C'est la principale partie de votre mémoire : vous devez présenter votre
 contribution (réalisation logicielle, système informatique, état de
 l'art, méthode, algorithme, évaluation, etc.) de façon synthétique,
 sans sombrer dans les détails techniques mais en n'éludant pas les
-points concrets qui permettent au rapporteur d'avoir une vision la plus
-précise possible de ce que vous avez mis en {\oe}uvre.
+points concrets qui permettent au rapporteur d'avoir la vision la plus
+exacte possible de ce que vous avez mis en {\oe}uvre. Ne passez
+les difficultés auxquelles vous avez été confronté sous silence.
 
 Soyez précis et factuel : technologies, algorithmes ou méthodes
 employés, éléments quantitatifs permettant d'apprécier l'envergure
@@ -250,14 +285,15 @@ doivent être explicités et justifiés.
 \section {Votre bilan}
 
 Le stage complète votre formation : vous devez prendre du recul pour
-mettre en rapport votre stage avec les compétences aquises pendant
-votre formation, ainsi que présenter les compétences complémentaires
-(techniques et/ou personnelles) que vous avez aquises durant le stage.
+mettre en rapport votre stage avec les compétences aquises pendant votre
+formation, et présenter les compétences complémentaires (techniques,
+personnelles, comportementales, etc.) que vous avez aquises durant
+le stage.
 
-Le bilan doit montrer votre recul par rapport au stage : vous avez
-le droit (voire le devoir) de jeter un regard critique sur votre
-comportement, sur votre démarche, sur votre réalisation ou même sur
-le contexte ou l'organisme d'accueil.
+Le bilan doit montrer votre recul par rapport au stage : vous avez le
+droit (voire le devoir) de jeter un regard personnel et critique sur
+votre comportement, sur votre démarche, sur votre réalisation ou même
+sur le contexte ou l'organisme d'accueil.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -298,7 +334,7 @@ et plus spécifiquement la section~\ref {sec:mission}, page~\pageref
 \section {Les illustrations}
 
 Un petit dessin valant mieux qu'un grand discours, les schémas de
-principe sont souvent appréciés par le rapporteur, qui ne connaissent
+principe sont souvent appréciés par le rapporteur, qui ne connaît
 pas votre environnement. Quelques règles cependant sont à respecter :
 
 \begin {itemize}
@@ -316,6 +352,10 @@ pas votre environnement. Quelques règles cependant sont à respecter :
 	n'apportent rien à la compréhension de votre mémoire et ne font
 	que prendre de la place inutile que vous pourriez utiliser pour
 	mieux présenter votre contribution~;
+    \item privilégiez (sauf peut-être pour les photos) un format
+	«~vectoriel~» à un format «~bitmap~» : le bitmap prend
+	de la place, peut être lent à s'afficher ou à s'imprimer,
+	et ne permet pas de zoomer facilement~;
     \item vérifiez que vos figures sont lisibles lorsque vous imprimez
 	votre mémoire.
 \end {itemize}
@@ -326,6 +366,19 @@ le message véhiculé est souvent très succint, voire trop léger. Un
 fichier de configuration, une commande ou son résultat doivent être
 présentés, si c'est vraiment nécessaire, comme du texte et non comme
 une copie d'écran.
+
+\section {Le niveau de détail}
+
+Trouver le bon niveau de détail est souvent facilité par les contraintes
+qui vous sont imposées quant au nombre de pages. Cependant, même si
+vous avez la place, évitez les recopies de code ou de commandes sans
+Évitez de faire des erreurs dans les recopies, ne les modifiez pas dans
+le texte (sauf pour supprimer une sortie trop longue par exemple, dans
+ce cas remplacez la partie supprimée par «~[...]~»).  Évitez les codes
+trop longs dans le texte (utilisez des annexes si vous tenez absolument
+à intégrer du code).
+
+
 
 \section {La bibliographie}
 
@@ -350,9 +403,9 @@ retrouver les documents concernés~: auteur, titre du document ou de
 l'ouvrage, éditeur, année de publication, URL si nécessaire, date de
 consultation pour un site Web, etc.
 
-Chaque document dans la bibliographie comporte une référence
-(un numéro, une abbréviation ou autre), que vous pouvez citer dans le
-texte.
+Chaque document dans la bibliographie comporte une référence (un
+numéro, une abbréviation ou autre), que vous devez citer dans le texte :
+un document non cité ne devrait pas apparaître dans la bibliographie.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Conclusion
@@ -372,6 +425,6 @@ tout le travail que vous avez effectué durant votre stage !
 
 \cleardoublepage
 \bibliographystyle{plain}
-\bibliography{rapport}
+\bibliography{memoire}
 
 \end{document}
