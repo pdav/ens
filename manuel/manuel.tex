@@ -770,6 +770,7 @@ réussie ou -1 en cas d'erreur.
 \separation
 \primitive {lseek} --- déplace le pointeur de lecture/écriture d'un fichier
     \index{\texttt {lseek}}
+    \label {lseek}
 
 \begin {quote}
 \begin {verbatim}
@@ -781,7 +782,7 @@ off_t lseek (int desc, off_t deplacement, int apartir)
 
 La primitive \texttt {lseek} déplace le pointeur du
 fichier repéré par \texttt {desc} (obtenu par
-\texttt {open},\texttt {creat}, \texttt {dup}, \texttt {fctnl} ou \texttt {pipe}).
+\texttt {open}, \texttt {creat}, \texttt {dup}, \texttt {fctnl} ou \texttt {pipe}).
 Le déplacement est régi par par la valeur de
 \texttt {apartir}~:
 
@@ -1263,6 +1264,53 @@ ouvert et une zone de mémoire virtuelle établie par \texttt {mmap}.
 
 Cette primitive renvoie 0 en cas de suppression réussie, ou -1 en
 cas d'erreur.
+
+
+\separation
+\primitive {lockf} --- verrouillage de tout ou partie d'un fichier
+    \index{\texttt {lockf}}
+
+\begin {quote}
+\begin {verbatim}
+#include <unistd.h>
+
+int lockf (int desc, int action, off_t taille)
+\end{verbatim}
+\end {quote}
+
+La primitive \texttt {lockf} demande le verrouillage de tout ou partie
+d'un fichier. Le verrouillage est consultatif, c'est-à-dire qu'un
+accès au fichier ne sera jamais refusé, mais que toute tentative de
+verrouillage avec \texttt {lockf} par un autre processus sera bloquée.
+Le fichier concerné est repéré par \texttt {desc} (obtenu par \texttt
+{open}, \texttt {creat}, \texttt {dup}, \texttt {fctnl} ou \texttt {pipe}).
+Le paramètre \texttt {action} peut prendre l'une des valeurs suivantes~:
+
+\begin {quote}
+    \begin {tabular} {|ll|} \hline
+	\texttt {F\_LOCK} & verrouiller (en attendant si
+	    le fichier est actuellement verrouillé) \\
+	\texttt {F\_ULOCK} & déverrouiller \\
+	\texttt {F\_TEST} & tester si le verrouillage est actif \\
+	\texttt {F\_TLOCK} & tester et verrouiller si possible \\
+	\hline
+    \end {tabular}
+\end {quote}
+
+L'action demandée concerne la partie du fichier s'étendant sur
+\texttt{taille} octets à partir de la position courante dans
+le fichier (voir \texttt{lseek}, page \pageref {lseek}).  Si le
+paramètre \texttt{taille} égale 0, la partie s'étend jusqu'à la
+fin du fichier. Pour verrouiller ou déverrouiller tout un fichier,
+il suffit donc simplement de l'ouvrir puis d'appeler \texttt{flock}
+avec une taille nulle.
+
+Si le processus ayant verrouillé le fichier se termine, le fichier est
+automatiquement déverrouillé. S'il existait un processus en attente
+de verrouillage (avec \texttt {F\_LOCK}), l'opération peut alors aboutir.
+
+Cette primitive renvoie 0 en cas d'opération réussie, ou -1 en cas
+d'erreur ou de test négatif avec \texttt{F\_TEST} ou \texttt{F\_TLOCK}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
