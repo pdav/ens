@@ -826,6 +826,7 @@ ou -1 en cas d'erreur.
 \separation
 \primitive {open} --- ouvre un fichier
     \index{\texttt {open}}
+    \label {open}
 
 \begin {quote}
 \begin {verbatim}
@@ -6462,15 +6463,16 @@ char *mktemp (char *modele)
 \end{verbatim}
 \end {quote}
 
-Cette fonction est \textbf {obsolète}. Il vaut mieux utiliser \texttt {tmpfile} et
-\texttt {tmpnam} (voir page~\pageref {tmpfile}).
+Cette fonction est \textbf {obsolète}. Il vaut mieux utiliser
+\texttt{tmpfile} et \texttt{tmpnam} (voir page~\pageref {tmpfile})
+ou \texttt{mkstemp}.
 
 La fonction \texttt {mktemp} remplace le contenu de la chaîne de
 caractères \texttt {modele} par un nom de fichier unique, et
 renvoie l'adresse de la chaîne.
 
 Le modèle doit être un nom de fichier suivi de 6 caractères
-\textit {X}. La fonction remplace ces 6 \textit {X} par une lettre et un
+\texttt {X}. La fonction remplace ces 6 \texttt {X} par une lettre et un
 numéro de telle sorte que le fichier n'ait pas un nom
 identique à celui d'un fichier existant.
 
@@ -6479,6 +6481,100 @@ renvoie la chaîne vide, c'est-à-dire la chaîne dont le
 premier caractère est \verb:\0:.
 
 
+
+\separation 
+\primitive {tmpfile} --- ouvre un fichier unique
+    \index{\texttt {tmpfile}}
+    \label {tmpfile}
+
+\begin {quote}
+\begin {verbatim}
+#include <stdio.h>
+
+FILE *tmpfile (void)
+\end{verbatim}
+\end {quote}
+
+La fonction \texttt {tmpfile} crée un fichier unique, l'ouvre et renvoie son
+descripteur. Le fichier est automatiquement détruit à la fin de
+l'exécution du processus.
+
+
+\separation 
+\primitive {tmpnam, tempnam} --- nom de fichier unique
+    \index{\texttt {tmpnam}}
+    \index{\texttt {tempnam}}
+
+\begin {quote}
+\begin {verbatim}
+#include <stdio.h>
+
+char *tmpnam (char *adresse)
+char *tmpnam ((char *) 0)
+char *tempnam (const char *repertoire, const char *prefixe)
+\end{verbatim}
+\end {quote}
+
+La fonction \texttt {tmpnam} génère un nom de fichier unique. Ce nom est
+renvoyé en retour. Si le paramètre \texttt {adresse} n'est pas nul, il s'agit
+d'un tableau d'au moins \texttt {L\_tmpnam} octets, et le nom
+est également placé dans ce tableau. Si le paramètre \texttt {adresse} est
+nul, le nom est mis dans une chaîne statique réutilisée par chaque
+nouvel appel.
+
+La fonction \texttt {tempnam} est plus complète : le paramètre \texttt
+{repertoire} indique un répertoire où doit être placé le fichier
+temporaire, et le paramètre \texttt {prefixe} est un préfixe d'au plus
+5 caractères utilisés comme début du nom unique. Le nom est placé
+dans un espace alloué avec \texttt {malloc} par \texttt {tempnam}. Il
+faut donc libérer cet espace avec \texttt {free} après usage.
+
+Si \texttt {tempnam} ne peut allouer de la place, la valeur \texttt {NULL} est
+renvoyée.
+
+
+
+\separation 
+\primitive {mkstemp, mkdtemp} --- crée un fichier ou un répertoire temporaire unique
+    \index{\texttt {mkstemp}}
+    \index{\texttt {mkdtemp}}
+    \label {mkstemp}
+
+\begin {quote}
+\begin {verbatim}
+#include <stdlib.h>
+
+int mkstemp (char *modele)
+char *mkdtemp (char *modele)
+\end{verbatim}
+\end {quote}
+
+La fonction \texttt {mkstemp} remplace le contenu de la chaîne de
+caractères \texttt {modele} par un nom de fichier unique, crée et
+ouvre le fichier, et renvoie finalement le descripteur du fichier obtenu.
+
+Le modèle doit être un chemin terminé par 6 caractères \texttt{X}. La
+fonction remplace ces 6 \texttt{X} par une combinaison de caractères
+de telle sorte que le fichier n'ait pas un nom identique à celui d'un
+fichier existant. Attention, ce remplacement implique que les caractères
+pointés par le paramètre \texttt{modele} doivent être modifiables par
+la fonction : il ne faut donc pas lui passer une chaîne de caractères
+constante.
+
+Le fichier est créé par \texttt {open} (voir page~\pageref {open})
+avec le flag \texttt{O\_EXCL} et les permissions 0600. L'utilisation du
+flag \texttt{O\_EXCL} permet de garantir que le nom de fichier généré
+à partir du modèle n'existait pas au moment de sa création, et qu'il
+est donc bien unique.
+
+Si la fonction \texttt {mkstemp} réussit à créer un fichier unique
+et à l'ouvrir, elle renvoie son descripteur. Sinon, elle renvoie la
+valeur -1. Le paramètre \texttt{modele} est réécrit 
+
+La fonction \texttt {mkdtemp} construit de manière analogue un nom de
+répertoire unique et le crée avec \texttt {mkdir}. Si elle réussit,
+elle renvoie l'adresse du paramètre \texttt{modele}, ou le pointeur
+\texttt {NULL} en cas d'échec.
 
 
 \separation 
@@ -6698,57 +6794,6 @@ commande soit finie.
 Si \texttt {system} ne peut lancer la commande, une valeur
 négative est renvoyée.
 
-
-
-\separation 
-\primitive {tmpfile} --- ouvre un fichier unique
-    \index{\texttt {tmpfile}}
-    \label {tmpfile}
-
-\begin {quote}
-\begin {verbatim}
-#include <stdio.h>
-
-FILE *tmpfile (void)
-\end{verbatim}
-\end {quote}
-
-La fonction \texttt {tmpfile} crée un fichier unique, l'ouvre et renvoie son
-descripteur. Le fichier est automatiquement détruit à la fin de
-l'exécution du processus.
-
-
-\separation 
-\primitive {tmpnam, tempnam} --- nom de fichier unique
-    \index{\texttt {tmpnam}}
-    \index{\texttt {tempnam}}
-
-\begin {quote}
-\begin {verbatim}
-#include <stdio.h>
-
-char *tmpnam (char *adresse)
-char *tmpnam ((char *) 0)
-char *tempnam (const char *repertoire, const char *prefixe)
-\end{verbatim}
-\end {quote}
-
-La fonction \texttt {tmpnam} génère un nom de fichier unique. Ce nom est
-renvoyé en retour. Si le paramètre \texttt {adresse} n'est pas nul, il s'agit
-d'un tableau d'au moins \texttt {L\_tmpnam} octets, et le nom
-est également placé dans ce tableau. Si le paramètre \texttt {adresse} est
-nul, le nom est mis dans une chaîne statique réutilisée par chaque
-nouvel appel.
-
-La fonction \texttt {tempnam} est plus complète : le paramètre \texttt
-{repertoire} indique un répertoire où doit être placé le fichier
-temporaire, et le paramètre \texttt {prefixe} est un préfixe d'au plus
-5 caractères utilisés comme début du nom unique. Le nom est placé
-dans un espace alloué avec \texttt {malloc} par \texttt {tempnam}. Il
-faut donc libérer cet espace avec \texttt {free} après usage.
-
-Si \texttt {tempnam} ne peut allouer de la place, la valeur \texttt {NULL} est
-renvoyée.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -25,8 +25,11 @@ all:	manuel.pdf
 verif:
 	pdflatex manuel
 
+# 3 fois makeindex et 4 fois pdflatex : pour avoir les références correctes
 manuel.pdf: manuel.tex $(INCLUDES)
 	rm -f manuel.ind
+	pdflatex manuel
+	makeindex manuel
 	pdflatex manuel
 	makeindex manuel
 	pdflatex manuel
