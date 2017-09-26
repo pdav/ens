@@ -6740,13 +6740,12 @@ est également placé dans ce tableau. Si le paramètre \texttt {adresse} est
 nul, le nom est mis dans une chaîne statique réutilisée par chaque
 nouvel appel.
 
-La fonction \texttt {tempnam} est plus complète, mais n'est pas normalisée
-par l'ANSI comme \texttt {tmpnam}. Le paramètre \texttt {repertoire} indique un
-répertoire où doit être placé le fichier temporaire, et le paramètre
-\texttt {prefixe} est un préfixe d'au plus 5 caractères utilisés comme début
-du nom unique. Le nom est placé dans un espace alloué avec \texttt {malloc}
-par \texttt {tempnam}. Il faut donc libérer cet espace avec \texttt {free} après
-usage.
+La fonction \texttt {tempnam} est plus complète : le paramètre \texttt
+{repertoire} indique un répertoire où doit être placé le fichier
+temporaire, et le paramètre \texttt {prefixe} est un préfixe d'au plus
+5 caractères utilisés comme début du nom unique. Le nom est placé
+dans un espace alloué avec \texttt {malloc} par \texttt {tempnam}. Il
+faut donc libérer cet espace avec \texttt {free} après usage.
 
 Si \texttt {tempnam} ne peut allouer de la place, la valeur \texttt {NULL} est
 renvoyée.
