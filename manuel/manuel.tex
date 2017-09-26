@@ -1080,6 +1080,28 @@ ou -1 en cas d'erreur.
 
 
 \separation
+\primitive {rename} --- renomme un fichier ou un répertoire
+    \index{\texttt {rename}}
+
+\begin {quote}
+\begin {verbatim}
+#include <stdio.h>
+
+int rename (const char *chemin, const char *nouveauchemin)
+\end{verbatim}
+\end {quote}
+
+La primitive \texttt {rename} renomme le fichier ou répertoire
+existant de nom \texttt{chemin}. Le nouveau nom est indiqué par
+\texttt{nouveauchemin}.
+
+Cette primitive renvoie 0 en cas de renommage
+réussi ou -1 en cas d'erreur.
+
+
+
+
+\separation
 \primitive {unlink} --- supprime le fichier (enlève un lien)
     \index{\texttt {unlink}}
 
