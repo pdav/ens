@@ -2,6 +2,8 @@
 # TeX output files
 *.aux
 *.bak
+*.bbl
+*.blg
 *.cb
 *.dvi
 *.idx
