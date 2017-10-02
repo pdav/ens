@@ -1655,6 +1655,7 @@ du processus père du processus appelant.
     \index{\texttt {geteuid}}
     \index{\texttt {getgid}}
     \index{\texttt {getegid}}
+    \label {geteuid}
 
 \begin {quote}
 \begin {verbatim}
@@ -1807,6 +1808,36 @@ super utilisateur)~:
 
 La primitive \texttt {setgid} opère de même pour les
 identificateurs de groupe.
+
+Ces primitives renvoient 0 en cas de modification
+réussie, ou -1 en cas d'erreur.
+
+
+
+
+\separation
+\primitive {seteuid, setegid} --- change les identificateurs effectifs
+    \index{\texttt {seteuid}}
+    \index{\texttt {setegid}}
+
+\begin {quote}
+\begin {verbatim}
+int seteuid (uid_t euid)
+int setegid (gid_t egid)
+\end{verbatim}
+\end {quote}
+
+La primitive \texttt {seteuid} change l'identificateur du propriétaire
+effectif du processus. Ceci est autorisé dans les cas suivants :
+
+\begin {itemize}
+    \item si la nouvelle valeur est égale à 0 (super-utilisateur)
+    \item si la nouvelle valeur est la même que l'utilisateur réel
+	(ruid) ou sauvé (suid)
+\end {itemize}
+
+La primitive \texttt {setegid} opère de même pour l'identificateur
+de groupe effectif.
 
 Ces primitives renvoient 0 en cas de modification
 réussie, ou -1 en cas d'erreur.
@@ -6284,7 +6315,7 @@ key_t ftok (const char *fichier, int id)
 \end {quote}
 
 La fonction \texttt {ftok} construit une clef adaptée aux primitives
-(\texttt {msgget}, \texttt {semget} et \texttt {shmget}) à part d'un
+(\texttt {msgget}, \texttt {semget} et \texttt {shmget}) à partir d'un
 nom de fichier et d'un numéro \texttt {id}.
 
 Si le fichier n'est pas accessible, la valeur -1 (ou plus exactement
@@ -6329,6 +6360,27 @@ variable du shell. Le résultat est un pointeur
 dans l'environnement courant sur le contenu de la variable,
 ou 0 si la variable \texttt {var}
 n'existe pas.
+
+
+\separation 
+\primitive {getlogin} --- nom de l'utilisateur réel
+    \index{\texttt {getlogin}}
+
+\begin {quote}
+\begin {verbatim}
+#include <unistd.h>
+
+char *getlogin (void)
+\end{verbatim}
+\end {quote}
+
+La fonction \texttt {getlogin} renvoie le nom de l'utilisateur connecté
+sur le terminal de contrôle du processus. Cette identité peut être
+différente de l'identité de l'utilisateur effectif (voir les primitives
+\texttt{getuid} et \texttt {geteuid}, page~\pageref {geteuid}).
+
+Cette fonction renvoie l'adresse d'un tableau alloué statiquement,
+ou le pointeur nul si l'information demandée ne peut être déterminée.
 
 
 \separation 
