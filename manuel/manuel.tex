@@ -1831,7 +1831,8 @@ La primitive \texttt {seteuid} change l'identificateur du propriétaire
 effectif du processus. Ceci est autorisé dans les cas suivants :
 
 \begin {itemize}
-    \item si la nouvelle valeur est égale à 0 (super-utilisateur)
+    \item si l'utilisateur effectif est actuellement égal à 0
+	(super-utilisateur)
     \item si la nouvelle valeur est la même que l'utilisateur réel
 	(ruid) ou sauvé (suid)
 \end {itemize}
