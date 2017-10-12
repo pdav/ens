@@ -56,8 +56,8 @@ void ecrire_valeurs (int id, int v1, int v2)
     int *adr ;
 
     adr = shmat (id, NULL, 0) ;
-    if (adr == NULL)
-	raler ("shmat") ;
+    if (adr == (void *) -1)
+	raler ("shmat ecrire") ;
 
     adr [0] = v1 ;
     adr [1] = v2 ;
@@ -71,8 +71,8 @@ void lire_valeurs (int id, int *v1, int *v2)
     int *adr ;
 
     adr = shmat (id, NULL, 0) ;
-    if (adr == NULL)
-	raler ("shmat") ;
+    if (adr == (void *) -1)
+	raler ("shmat lire") ;
 
     *v1 = adr [0] ;
     *v2 = adr [1] ;
