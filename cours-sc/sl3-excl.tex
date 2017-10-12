@@ -444,7 +444,7 @@ main () {
 
     \begin {lstlisting} [basicstyle=\scriptsize\lstmonstyle]
     void verrouiller (int *verrou) {
-      while (fetch_and_set (*verrou, 1) == 0)
+      while (fetch_and_set (verrou, 1) != 0)
         ;       /* attente active */
     }
     void deverrouiller (int *verrou) {
