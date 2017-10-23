@@ -200,9 +200,10 @@
     \begin {itemize}
 	\item \code {semctl}~:
 	    \begin {itemize}
-		\item \code {GETVAL} ou \code {SETVAL} d'un
+		\item \code {GETVAL} / \code {SETVAL} : valeur (>0) d'un
 		    sémaphore de l'ensemble
-		\item \code {GETALL} ou \code {SETALL}~: nécessite
+		\item \code {GETNCNT} : nombre de processus en attente
+		\item \code {GETALL} / \code {SETALL}~: nécessite
 		    un tableau pour les valeurs
 	    \end {itemize}
 	\item \code {semop}~: utilise un tableau de structures \code
