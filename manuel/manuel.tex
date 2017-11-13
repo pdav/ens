@@ -3794,22 +3794,20 @@ int semop (int semid, struct sembuf *sops, int nsops)
 \end{verbatim}
 \end {quote}
 
-Cette primitive est utilisée pour réaliser de manière atomique un
-ensemble d'opérations sur un groupe de sémaphores repéré par
-l'identificateur \texttt {semid}.
-
-Le paramètre \texttt {nsops} spécifie le nombre de sémaphores dans le groupe
-concernés par l'action en cours.  Le tableau \texttt {sops} (de \texttt {nsops}
-éléments) décrit l'opération à réaliser sur chacun d'entre eux.  Chaque
+Cette primitive est utilisée pour réaliser de manière atomique
+un ensemble d'opérations sur un groupe de sémaphores repéré par
+l'identificateur \texttt {semid}. Les opérations sont décrites par
+le tableau \texttt {sops} contenant \texttt {nsops} éléments. Chaque
 élément de ce tableau est une structure contenant les champs~:
 
 \begin {itemize}
-    \item \texttt {unsigned short sem\_num}~: numéro du sémaphore~;
+    \item \texttt {unsigned short sem\_num}~: numéro du sémaphore
+	dans le groupe~;
     \item \texttt {short sem\_op}~: opération sur le sémaphore~;
     \item \texttt {short sem\_flg}~: paramètres de l'opération~;
 \end {itemize}
 
-Pour chaque sémaphore du groupe, \texttt {sem\_op} indique l'opération~:
+Pour chaque sémaphore, \texttt {sem\_op} indique l'opération~:
 
 \begin {itemize}
     \item si \texttt {sem\_op} $< 0$~:\\
