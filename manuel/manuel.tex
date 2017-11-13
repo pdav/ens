@@ -3811,7 +3811,7 @@ Pour chaque sémaphore, \texttt {sem\_op} indique l'opération~:
 
 \begin {itemize}
     \item si \texttt {sem\_op} $< 0$~:\\
-	si la valeur courante du sémaphore est supérieure à la valeur
+	si la valeur courante du sémaphore est supérieure ou égale à la valeur
 	absolue de \texttt {sem\_op}, cette valeur est soustraite de la
 	valeur courante du sémaphore. Sinon, le processus est mis en
 	attente ou la primitive renvoie la valeur -1, suivant la valeur
