@@ -156,31 +156,44 @@ LSTthsync = \
 	inc6-thsync/rw.c \
 
 ##############################################################################
+# C11
+
+SRCc11 = ch7-c11.tex sl7-c11.tex
+
+FIGc11 = \
+
+LSTc11 = \
+	inc7-c11/ex-c78.c \
+	inc7-c11/ex-c89.c \
+	inc7-c11/ex-c99.c \
+	inc7-c11/thrloc.c \
+
+##############################################################################
 # OpenMP
 
-SRCopenmp = ch7-openmp.tex sl7-openmp.tex
+SRCopenmp = ch8-openmp.tex sl8-openmp.tex
 
 FIGopenmp = \
-	inc7-openmp/couches.pdf \
-	inc7-openmp/fork-join.pdf \
-	inc7-openmp/hello.pdf \
-	inc7-openmp/reduc.pdf \
-	inc7-openmp/parfor.pdf \
-	inc7-openmp/parsect.pdf \
-	inc7-openmp/parsgl.pdf \
+	inc8-openmp/couches.pdf \
+	inc8-openmp/fork-join.pdf \
+	inc8-openmp/hello.pdf \
+	inc8-openmp/reduc.pdf \
+	inc8-openmp/parfor.pdf \
+	inc8-openmp/parsect.pdf \
+	inc8-openmp/parsgl.pdf \
 
 LSTopenmp = \
-	inc7-openmp/hello.c \
-	inc7-openmp/reduc.c \
-	inc7-openmp/parfor.c \
-	inc7-openmp/parsect.c \
-	inc7-openmp/parsgl.c \
-	inc7-openmp/priv.c \
-	inc7-openmp/thrpriv.c \
-	inc7-openmp/thrcopy.c \
-	inc7-openmp/barrier.c \
-	inc7-openmp/critical.c \
-	inc7-openmp/atomic.c \
+	inc8-openmp/hello.c \
+	inc8-openmp/reduc.c \
+	inc8-openmp/parfor.c \
+	inc8-openmp/parsect.c \
+	inc8-openmp/parsgl.c \
+	inc8-openmp/priv.c \
+	inc8-openmp/thrpriv.c \
+	inc8-openmp/thrcopy.c \
+	inc8-openmp/barrier.c \
+	inc8-openmp/critical.c \
+	inc8-openmp/atomic.c \
 
 ##############################################################################
 # L'ensemble
@@ -192,6 +205,7 @@ SRCall = \
 	$(SRCsem) \
 	$(SRCinterb) \
 	$(SRCthsync) \
+	$(SRCc11) \
 	$(SRCopenmp) \
 	tout.tex
 
@@ -202,6 +216,7 @@ FIGall = \
 	$(FIGsem) \
 	$(FIGinterb) \
 	$(FIGthsync) \
+	$(FIGc11) \
 	$(FIGopenmp) \
 
 LSTall = \
@@ -211,6 +226,7 @@ LSTall = \
 	$(LSTsem) \
 	$(LSTinterb) \
 	$(LSTthsync) \
+	$(LSTc11) \
 	$(LSTopenmp) \
 
 ##############################################################################
@@ -223,6 +239,7 @@ all:	ch1-intro.pdf \
 	ch4-sem.pdf \
 	ch5-interb.pdf \
 	ch6-thsync.pdf \
+	ch7-c11.pdf \
 	ch7-openmp.pdf
 
 ch1-intro.pdf:	$(DEPS) $(FIGintro) $(LSTintro) $(SRCintro)
@@ -231,6 +248,7 @@ ch3-excl.pdf:	$(DEPS) $(FIGexcl) $(LSTexcl) $(SRCexcl)
 ch4-sem.pdf:	$(DEPS) $(FIGsem) $(LSTsem) $(SRCsem)
 ch5-interb.pdf:	$(DEPS) $(FIGinterb) $(LSTinterb) $(SRCinterb)
 ch6-thsync.pdf:	$(DEPS) $(FIGthsync) $(LSTthsync) $(SRCthsync)
+ch7-c11.pdf:	$(DEPS) $(FIGc11) $(LSTc11) $(SRCc11)
 ch7-openmp.pdf:	$(DEPS) $(FIGopenmp) $(LSTopenmp) $(SRCopenmp)
 
 tout.pdf:	$(DEPS) $(FIGall) $(LSTall) $(SRCall)
@@ -248,6 +266,6 @@ gencpu:
 	$(GENCPU) $(CPUDBDIR) inc1-intro/cpu-
 
 clean:
-	rm -f $(FIGall) *.bak */*.bak *.nav *.out *.aux *.snm *.vrb *.log
+	rm -f $(FIGall) *.bak */*.bak *.nav *.out *.aux *.snm *.vrb *.log *.toc
 	rm -f print-*.pdf ch*.pdf tout.pdf by-nc.pdf
 	rm -f inc?-*/a.out

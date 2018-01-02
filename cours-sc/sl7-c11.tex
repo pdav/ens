@@ -1,0 +1,422 @@
+%
+% Historique
+%   2014/08/30 : pda : conception
+%
+
+%%%%% \newcounter {ompexemple}
+\def\inc{inc7-c11}
+
+\titreA {Nouveautés de la norme C-2011}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Introduction}
+
+\begin {frame} {Introduction}
+    Plusieurs versions du langage C :
+
+    \begin {itemize}
+	\item 1978 : version K\&R (Kernighan \& Ritchie)
+	\item 1989 : norme ANSI (C89) \implique norme ISO (C90)
+	\item 1999 : norme ISO (C99)
+	\item 2011 : norme ISO (C11)
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} [fragile] {Introduction -- C K\&R}
+    \begin {itemize}
+	\item livre publié en 1978 par les créateurs du langage
+	\item C primitif (mais amélioré par rapport à la première version)
+	\item pas de vérification des arguments
+	\item type \code {void} existant, mais embryonnaire
+    \end {itemize}
+
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle] {\inc/ex-c78.c}
+\end{frame}
+
+\begin {frame} [fragile] {Introduction -- C 89}
+    \begin {itemize}
+	\item compatible avec C K\&R
+	\item vérification possible des arguments avec les prototypes
+    \end {itemize}
+
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle] {\inc/ex-c89.c}
+\end{frame}
+
+\begin {frame} [fragile] {Introduction -- C 99}
+    \begin {itemize}
+	\item compatible avec C 89
+	\item beaucoup d'améliorations : nouveaux types, déclarations
+	    au plus près, tableaux dynamiques, etc.
+    \end {itemize}
+
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle] {\inc/ex-c99.c}
+\end{frame}
+
+\begin {frame} {Introduction -- C 11}
+    \begin {itemize}
+	\item compatible avec C 99
+	\item beaucoup d'améliorations générales
+	    \begin {itemize}
+		\item spécificateur d'alignement
+		\item meilleur support d'Unicode (ex : \code {char32\_t},
+		    \texttt {uchar.h}, \code {u"}...\code {"})
+		\item expressions génériques (i.e. fonction du type des
+		    arguments)
+		\item structures/unions anonymes (dans les structures)
+		\item etc.
+	    \end {itemize}
+	\item mais également support d'opérations parallèles :
+	    \begin {itemize}
+		\item \textbf {variables atomiques}
+		\item \textbf {threads}
+	    \end {itemize}
+	    \implique inspirées de la norme C++ 2011
+    \end {itemize}
+\end{frame}
+
+\begin {frame} {Introduction -- C 11}
+
+    Support de C11 encore incomplet dans les compilateurs
+    \begin {itemize}
+	\item de plus, le support des variables atomiques et des
+	    threads est optionnel !
+	\item Compilateur \texttt {clang} version $\geq$ 5 : ok
+
+    \end {itemize}
+
+    \vspace* {3mm}
+
+    Utilisation des variables atomiques et des threads :
+    \begin {itemize}
+	\item avec Clang : \code {cc ... -lstdthreads}
+    \end {itemize}
+\end {frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Variables atomiques
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Variables atomiques}
+
+\begin {frame} {Qualificateur \textbf {atomic} -- Introduction}
+    Nouveau qualificateur pour la déclaration de variables :
+
+    \begin {itemize}
+	\item En utilisation réelle : \code {\_Atomic int x ;}
+	    \\
+	    \implique ma préférence personnelle
+	\item Ne devrait pas être utilisé : \code {\_Atomic(int) x ;}
+	\item Avec \texttt {stdatomic.h} : \code {atomic\_int x ;}
+	    \ctableau {\fE} {|l|l|} {
+		\textbf {Type défini dans \texttt {stdatomic.h}} &
+		    \textbf {Type réel} \\ \hline
+		\texttt {atomic\_bool} & \texttt {\_Atomic \_Bool} \\
+		\texttt {atomic\_char} & \texttt {\_Atomic char} \\
+		\texttt {atomic\_schar} & \texttt {\_Atomic signed char} \\
+		\texttt {atomic\_uchar} & \texttt {\_Atomic unsigned char} \\
+		\texttt {atomic\_uchar} & \texttt {\_Atomic unsigned char} \\
+		\texttt {atomic\_short} & \texttt {\_Atomic short int} \\
+		\texttt {atomic\_ushort} & \texttt {\_Atomic unsigned short int} \\
+		... & ... \\
+		\texttt {atomic\_llong} & \texttt {\_Atomic long long int} \\
+		\texttt {atomic\_ullong} & \texttt {\_Atomic unsigned long long int} \\
+		... & ... \\
+		\texttt {atomic\_size\_t} & \texttt {\_Atomic size\_t} \\
+		... & ... \\
+	    }
+    \end {itemize}
+\end {frame}
+
+\begin {frame} [fragile] {Qualificateur \textbf {atomic} -- Opérateurs atomiques}
+    Une variable qualifiée avec \code {\_Atomic} est automatiquement
+    utilisée en section critique avec les opérateurs classiques :
+
+    \begin {lstlisting} [basicstyle=\fB\lstmonstyle]
+_Atomic int x, *p ;
+
+x++ ;          // operation atomique
+*p *= 3 ;      // operation atomique
+\end{lstlisting}
+
+    \vspace* {3mm}
+
+    Attention :
+    \begin {itemize}
+	\item \code {x++}  ou \code {x += 1} sont des opérations atomiques
+	\item \code {x = x + 1} n'est pas une opération atomique !
+    \end {itemize}
+
+\end{frame}
+
+\begin {frame} {Qualificateur \textbf {atomic} -- Initialisation}
+    Une variable atomique de type $T$ n'a pas forcément la même
+    implémentation qu'une variable non atomique de type $T$
+
+    \begin {itemize} 
+	\item certaines architectures peuvent nécessiter l'ajout
+	    d'un verrou
+
+	\item \code {sizeof (\_Atomic T)} peut être différent de
+	    \code {sizeof (T)}
+
+    \end {itemize} 
+
+    Une variable atomique doit donc être initialisée :
+
+    \begin {itemize}
+	\item deux possibilités au choix :
+	    \begin {itemize}
+		\item \code {atomic\_init (\&x, 0) ;}
+		\item \code {\_Atomic int x = ATOMIC\_VAR\_INIT (0) ;}
+	    \end {itemize}
+	\item à faire une seule fois seulement
+	\item initialise la variable et le verrou éventuel en même temps
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Qualificateur \textbf {atomic} -- Affectation}
+    Des opérations peuvent être non atomiques sur certaines
+    architectures.  Exemples :
+
+    \begin {itemize}
+	\item \code {long long int x = 12345678987654321LL ;} \\
+	\item \code {double complex z = CMPLX (1.0, -1.0) ;} \\
+    \end {itemize}
+
+    \implique une affectation peut nécessiter plusieurs instructions \\
+    \implique état non cohérent pendant un court laps de temps
+\end {frame}
+
+\begin {frame} {Qualificateur \textbf {atomic} -- Affectation}
+    C11 définit des macros génériques pour les opérations d'affectation :
+
+    \begin {itemize}
+	\item \code {T atomic\_load (volatile \_Atomic T *)}
+	\item \code {void atomic\_store (volatile \_Atomic T *, val)}
+    \end {itemize}
+
+    Exemples :
+
+    \begin {itemize}
+	\item \code {\_Atomic long int ax ; \\ ... \\
+			long int x = atomic\_load (\& ax) ;}
+	\item \code {\_Atomic double complex z ; \\ ... \\
+			atomic\_store (\&z, CMPLX (1.0, -1.0)) ;} \\
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Qualificateur \textbf {atomic} -- Autres macros}
+    Quelques autres macros C11 fonctionnant de manière atomique :
+
+    {\fC
+    \begin {itemize}
+	\item \code {T atomic\_exchange (volatile \_Atomic T *, val)}
+	\item \code {T atomic\_fetch\_add (volatile \_Atomic T *, val)}
+	\item \code {T atomic\_fetch\_\textit {x}} avec $x$ = \code {sub},
+		    \code {or}, \code {xor} ou \code {and}
+    \end {itemize}
+    }
+
+    \implique ces opérations peuvent entraîner des verrouillages
+    implicites
+
+    \vspace* {3mm}
+
+    Type \texttt {atomic\_flag} :
+
+    {\fC
+    \begin {itemize}
+	\item \code {atomic\_flag x = ATOMIC\_FLAG\_INIT ;}
+	\item \code {void atomic\_flag\_clear (volatile atomic\_flag *)}
+	\item \code {bool atomic\_flag\_test\_and\_set (volatile atomic\_flag *)}
+    \end {itemize}
+    }
+
+    \implique ces opérations sont garanties atomiques et sans verrouillage
+\end {frame}
+
+\begin {frame} {Qualificateur \textbf {atomic} -- struct/union}
+    Utilisation de \code {\_Atomic} avec des structures~:
+
+    \begin {itemize}
+	\item une structure peut être qualifiée avec \code {\_Atomic}
+	    \begin {itemize}
+		\item l'accès aux membres n'est pas pour autant atomique
+		    \\
+		    \implique «~comportement non défini~» d'après le standard
+
+		\item la structure peut être accédée en totalité
+		    avec \code {atomic\_load()} ou \code {atomic\_store()}
+
+	    \end {itemize}
+
+	\item un membre de structure peut être qualifié avec \code {\_Atomic}
+	    \begin {itemize}
+		\item l'accès à ce membre est atomique
+		\item \code {struct \{ ... \_Atomic int x ; ... \} s ; \\
+			atomic\_init (s.x, 0) ; \\
+			... \\
+			s.x++ ; // atomique
+		    }
+
+	    \end {itemize}
+    \end {itemize}
+
+    Idem avec les unions
+\end {frame}
+
+\begin {frame} {Qualificateur \textbf {atomic} -- Bilan}
+    \begin {itemize}
+	\item nouveau qualificateur \code {\_Atomic}
+	\item initialisation obligatoire (\code {atomic\_init()})
+	\item des opérations par défaut atomiques (\code {++}, \code
+	    {+=}, etc.)
+	\item opérations d'affectation : utiliser \code {atomic\_store/load}
+	\item macros pour réaliser des traitements atomiques
+
+    \end {itemize}
+
+\end {frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Threads
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Threads}
+
+\begin {frame} {Threads C11 -- Introduction}
+    Support des threads ajouté au langage avec la norme C 2011.
+
+    \vspace* {3mm}
+
+    Concepts analogues à l'API POSIX, légèrement simplifiés :
+
+    \begin {itemize}
+	\item \code {\#include <threads.h> \hspace*{10mm} // et pas <pthread.h>}
+	\item types similaires :
+	    \ctableau {\fC} {|l|l|} {
+		\textbf {Type C11} & \textbf {Type POSIX} \\ \hline
+		\code {thrd\_t} & \code {pthread\_t} \\
+		\code {mtx\_t} & \code {pthread\_mutex\_t} \\
+		\code {cnd\_t} & \code {pthread\_cond\_t} \\
+	    }
+	\item pas d'attributs (de thread, de mutex, etc.)
+	\item codes de retour : valeurs spécifiques
+	    \begin {itemize}
+		\item ok : \code {thrd\_success},
+		\item erreurs : {\fC \code {thrd\_timeout}, \code {thrd\_busy},
+		    \code {thrd\_error}, \code {thrd\_nomem}}
+		\item non compatibles avec les codes POSIX (\code {errno}, etc)
+	    \end {itemize}
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Threads C11 -- Gestion des threads}
+    Fonctions de gestion des threads :
+
+    {\fC
+    \begin {itemize}
+	\item \code {int thrd\_create (thrd\_t *, int (*)(void *), void *)}
+	\item \code {void thrd\_exit (int)}
+	\item \code {int thrd\_join (thrd\_t, int *)}
+	\item \code {thrd\_t thrd\_current (void)}
+	\item \code {int thrd\_equal (thrd\_t, thrd\_t)}
+    \end {itemize}
+    }
+
+    Principale différence :
+
+    \begin {itemize}
+	\item retour d'un thread = \code {int} (et pas \code {void *})
+    \end {itemize}
+\end {frame}
+
+
+\begin {frame} {Threads C11 -- Mutex}
+    Foncions analogues à l'API POSIX :
+
+    {\fC
+    \begin {itemize}
+	\item \code {int mtx\_init (mtx\_t *, int)} \\
+	    Deuxième paramètre : type de mutex (ex: \code {mtx\_plain},
+	    \code {mtx\_timed})
+	\item \code {int mtx\_destroy (mtx\_t *)} \\
+	\item \code {int mtx\_lock (mtx\_t *)}
+	\item \code {int mtx\_timedlock (mtx\_t *, struct timespec *)}
+	\item \code {int mtx\_trylock (mtx\_t *)}
+	\item \code {int mtx\_unlock (mtx\_t *)}
+    \end {itemize}
+    }
+
+\end {frame}
+
+
+\begin {frame} {Threads C11 -- Conditions}
+    Foncions analogues à l'API POSIX :
+
+    {\fC
+    \begin {itemize}
+	\item \code {int cnd\_init (cnd\_t *)} \\
+	\item \code {int cnd\_destroy (cnd\_t *)} \\
+	\item \code {int cnd\_wait (cnd\_t *, mtx\_t *)}
+	\item \code {int cnd\_timedwait (cnd\_t *, mtx\_t *, struct timespec *)}
+	\item \code {int cnd\_signal (cnd\_t *)} \\
+	\item \code {int cnd\_broadcast (cnd\_t *)} \\
+    \end {itemize}
+    }
+
+\end {frame}
+
+
+\begin {frame} {Threads C11 -- Variables de thread}
+    Apport de C11 : variables de thread
+
+    \begin {itemize}
+	\item variables « globales »
+	    \begin {itemize}
+		\item déclarées en dehors des fonctions C, ou
+		\item déclarées locales et \code {static}
+	    \end {itemize}
+	\item mais locales à chaque thread
+	    \begin {itemize}
+		\item une instance spécifique dans chaque thread
+	    \end {itemize}
+    \end {itemize}
+
+    \implique qualificateur \code {thread\_local}
+\end {frame}
+
+\begin {frame} [fragile] {Threads C11 -- Variables de thread}
+
+    Exemple~:
+    \lstinputlisting [basicstyle=\scriptsize\lstmonstyle] {\inc/thrloc.c}
+
+\end{frame}
+
+\begin {frame} {Threads C11 -- Bilan}
+    \begin {itemize}
+	\item fonctions très proches de l'API POSIX...
+	\item ... mais légèrement simplifiées
+	\item intégré dans le langage C \\
+	    \implique interface indépendante du système d'exploitation
+	\item ajout des variables de thread
+    \end {itemize}
+
+    \vspace* {3mm}
+
+    Apport de C11 important...
+    \begin {itemize}
+	\item ... mais support des compilateurs encore incomplet
+	\item ... et extension optionnelle dans la norme
+	    \\
+	    \implique un compilateur peut se prétendre conforme C11 sans
+	    supporter \code {\_Atomic} et les threads !
+    \end {itemize}
+\end {frame}
