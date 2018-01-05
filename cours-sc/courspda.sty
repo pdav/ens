@@ -180,6 +180,10 @@
     \usebox {\Cbox}
 }
 
+% Reduire l'espace inter-lignes dans les tables des matières
+% https://tex.stackexchange.com/questions/51452/reduce-spacing-in-table-of-contents-beamer#51458
+\patchcmd{\beamer@sectionintoc}{\vskip1.5em}{\vskip1.1em}{}{}
+
 \iftoggle {multichap} {%%%%%%%%%%%%%%%%%%%% Multi-chapter
     \newcommand {\titreA} [1] {\section {#1}}
     \newcommand {\titreB} [1] {\subsection {#1}}
