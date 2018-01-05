@@ -6,7 +6,7 @@
 %%%%% \newcounter {ompexemple}
 \def\inc{inc7-c11}
 
-\titreA {Nouveautés de la norme C-2011}
+\titreA {Concurrence et norme C-2011}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Introduction
@@ -64,17 +64,17 @@
 		\item spécificateur d'alignement
 		\item meilleur support d'Unicode (ex : \code {char32\_t},
 		    \texttt {uchar.h}, \code {u"}...\code {"})
-		\item expressions génériques (i.e. fonction du type des
-		    arguments)
+		\item expressions génériques (i.e. macros agissant
+		    en fonction du type des argument)
 		\item structures/unions anonymes (dans les structures)
 		\item etc.
 	    \end {itemize}
-	\item mais également support d'opérations parallèles :
+	\item mais également support d'opérations concurrentes :
 	    \begin {itemize}
 		\item \textbf {variables atomiques}
 		\item \textbf {threads}
 	    \end {itemize}
-	    \implique inspirées de la norme C++ 2011
+	    \implique quasiment identiques à la norme C++ 2011
     \end {itemize}
 \end{frame}
 
@@ -419,4 +419,23 @@ x++ ;          // operation atomique
 	    \implique un compilateur peut se prétendre conforme C11 sans
 	    supporter \code {\_Atomic} et les threads !
     \end {itemize}
+\end {frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Bibliographie
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Bibliographie}
+
+\begin {frame} {Bibliographie}
+
+    \begin {itemize}
+	\item Ben Klemens, \textit {21st Century C, C Tips from the
+	    New School}, second edition, O'Reilly (2014)
+
+	\item Matt Kline, \textit {What every systems programmer should
+	    know about concurrency} (Dec 2017),
+	    \url {http://assets.bitbashing.io/papers/concurrency-primer.pdf}
+    \end {itemize}
+
 \end {frame}
