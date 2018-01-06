@@ -605,6 +605,27 @@
     de processus...}
 \end {frame}
 
+\begin {frame} {Rappels -- Mémoire virtuelle}
+
+    Extension x86 pour adresses sur 64 bits~:
+
+    \begin {center}
+	\includegraphics [width=.8\linewidth] {\inc/mmu-x64}
+    \end {center}
+
+    \begin {itemize}
+	\fC
+	\item Note : bits 48 à 63 de l'adresse logique = extension du bit de signe 47
+	    \\
+	    \implique vérification de l'adresse logique
+	\item 
+	    Exercice : cette MMU permet d'avoir des pages de 2~Mo,
+	    voire de 1~Go. Décrivez la traduction des adresses.
+    \end {itemize}
+
+
+\end {frame}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Partage de mémoire entre processus

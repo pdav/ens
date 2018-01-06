@@ -82,6 +82,7 @@ FIGapi = \
 	inc2-api/mmu-pdp11b.pdf \
 	inc2-api/mmu-pdp11ex.pdf \
 	inc2-api/mmu-i386.pdf \
+	inc2-api/mmu-x64.pdf \
 	inc2-api/mmu-tlb386.pdf \
 	inc2-api/msg.pdf \
 	inc2-api/shmat.pdf \
