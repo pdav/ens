@@ -52,8 +52,9 @@
 	\item la structure dépend de l'application qui accède au fichier
 
 	    \begin {itemize}
-		\item texte : suite de caractères séparés par l'octet
-		    de code 10
+		\item texte : suite de caractères séparés par
+		    \code {\textbackslash n}
+		    (octet 10)
 		\item binaire exécutable : contient un en-tête qui
 		    décrit les différentes parties (code, données,
 		    infos de debug, etc.)
@@ -61,7 +62,7 @@
 		\item etc.
 	    \end {itemize}
 
-	\item notion de « \textit {magic number} » :
+	\item notion de « \textit {magic number} »
 	    \begin {itemize}
 		\item suite d'octets au début d'un fichier pour l'identifier
 		\item ex: \code {\#!} (script), \code {\%PDF} (fichier PDF),
