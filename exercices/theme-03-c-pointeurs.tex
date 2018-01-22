@@ -100,7 +100,7 @@ sans utiliser de fonction de librairie (et surtout pas {\tt strchr}).
 %%%% Dependances: fonction, pointeurs, passage par adresse, sizeof,
 %%%% Dependances: pile d'execution
 
-Pourquoi les fonctions ci-après ne peuvent pas fonctionner~?
+Quelles sont les erreurs dans les fonctions ci-après ?
 %Pour chacune des fonctions suivantes, il vous est demandé~:
 %
 %\begin {enumerate}
@@ -123,11 +123,11 @@ int *f1 (int val)
 }
 \end{verbatim}
 
-% l'adresse retournee est dans la pile
+% tab devrait contenir 4 octets
 \begin {verbatim}
 char *f2 (void)
 {
-    char tab [3 + 1] ;
+    char tab [3] ;
     strcpy (tab, "abc") ;
     return tab ;
 }
