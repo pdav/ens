@@ -62,8 +62,8 @@ trouverez dans les liens suivants :
 | [manuel.pdf](http://dpt-info.u-strasbg.fr/~pda/manuel.pdf) | notice simplifiée des primitives systèmes et fonctions de librairie |
 | [exercices.pdf](http://dpt-info.u-strasbg.fr/~pda/exercices.pdf) | recueil d'exercices |
 | [conseils.pdf](http://dpt-info.u-strasbg.fr/~pda/conseils.pdf) | conseils pour réussir TP et projets |
-| [cours-se1.pdf](http://dpt-info.u-strasbg.fr/~pda/cours-se1.pdf) | transparents du cours de systèmes d'exploitation de L2S4 (partie 1 : utilisation des primitives systèmes) |
-| [cours-se2.pdf](http://dpt-info.u-strasbg.fr/~pda/cours-se2.pdf) | transparents du cours de systèmes d'exploitation de L2S4 (partie 2 : le noyau) |
+| [cours-ps.pdf](http://dpt-info.u-strasbg.fr/~pda/cours-ps.pdf) | transparents du cours de systèmes d'exploitation de L2S4 (utilisation des primitives systèmes) |
+| [cours-se.pdf](http://dpt-info.u-strasbg.fr/~pda/cours-se.pdf) | transparents du cours de systèmes d'exploitation de L2S4 (partie 2 : le noyau) |
 | [cours-sc.pdf](http://dpt-info.u-strasbg.fr/~pda/cours-sc.pdf) | transparents du cours de systèmes concurrents en L3S5 |
 | [memoire.pdf](http://dpt-info.u-strasbg.fr/~pda/memoire.pdf) | conseils pour faire un bon mémoire de stage |
 
