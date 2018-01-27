@@ -1,0 +1,471 @@
+\def\inc{inc5-time}
+
+\titreA {Gestion du temps}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Introduction}
+
+\begin {frame} {Mesure du temps}
+    Comment le noyau mesure le temps ?
+
+    \begin {enumerate}
+	\item Obtenir l'heure au démarrage
+	\item Compter le temps qui passe
+    \end {enumerate}
+\end {frame}
+
+\begin {frame} {Mesure du temps}
+    Comment obtenir l'heure au démarrage ?
+    \begin {itemize}
+	\item Solution 1 : lire l'heure sur le périphérique RTC
+
+	    \begin {itemize}
+		\item RTC : \textit {Real Time Clock}
+		\item horloge matérielle
+		\item fonctionne sur batterie si courant coupé
+	    \end {itemize}
+
+	\item Solution 2 : demander l'heure au démarrage du noyau
+
+	    \begin {itemize}
+		\item solution « historique »
+		\item encore aujourd'hui (exemple : Raspberry PI)
+	    \end {itemize}
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Mesure du temps}
+    Comment compter le temps qui passe ?
+
+    \begin {itemize}
+	\item Le noyau doit reprendre la main à intervalle régulier
+	\item Assistance matérielle indispensable
+	    \begin {itemize}
+		\item mécanisme d'interruption périodique du processeur
+		\item historiquement : fréquence du secteur électrique
+		    \begin {itemize}
+			\item fréquence très stable (à l'inverse de la tension)
+			\item aux États-Unis : 60 Hz \implique 60 interruptions
+			    par seconde
+			\item en Europe : 50 Hz \implique 50 interruptions
+			    par seconde
+		    \end {itemize}
+
+		\item actuellement : composant matériel basé sur le quartz
+		    \begin {itemize}
+			\item fréquence programmable par le noyau
+			\item en fonction de la configuration du noyau
+			\item entre 50 et 1000 fois par seconde
+			    (période entre 1 et 20 ms)
+		    \end {itemize}
+	    \end {itemize}
+	\item À chaque interruption, incrémenter un compteur
+	\item Lorsque le compteur atteint la fréquence
+	    \begin {itemize}
+		\item une seconde s'est écoulée
+		\item incrémenter l'heure du système
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Unités de temps}
+    Le noyau utilise deux unités de temps :
+
+    \begin {enumerate}
+	\item instant précis dans le temps
+	\item courte durée (ex : consommation de CPU)
+    \end {enumerate}
+\end {frame}
+
+\begin {frame} {Unités de temps -- time\_t}
+
+    Instant précis (à la seconde) dans le temps : type \code {time\_t}
+
+    \begin {itemize}
+	\item exemple : heure courante, date de fichier, etc.
+	\item valeur : nombre de secondes depuis «~The Epoch~»
+	    \begin {itemize}
+		\item Epoch : premier janvier 1970, 0h0'0", UTC
+		\item UTC : temps universel coordonné
+		    \\
+		    {\fC (avant 1986 : GMT = heure du méridien de
+		    Greenwich)}
+
+	    \end {itemize}
+
+	\item l'heure est conservée en UTC
+	    \begin {itemize}
+		\item indépendamment du fuseau horaire
+	    \end {itemize}
+
+	\item \code {time\_t} historiquement sur 32 bits
+	    \begin {itemize}
+		\item bogue de l'an 2038 (nombre de secondes $\geq 2^{31}$)
+		\item solution : passer à 64 bits (ex : Linux $\geq 3.17$)
+		\item nombreux formats de fichiers avec des dates
+		    sur 32 bits
+	    \end {itemize}
+
+	\item valeur de type \code {time\_t}...
+	    \begin {itemize}
+		\item ... facile à tenir à jour par le noyau
+		\item ... pas facile à lire pour un humain
+		    \begin {itemize}
+			\item ce n'est pas le problème du noyau
+		    \end {itemize}
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Unités de temps -- time\_t}
+
+    Conversion d'un \code {time\_t} en une valeur intelligible :
+    \begin {itemize}
+	\item problème «~intéressant~», car prise en compte :
+	    \begin {itemize}
+		\item du fuseau horaire
+		\item de l'heure d'été et de l'heure d'hiver
+		\item des changements de dates des heures d'été et d'hiver
+		    \begin {itemize}
+			\item ex : pas de changement d'heure avant 1976
+			    en France
+		    \end {itemize}
+		\item des années bissextiles
+		\item des secondes intercalaires
+		    \begin {itemize}
+			\item variations de la vitesse de rotation de la Terre
+			\item ex : 1 seconde ajoutée après 23h59'59"
+			    le 31/12/2016
+		    \end {itemize}
+	    \end {itemize}
+
+	\item ... mais ne concerne pas le noyau
+	\item \implique à la charge des fonctions de bibliothèque
+	    \begin {itemize}
+		\item \code {localtime}, \code {asctime}, \code {strftime}, etc.
+	    \end {itemize}
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Unités de temps -- clock\_t}
+    courte durée : type \code {clock\_t}
+
+    \begin {itemize}
+	\item exemple : temps CPU consommé par un processus
+	\item valeur : nombre de tops d'horloge (ou «~\textit {ticks}~»)
+	\item unité dépend de la configuration du noyau
+	    \begin {itemize}
+		\item POSIX fournit la primitive
+		    \code {long sysconf (int paramètre})
+		\item \code {paramètre} : paramètre de configuration interrogé
+		\item exemple : \code {freq = sysconf (\_SC\_CLK\_TCK)}
+		    \\
+		    \implique donne le nombre de tops d'horloge par seconde
+	    \end {itemize}
+	\item mesure de la consommation CPU :
+	    \begin {itemize}
+		\item à chaque interruption d'horloge, le noyau incrémente
+		    le compteur du processus courant
+		\item \implique consommation approximative
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Heure courante
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Heure courante}
+
+\begin {frame} {Heure courante}
+    \prototype {
+	\code {time\_t time (time\_t *heure)} \\
+	\code {int stime (time\_t *heure)}
+    }
+
+    \begin {itemize}
+	\item \code {time} récupère l'heure courante
+	    \begin {itemize}
+		\item comme valeur de retour (ou -1)
+		\item et à l'adresse indiquée
+	    \end {itemize}
+	\item \code {stime} modifie l'heure courante
+	    \begin {itemize}
+		\item primitive réservée à l'administrateur
+	    \end {itemize}
+    \end {itemize}
+
+    \vspace* {3mm}
+
+    Note : l'heure courante est parfois appelée «~\textit {wall clock}~» \\
+    (i.e. l'heure qu'on peut lire sur l'horloge murale)
+\end {frame}
+
+\begin {frame} {Heure courante -- gettimeofday}
+    \prototype {
+	\code {int gettimeofday (struct timeval *tv, struct timezone *tz)}
+    }
+
+    \begin {itemize}
+	\item ajout de l'U. de Berkeley
+	\item précision accrue
+	\item contenu de la \code {struct timeval} :
+	    \ctableau {\fD} {|ll|l|} {
+		\code {time\_t} & \code {tv\_sec}
+		    & nombre de secondes depuis « The Epoch » \\
+		\code {suseconds\_t}  & \code {tv\_usec}
+		    & nombre de micro-secondes \\
+	    }
+
+	    \vspace* {1mm}
+
+	\item attention : ce n'est pas parce qu'il y a un champ dont
+	    l'unité est la $\mu$s que la granularité de la mesure
+	    du temps est la $\mu$s
+
+	\item \code {time} est maintenant devenue une fonction de
+	    bibliothèque qui appelle la primitive \code {gettimeofday}
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Heure courante -- gettimeofday}
+    Exemple de \code {struct timeval}~:
+
+    \vspace* {3mm}
+    
+    \begin {minipage} {.35\linewidth}
+    \ctableau {\fD} {|l|r|} {
+	\code {tv\_sec}
+	    & 1$\thinspace$500$\thinspace$000$\thinspace$000
+	    \\
+	\code {tv\_usec}
+	    & 123$\thinspace$456
+	    \\
+    }
+    \end {minipage}
+    \hfill
+    $\Leftrightarrow$
+    \hfill
+    \begin {minipage} {.55\linewidth}
+	\fC 14/07/2017 à 2h40'00" et 123456 $\mu s$ UTC
+    \end {minipage}
+
+
+    \begin {center}
+	\includegraphics [width=.9\linewidth] {\inc/timeval}
+    \end {center}
+\end {frame}
+
+
+\begin {frame} {Heure courante}
+    Exemple d'utilisation :
+
+    \lstinputlisting [basicstyle=\fD\lstmonstyle] {\inc/ex-lib.c}
+
+    \begin {itemize}
+	\item « primitive système » : \code {time}
+	\item fonctions de bibliothèque : \code {localtime}, \code
+	    {asctime} et \code {strftime}
+    \end {itemize}
+\end {frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Temps CPU
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Temps CPU}
+
+\begin {frame} {Temps CPU}
+    \prototype {
+	\code {clock\_t times (struct tms *buf)} \\
+    }
+
+    \begin {itemize}
+	\item place la consommation CPU à l'adresse pointée par \code {buf}
+	    \begin {itemize}
+		\item contenu de la \code {struct tms}~:
+
+		    \vspace* {-3mm}
+
+		    \ctableau {\fD} {|l|l|} {
+			\code {tms\_utime}
+			    & consommation CPU du processus
+				en mode utilisateur \\
+			\code {tms\_stime}
+			    & consommation CPU du processus
+				en mode système \\
+			\code {tms\_cutime}
+			    & consommation CPU cumulée des fils
+				en mode utilisateur \\
+			\code {tms\_cstime}
+			    & consommation CPU cumulée des fils
+				en mode système \\
+		    }
+
+		    \vspace* {1mm}
+
+		\item tous les champs sont de type \code {clock\_t}
+	    \end {itemize}
+
+	\item retourne le temps réellement écoulé depuis un moment
+	    arbitraire dans le passé (ou -1)
+
+	    \begin {itemize}
+		\item typiquement le démarrage du noyau
+		\item pas très utile
+		\item peut déborder la taille allouée à un \code {clock\_t}
+		\item bref : valeur de retour à ignorer (sauf pour test
+		    d'erreur)...
+	    \end {itemize}
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Temps CPU}
+    Récupération de la consommation CPU :
+
+    \begin {center}
+	\includegraphics [width=.5\linewidth] {\inc/times}
+    \end {center}
+
+    \begin {itemize}
+	\item état « zombie » : permet de transmettre 3 informations
+	    \begin {itemize}
+		\item code de retour (primitive \code {exit})
+		\item consommation CPU agrégée en mode utilisateur
+		\item consommation CPU agrégée en mode système
+	    \end {itemize}
+	\item informations transmises lors du \code {wait} par le père
+	\item on ne peut pas avoir la consommation d'un fils non terminé
+    \end {itemize}
+
+\end {frame}
+
+\begin {frame} {Temps CPU}
+    \prototype {
+	\code {int getrusage (int qui, struct rusage *res)}
+    }
+
+    \begin {itemize}
+	\item primitive \code {times} limitée à la consommation CPU
+	\item \implique besoin d'une primitive plus générale pour
+	    l'ensemble des ressources consommées par un processus
+	\item paramètre \code {qui} :
+	    \ctableau {\fD} {|l|l|} {
+		\code {RUSAGE\_SELF}
+		    & consommation du processus lui-même \\
+		\code {RUSAGE\_CHILDREN}
+		    & consommation cumulée des fils \\
+	    }
+	    \vspace* {1mm}
+	\item exemples (non exhaustifs) de champs de \code {struct rusage} :
+
+	    \ctableau {\fD} {|l|l|} {
+		\code {ru\_utime} & CPU en mode utilisateur \\
+		\code {ru\_stime} & CPU en mode système \\
+		\code {ru\_maxrss} & mémoire maximum utilisée \\
+		\code {ru\_inblock} & nombre de lectures disques \\
+		\code {ru\_outblock} & nombre d'écritures disques \\
+	    }
+    \end {itemize}
+\end {frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Dates des fichiers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Dates des fichiers}
+
+\begin {frame} {Dates des fichiers}
+    \vspace* {-2mm}
+    \prototype {
+	\code {int utime (const char *path, const struct utimbuf *ut)}
+	\\
+	\code {int utimes (const char *path, const struct timeval tv [2])}
+    }
+
+    \vspace* {-2mm}
+
+    \begin {itemize}
+	\item Rappel des attributs des fichiers :
+
+	    \ctableau {\fD} {|l|l|} {
+		\code {st\_mtime}
+		    & date de dernière modification des données \\
+		\code {st\_ctime}
+		    & date de dernière modification de l'inode \\
+		\code {st\_atime}
+		    & date de dernier accès \\
+	    }
+
+	    \vspace* {1mm}
+
+	\item Primitive \code {utime} : modification des dates d'un
+	    fichier
+	\item Champs de la \code {struct utimbuf} :
+	    \ctableau {\fD} {|l|l|} {
+		\code {actime} & date de dernier accès \\
+		\code {modtime} & date de dernière modification des
+		    données \\
+	    }
+
+	    \vspace* {1mm}
+
+	\item Pas de dernière modification de l'inode \implique pourquoi ?
+
+	\item Primitive \code {utimes} : idem \code {utime}, mais avec
+	    des \code {struct timeval} (comme \code {gettimeofday})
+	    \begin {itemize}
+		\item \code {tv[0]} : dernier accès
+		\item \code {tv[1]} : dernière modification des données
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Alarmes de processus
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Alarmes de processus}
+
+\begin {frame} {Alarmes de processus}
+    Voir chapitre suivant (signaux)
+\end {frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Précision de la mesure du temps
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\titreB {Précision de la mesure du temps}
+
+\begin {frame} {Précision de la mesure du temps}
+    La précision de la mesure de la consommation de temps CPU est
+    approximative
+
+    \begin {center}
+	\includegraphics [width=.9\linewidth] {\inc/precision}
+    \end {center}
+
+    \begin {itemize}
+	\item comptabilisation du temps pour un processus lorsque
+	    l'horloge interrompt le CPU
+	    \begin {itemize}
+		\item pas de prise en compte du temps de B avant son E/S
+		    \\
+		    \implique temps imputé à C
+		\item l'interruption disque est traitée alors que le
+		    A est sur le CPU \\
+		    \implique temps pour traitement d'E/S de B
+			imputé à A
+	    \end {itemize}
+
+	\item \implique faire plusieurs mesures
+    \end {itemize}
+
+\end {frame}

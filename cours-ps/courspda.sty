@@ -1,0 +1,233 @@
+%
+% Fichier de style pour les cours Beamer
+%
+% Options possibles
+%	francais (ou english) : pour babel
+%	utf8 (ou latin9) : pour inputenc
+%	singlechap (ou multichap) : cours multiples chapitres (i.e. \titreA)
+%	title (ou notitle) : pas de page d'en-tête + plan général
+%
+% Attention : utiliser avec :
+%		\documentclass [xcolor=table] {beamer}
+% pour avoir les zolis tableaux colorés
+%
+% Historique
+%   2013/11/18 : pda    : separation dans un fichier
+%   2016/06/14 : pda    : utilisation de xcolor pour les tableaux coloréss
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Identification
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NeedsTeXFormat {LaTeX2e}
+
+\ProvidesPackage {courspda} [2016/01/24 1.2 (pda)]
+
+\RequirePackage {etoolbox}	% toggle + AtBeginDocument
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Options
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\@lang{francais}		% par defaut : francais, sinon english
+\def\@inputenc{utf8}		% par defaut : utf8, sinon latin9
+
+\newtoggle {multichap}		% par defaut : singlechap
+\togglefalse {multichap}
+\newtoggle {title}		% par defaut : title
+\toggletrue {title}
+
+\DeclareOption {francais}	{\def\@lang{francais}}
+\DeclareOption {english}	{\def\@lang{english}}
+
+\DeclareOption {utf8}		{\def\@inputenc{utf8}}
+\DeclareOption {latin9}		{\def\@inputenc{latin9}}
+
+\DeclareOption {multichap}	{\toggletrue {multichap}}
+\DeclareOption {singlechap}	{\togglefalse {multichap}}
+
+\DeclareOption {title}		{\toggletrue {title}}
+\DeclareOption {notitle}	{\togglefalse {title}}
+
+\ProcessOptions
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Packages utiles
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage [\@lang] {babel}
+\RequirePackage [\@inputenc] {inputenc}
+\RequirePackage [T1] {fontenc}
+\RequirePackage {helvet}
+\RequirePackage {ccicons}	% creative commons icons
+
+\newcommand {\credit} [1] {{\vspace* {-3mm} %
+			\fontsize{1.3mm}{1.5mm}\selectfont #1}}
+\newcommand {\creditphoto} [2] {\credit {Crédit photo : #1 -- #2}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Configuration des packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage {graphicx}
+% valeur par défaut pour les inclusions d'images
+\setkeys {Gin} {keepaspectratio}
+
+\RequirePackage {listings}
+\newcommand {\lstmonstyle} {\color {blue}\ttfamily}
+\lstset {language=c, basicstyle=\footnotesize\lstmonstyle, keywordstyle=}
+\newcommand {\code} [1] {{\lstmonstyle #1}}
+
+% \prototype {\code {int blabla (...)}}
+\newcommand {\prototype} [1] {
+    \begin {center}
+	\small
+	\begin {tabular} {l}
+	    #1
+	    \\
+	\end {tabular}
+    \end {center}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Pour avoir des zolis tableaux avec des lignes colorées
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\definecolor {bleuclair} {rgb} {0.90, 0.95, 1.0}
+\definecolor {bleufonce} {rgb} {0.80, 0.90, 1.0}
+
+\def\rca {\rowcolor {bleuclair}}
+\def\rcb {\rowcolor {bleufonce}}
+
+% tableau coloré aligné à gauche
+% #1 : taille de police (ou vide) ou autre déclaration
+% #2 : colonnes (ex: |l|c|)
+% #3 : contenu
+\newcommand {\tableau} [3] {{%
+    % \rowcolors : couleur pour les lignes impaires, pour les lignes paires
+    \rowcolors {1} {bleuclair} {bleufonce} %
+    #1 %
+    \begin {tabular} {#2} \hline
+	#3 %
+	\hline
+    \end {tabular}}}
+% tableau coloré centré
+\newcommand {\ctableau} [3] { %
+    \begin {center}
+	\tableau {#1} {#2} {#3}
+    \end {center}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Des commandes pour éviter d'avoir à se rappeler des tailles de fonte
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand {\fA} \normalsize		% taille normale
+\newcommand {\fB} \small		% un peu plus petite
+\newcommand {\fC} \footnotesize		% encore plus petite
+\newcommand {\fD} \scriptsize		% etc.
+\newcommand {\fE} \tiny			% minuscule
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Quelques commandes pour se simplifier la vie
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand {\implique} {$\Rightarrow$\ }
+\renewcommand {\arraystretch} {1.2}
+
+\newcommand {\DESSIN} {\textbf {\huge {DESSIN}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Configuration de beamer
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usetheme {default}
+\usefonttheme {structurebold}
+
+\setbeamercolor {frametitle} {fg=red}
+\setbeamertemplate {frametitle} {\insertframetitle \par}
+
+\pgfdeclareimage [height=3mm, interpolate=true] {logo} {logo-uds}
+
+\setbeamertemplate {footline} {%
+    \vskip 1ex
+	\hskip 1ex
+	\makebox [.4\textwidth] [l] {\pgfuseimage {logo}}
+	\hfill
+	\insertframenumber %/\inserttotalframenumber
+	\hfill
+	\makebox [.4\textwidth] [r] {\textnormal {%
+		% \copyright
+		Pierre David,
+		pda@unistra.fr}%
+	    }
+	\hspace* {1ex}
+    \vskip 1ex
+}
+
+\setbeamertemplate {navigation symbols} {}
+
+\setbeamercolor {block title} {fg=red!80, bg= blue!10}
+\setbeamercolor {block body} {fg=black, bg= blue!5}
+
+% pour les "recettes de cuisines" dans les "blocks". Repose sur
+% le fichier casserole.pdf
+\newsavebox {\Cbox}
+\newcommand {\casseroler} [1] {\sbox {\Cbox} {#1} %
+    \raisebox {-.1\ht\Cbox} {\includegraphics [height=1.6\ht\Cbox] {casserole}}
+    \hspace* {.5\ht\Cbox}
+    \usebox {\Cbox}
+}
+
+% Reduire l'espace inter-lignes dans les tables des matières
+% https://tex.stackexchange.com/questions/51452/reduce-spacing-in-table-of-contents-beamer#51458
+\patchcmd{\beamer@sectionintoc}{\vskip1.5em}{\vskip1.1em}{}{}
+
+\iftoggle {multichap} {%%%%%%%%%%%%%%%%%%%% Multi-chapter
+    \newcommand {\titreA} [1] {\section {#1}}
+    \newcommand {\titreB} [1] {\subsection {#1}}
+    \AtBeginSection [] % Do nothing for \section*
+    {
+	\begin {frame}<beamer>
+	    \frametitle {Plan}
+	    \tableofcontents [currentsection, hideallsubsections]
+	\end {frame}
+    }
+    \AtBeginSubsection [] % Do nothing for \subsection*
+    {
+	\begin {frame}<beamer>
+	    \frametitle {Plan}
+	    \tableofcontents [sectionstyle=show/hide, subsectionstyle=show/shaded/hide]
+	\end {frame}
+    }
+} {%%%%%%%%%%%%%%%%%%%% Single-chapter
+    \newcommand {\titreA} [1] {}
+    \newcommand {\titreB} [1] {\section {#1}}
+    \AtBeginSection [] % Do nothing for \section*
+    {
+	\begin {frame}<beamer>
+	    \frametitle {Plan}
+	    \tableofcontents [currentsection]
+	\end {frame}
+    }
+    \AtBeginSubsection [] % Do nothing for \subsection*
+    {
+	\begin {frame}<beamer>
+	    \frametitle {Plan}
+	    \tableofcontents [sectionstyle=show/hide, subsectionstyle=show/shaded/hide]
+	\end {frame}
+    }
+}
+
+\iftoggle {title} {%%%%%%%%%%%%%%%%%%%%%%%% Title
+    \AtBeginDocument {
+	\begin {frame} [plain]
+	    \titlepage
+	\end {frame}
+	\section* {Plan}
+	\begin {frame} {Plan}
+	    \tableofcontents [hideallsubsections]
+	\end {frame}
+    }
+} {}
