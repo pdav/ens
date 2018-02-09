@@ -5,7 +5,7 @@ fp1 = fopen ("toto", "r") ;
 if (fp1 == NULL)
     raler ("fopen toto") ;
 fp2 = fopen ("titi", "w") ;
-if (fp1 == NULL)
+if (fp2 == NULL)
     raler ("fopen titi") ;
 
 while ((c = getc (fp1)) != EOF)
