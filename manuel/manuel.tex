@@ -6398,16 +6398,20 @@ extern int optind, opterr ;
 \end {quote}
 
 La fonction \texttt {getopt} permet d'analyser les arguments de
-la ligne de commande. la chaîne \texttt {optstring} décrit les
+la ligne de commande de manière compatible avec les outils standards :
+traitement des options dans n'importe quel ordre ou accolées (exemple~:
+\verb|-a -b| ou \verb|-ab| ou \verb|-ba|, etc.) et traitement de
+\verb|--| pour terminer les options.
+La chaîne \texttt {optstring} décrit les
 options valides~: une lettre seule décrit une option sans
-argument, une lettre suivie d'un caractère \texttt {:} est une
+argument, une lettre suivie d'un caractère «~\texttt {:}~» est une
 option qui admet un argument, séparé ou non par des espaces.
 La variable \texttt {optarg} pointe alors sur le texte de
 l'argument.
 
 \texttt {getopt} place dans la variable \texttt {optind} l'indice dans
 \texttt {argv} du prochain argument à traiter. Quand toutes les
-options sont traitées, \texttt {getopt} renvoie \texttt {EOF}.
+options sont traitées, \texttt {getopt} renvoie -1.
 
 Exemple~:
 
@@ -6420,13 +6424,13 @@ int main (int argc, char *argv [])
     extern int optind ;
 
     ...
-    while ((c = getopt (argc, argv, "abf:o:")) != EOF)
+    while ((c = getopt (argc, argv, "abf:o:")) != -1)
         switch (c)
         {
             case 'a' :     /* option sans argument */
                 aflag++ ;
                 break ;
-	    case 'b' :
+            case 'b' :
                 bflag++ ;
                 break ;
             case 'f' :     /* option avec argument */
