@@ -121,7 +121,7 @@ ls} avec l'option {\tt -l}).
 \question
 
 On désire implémenter une nouvelle version de la librairie standard
-d'entrées/sorties à l'aide des primitives système.
+d'entrées/sorties à l'aide des primitives systèmes.
 
 \begin {enumerate}
     \item Donnez une définition du type {\tt FICHIER}.  N'oubliez de
@@ -140,6 +140,12 @@ d'entrées/sorties à l'aide des primitives système.
 
     \item Programmez la fonction {\tt my\_close}, analogue à {\tt
 	fclose}.
+
+    \item Pour tester, écrivez une fonction \texttt {main} qui ouvre
+	deux fichiers \texttt{toto} et \texttt{tata} en lecture, puis
+	qui lit en boucle 1 caractère dans chacun des deux fichiers
+	et les affiche sur la sortie standard. Votre boucle s'arrêtera
+	dès que vous rencontrez la première fin de fichier.
 
 \end {enumerate}
 
