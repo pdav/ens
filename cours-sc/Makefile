@@ -241,7 +241,7 @@ all:	ch1-intro.pdf \
 	ch5-interb.pdf \
 	ch6-thsync.pdf \
 	ch7-c11.pdf \
-	ch7-openmp.pdf
+	ch8-openmp.pdf
 
 ch1-intro.pdf:	$(DEPS) $(FIGintro) $(LSTintro) $(SRCintro)
 ch2-api.pdf:	$(DEPS) $(FIGapi) $(LSTapi) $(SRCapi)
