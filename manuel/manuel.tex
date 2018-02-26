@@ -4797,9 +4797,10 @@ int snprintf (char *str, size_t taille, const char *format, ...)
 \end{verbatim}
 \end {quote}
 
-Attention : la fonction \texttt {sprintf} est \textbf {obsolète}, car elle ne
-vérifie pas le débordement de la chaîne fournie en paramètre. Il faut
-utiliser \texttt {snprintf} à la place.
+Attention : la fonction \texttt {sprintf} peut être dangereuse car
+elle ne vérifie pas le débordement de la chaîne \texttt{str} fournie
+en paramètre. Il vaut mieux en général utiliser \texttt{snprintf},
+sauf s'il est certain que la place dans \texttt{str} est suffisante.
 
 La fonction \texttt {printf} affiche ses données sur la sortie standard, la
 fonction \texttt {fprintf} écrit sur le flux \texttt {flux}, la fonction \texttt
@@ -4999,10 +5000,11 @@ int main (int argc, char *argv [])
 \end{verbatim}
 \end {quote}
 
-Attention : comme pour \texttt {sprintf}, la fonction \texttt {vsprintf}
-est \textbf {obsolète}, car elle ne vérifie pas le débordement de la
-chaîne fournie en paramètre. Il faut donc utiliser \texttt {vsnprintf}
-à la place.
+Attention : comme pour \texttt{sprintf}, la fonction \texttt{vsprintf}
+peut être dangereuse car elle ne vérifie pas le débordement de
+la chaîne fournie en paramètre. Il vaut mieux en général utiliser
+\texttt{vsnprintf}, sauf s'il est certain que la place dans \texttt{str}
+est suffisante.
 
 
 \separation
@@ -5424,9 +5426,10 @@ char *strncat (char *str1, const char *str2, size_t n)
 \end{verbatim}
 \end {quote}
 
-Attention : la fonction \texttt {strcat} est \textbf {obsolète}, car elle ne
-vérifie pas le débordement de la chaîne \texttt {str1}. Il faut
-utiliser \texttt {strncat} à la place.
+Attention : la fonction \texttt {strcat} peut être dangereuse car
+elle ne vérifie pas le débordement de la chaîne \texttt{str1} fournie
+en paramètre. Il vaut mieux en général utiliser \texttt{strncat},
+sauf s'il est certain que la place dans \texttt{str1} est suffisante.
 
 La fonction \texttt {strcat} réalise une concaténation de la
 chaîne \texttt {str2} à la fin de la chaîne \texttt {str1}.
@@ -5477,9 +5480,10 @@ char *strncpy (char *str1, const char *str2, size_t n)
 \end{verbatim}
 \end {quote}
 
-Attention : la fonction \texttt {strcpy} est \textbf {obsolète}, car elle ne
-vérifie pas le débordement de la chaîne \texttt {str1}. Il faut
-utiliser \texttt {strncpy} à la place.
+Attention : la fonction \texttt {strcpy} peut être dangereuse car
+elle ne vérifie pas le débordement de la chaîne \texttt{str1} fournie
+en paramètre. Il vaut mieux en général utiliser \texttt{strncpy},
+sauf s'il est certain que la place dans \texttt{str1} est suffisante.
 
 La fonction \texttt {strcpy} copie la chaîne \texttt {str2} dans la
 chaîne \texttt {str1} (en écrasant l'ancienne valeur de \texttt {str1}).
