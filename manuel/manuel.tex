@@ -4937,10 +4937,11 @@ Exemples~:
 	\label{printftypesposix}
 	pour imprimer des valeurs correspondant à des types définis
 	par POSIX (cf~\ref{typesposix}, page~\pageref{typesposix}) de
-	manière portable, il faut les convertir en \texttt{intmax\_t}~:
+	manière portable, il faut les convertir en \texttt{intmax\_t}
+	ou \texttt{uintmax\_t}~:
 	    \begin {quote}
 		\small
-		\verb|printf ("taille = %jd, uid=%jd", (intmax_t) stbuf.st_size, (intmax_t) stbuf.st_uid)|
+		\verb|printf ("taille = %ju, uid=%ju", (uintmax_t) stbuf.st_size, (uintmax_t) stbuf.st_uid)|
 	    \end {quote}
 
 \end {itemize}

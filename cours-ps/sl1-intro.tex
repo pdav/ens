@@ -1070,7 +1070,30 @@
 		\code {size\_t} & taille, résultat de sizeof (définie par ISO C) \\
 	    }
 
-	    Définitions des types : fichiers d'inclusion
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {POSIX -- Types}
+    \begin {itemize}
+	\item Définition des types :
+	    \begin {itemize}
+		\item taille choisie par l'implémenteur
+		\item voir fichiers d'inclusion
+	    \end {itemize}
+	\item Problème : comment afficher des valeurs avec \code{printf}~?
+	    \begin {itemize}
+		\item \code {\%d}, \code {\%ld}, \code {\%lld} ? \implique non !
+		\item solution : convertir en \code{uintmax\_t}
+		    et utiliser le format \code{\%ju}
+		    \begin {itemize}
+			\item \code {j} : taille = celle d'un
+			    \code{intmax\_t}/\code{uintmax\_t}
+			\item \code {u} : \code{unsigned} (\code{d} pour \code{signed})
+		    \end {itemize}
+		\item exemple~: \\
+		    \code{printf ("taille=\%ju", (uintmax\_t) stbuf.st\_size)}
+
+	    \end {itemize}
     \end {itemize}
 
 \end {frame}
