@@ -327,6 +327,7 @@ ignoré.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section {Définition des types}
+    \label {typesposix}
 
 Certaines primitives et fonctions de bibliothèque utilisent des paramètres
 représentant des identificateurs de processus, des numéros d'utilisateur
@@ -349,6 +350,7 @@ les principaux types utilisés~:
 	à un fichier
     \item \texttt {off\_t} (entier long)~: déplacement dans un fichier
     \item \texttt {pid\_t} (entier long)~: identificateur de processus
+    \item \texttt {ptrdiff\_t} (entier long)~: différence entre deux adresses
     \item \texttt {sigset\_t} (tableau)~: bitmap utilisée pour les signaux POSIX
     \item \texttt {size\_t} (entier non signé)~: nombre d'octets
     \item \texttt {ssize\_t} (entier)~: nombre d'octets signé
@@ -359,6 +361,9 @@ les principaux types utilisés~:
 	pouvant contenir toute donnée d'un des types précédents
 
 \end {itemize}
+
+Voir \ref {printftypesposix} (page~\pageref {printftypesposix}) pour
+les formats d'affichage de ces types.
 
 
 
@@ -4913,29 +4918,32 @@ crochets sont optionnels, les accolades indiquent une lettre au choix)~:
 
 \end {itemize}
 
-Exemple~: pour imprimer une date et une heure au format~: \par
-\begin {quote}
-\begin {verbatim}
-dimanche 3 juillet, 10:02
-\end{verbatim}
-\end {quote}
+Exemples~:
+\begin {itemize}
+    \item pour imprimer une date et une heure au format
+	«~{\small\texttt{dimanche 3 juillet, 10:02}}~», il faut
+	utiliser~:
+	    \begin {quote}
+		\verb|printf ("%s %d %s, %d:%.2d", sem, jour, mois, heure, mn)|
+	    \end {quote}
 
-il faut utiliser~:
+    \item pour imprimer $\pi$ à 10$^{-5}$ près~:
+	    \begin {quote}
+		\small
+		\verb|printf ("PI = %.5f", 4 * atan (1.0))|
+	    \end {quote}
 
-\begin {quote}
-\begin {verbatim}
-printf ("%s %d %s, %d:%.2d", sem, jour, mois, heure, mn) ;
-\end{verbatim}
-\end {quote}
+    \item
+	\label{printftypesposix}
+	pour imprimer des valeurs correspondant à des types définis
+	par POSIX (cf~\ref{typesposix}, page~\pageref{typesposix}) de
+	manière portable, il faut les convertir en \texttt{intmax\_t}~:
+	    \begin {quote}
+		\small
+		\verb|printf ("taille = %jd, uid=%jd", (intmax_t) stbuf.st_size, (intmax_t) stbuf.st_uid)|
+	    \end {quote}
 
-Pour imprimer $\pi$ à 10$^{-5}$ près~:
-
-\begin {quote}
-\begin {verbatim}
-printf ("PI = %.5f", 4 * atan (1.0)) ;
-\end{verbatim}
-\end {quote}
-
+\end {itemize}
 
 \separation
 \primitive {vprintf, vdprintf, vfprintf, vsprintf, vsnprintf} --- écriture formattée avec un nombre variable d'arguments
