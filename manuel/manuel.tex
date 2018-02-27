@@ -5234,7 +5234,8 @@ void *realloc (void *pointeur, size_t taille)
 La fonction \texttt {realloc} change la taille de l'espace alloué
 à exactement \texttt {taille} octets. Si l'espace n'est pas
 extensible, \texttt {realloc} en cherche un autre et y copie les
-données.
+données. Si \texttt{pointer} est nul, \texttt{realloc} se comporte
+comme \texttt{malloc}.
 
 La fonction \texttt {realloc} renvoie le pointeur sur l'espace
 mémoire, ou 0 si il n'y a plus de place ou si il y a eû
