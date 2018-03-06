@@ -1403,11 +1403,11 @@ réussi, ou -1 en cas d'erreur.
 \begin {verbatim}
 #include <unistd.h>
 
-int execl (char *chemin, char *arg0, char *arg1, ... char *argn, (char *) 0)
+int execl (char *chemin, char *arg0, char *arg1, ... char *argn, NULL)
 int execv (char *chemin, char *argv [])
-int execle (char *chemin, char *arg0, char *arg1, ... char *argn, (char *) 0, char *envp [])
+int execle (char *chemin, char *arg0, char *arg1, ... char *argn, NULL, char *envp [])
 int execve (char *chemin, char *argv [], char *envp [])
-int execlp (char *fichier, char *arg0, char *arg1, ... char *argn, (char *) 0)
+int execlp (char *fichier, char *arg0, char *arg1, ... char *argn, NULL)
 int execvp (char *fichier, char *argv [])
 \end{verbatim}
 \end {quote}
@@ -5215,7 +5215,7 @@ la fonction \texttt {calloc} alloue un espace pour un tableau de
 est initialisé à 0.
 
 Ces deux fonctions renvoient un pointeur sur l'espace
-alloué, ou 0 si il n'y a plus de place ou si il y a eû
+alloué, ou \texttt{NULL} si il n'y a plus de place ou si il y a eû
 erreur.
 
 
@@ -5238,7 +5238,7 @@ données. Si \texttt{pointer} est nul, \texttt{realloc} se comporte
 comme \texttt{malloc}.
 
 La fonction \texttt {realloc} renvoie le pointeur sur l'espace
-mémoire, ou 0 si il n'y a plus de place ou si il y a eû
+mémoire, ou \texttt{NULL} si il n'y a plus de place ou si il y a eû
 erreur.
 
 
@@ -6579,7 +6579,6 @@ l'exécution du processus.
 #include <stdio.h>
 
 char *tmpnam (char *adresse)
-char *tmpnam ((char *) 0)
 char *tempnam (const char *repertoire, const char *prefixe)
 \end{verbatim}
 \end {quote}
@@ -6587,8 +6586,8 @@ char *tempnam (const char *repertoire, const char *prefixe)
 La fonction \texttt {tmpnam} génère un nom de fichier unique. Ce nom est
 renvoyé en retour. Si le paramètre \texttt {adresse} n'est pas nul, il s'agit
 d'un tableau d'au moins \texttt {L\_tmpnam} octets, et le nom
-est également placé dans ce tableau. Si le paramètre \texttt {adresse} est
-nul, le nom est mis dans une chaîne statique réutilisée par chaque
+est également placé dans ce tableau. Si le paramètre \texttt {adresse} vaut
+\texttt{NULL}, le nom est mis dans une chaîne statique réutilisée par chaque
 nouvel appel.
 
 La fonction \texttt {tempnam} est plus complète : le paramètre \texttt
