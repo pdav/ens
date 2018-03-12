@@ -5564,16 +5564,16 @@ La fonction \texttt {ctime} renvoie une chaîne de 26 caractères
 Sun Sep 16 01:03:52 1973\n\0
 \end{verbatim}
 \end {quote}
-L'argument de \texttt {ctime} est la valeur de l'horloge telle
-que renvoyée par la primitive système \texttt {time}. Le plus simple est
-habituellement de procéder comme suit~:
+L'argument de \texttt {ctime} est la valeur de l'horloge telle que
+renvoyée par la primitive système \texttt {time}. L'adresse renvoyée
+pointe dans une variable interne (statique) de \texttt{ctime}.
 
 \begin {quote}
-\begin {verbatim}
+\begin{verbatim}
 time_t horloge ;
 
 horloge = time (NULL) ;
-strncpy (str, ctime (&horloge), 26) ;
+printf ("la date courante est: %s", ctime (&horloge)) ;
 \end{verbatim}
 \end {quote}
 
