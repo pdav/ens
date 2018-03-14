@@ -28,8 +28,10 @@ terminaison du fils.
 
 Généralisez l'exercice précédent à $n$ processus~:  le premier passe les
 données depuis l'entrée standard au second, qui les passe au troisième,
-et ainsi de suite jusqu'au $n-1$-ème qui les passe au $n$-ème, qui les
-écrit sur sa sortie standard.
+et ainsi de suite jusqu'au $n-1$-ème qui les passe au $n$-ème (le père),
+qui les écrit sur sa sortie standard. Il doit donc y avoir $n-1$ tubes,
+et les $n-1$ fils doivent être les fils directs du processus père qui
+exécute la fonction \texttt{main}.
 
 
 \question
