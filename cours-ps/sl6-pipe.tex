@@ -104,21 +104,40 @@
 
 \titreB {Règles de fonctionnement}
 
-\begin {frame} {Règles de fonctionnement [1/2]}
-    Règles particulières des tubes :
+\begin {frame} {Règles de fonctionnement [1/3]}
+    Règles particulières des tubes pour la lecture (\code {read}) :
+
     \begin {itemize}
 	\item Primitive \code {read} bloquante
 	    \begin {itemize}
 		\item \code {read} renvoie 0 quand tube vide et plus
 		    aucun écrivain
 	    \end {itemize}
-	\item \code {read} renvoie ce qui est disponible dans le tube
+
+	\item Lectures partielles
 	    \begin {itemize}
+		\item \code {read} renvoie ce qui est disponible dans le tube
 		\item vraisemblablement moins que ce qui est demandé
 		\item \implique être prêt à ce que \code
 		    {read} renvoie moins que demandé
 	    \end {itemize}
-	\item Écriture (\code {write}) dans un tube sans lecteur
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Règles de fonctionnement [2/3]}
+    Règles particulières des tubes pour l'écriture (\code {write}) :
+
+    \begin {itemize}
+	\item Écritures partielles
+	    \begin {itemize}
+		\item \code {write} limité par taille maximum des tubes
+		\item taille maximum variable (même sur le même système)
+		\item \implique être prêt à ce que \code{write}
+		    renvoie moins que demandé
+
+	    \end {itemize}
+
+	\item Écriture dans un tube sans lecteur
 	    \implique problème !
 	    \begin {itemize}
 		\item renvoyer \code {-1} ne suffit pas
@@ -138,8 +157,9 @@
     \end {itemize}
 \end {frame}
 
-\begin {frame} {Règles de fonctionnement [2/2]}
-    Règles particulières des tubes :
+\begin {frame} {Règles de fonctionnement [3/3]}
+    Règles particulières pour le partage des tubes :
+
     \begin {itemize}
 	\item Il peut y avoir plusieurs lecteurs et plusieurs écrivains
 	    \begin {itemize}
