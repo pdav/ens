@@ -795,6 +795,31 @@
     \end {itemize}
 \end {frame}
 
+\begin {frame} {API POSIX -- Primitive sigprocmask}
+    Pourquoi/quand utiliser \code{sigprocmask} ?
+
+    \begin {itemize}
+	\item Exemple déjà vu : le programme principal appelle la
+	    fonction \code{incrementer}
+
+	    \lstinputlisting [basicstyle=\fE\lstmonstyle, numbers=left] {\inc/compteur.c}
+
+	\item Problème de concurrence si la fonction associée à un
+	    signal utilise la variable \code{c}
+
+	\item Il faut empêcher le signal d'être pris en compte lorsque
+	    \code{incrementer} s'exécute
+	    \implique \textit{masquer} le signal
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {API POSIX -- Primitive sigprocmask}
+
+    \lstinputlisting [basicstyle=\fD\lstmonstyle] {\inc/sigprocmask.c}
+
+\end {frame}
+
 \begin {frame} {API POSIX -- Primitive sigpending}
     \prototype {
 	\code {int sigpending (sigset\_t *ensemble)}
@@ -808,6 +833,13 @@
 		\item les signaux sont reçus
 		\item mais ils sont masqués
 		\item donc ils sont en attente de traitement
+	    \end {itemize}
+
+	\item rappel : signal $i$ reçu $\Leftrightarrow$ bit $i$ à 1
+	    \begin {itemize}
+		\item un signal n'est mémorisé qu'une seule fois
+		\item si un signal $i$ est reçu $n$ fois ($n > 1$),
+		    on ne garde qu'un bit
 	    \end {itemize}
     \end {itemize}
 \end {frame}
@@ -825,6 +857,39 @@
 
     \end {itemize}
 \end {frame}
+
+\begin {frame} {API POSIX -- Primitive sigsuspend}
+    Pourquoi/quand utiliser \code{sigsuspend} ?
+
+    \begin {itemize}
+	\item Exemple : prise de décision suite à un événement
+	    \lstinputlisting [basicstyle=\fE\lstmonstyle, lastline=16, numbers=left] {\inc/sigsuspend.c}
+
+	\item Si le signal arrive entre 13 et 14 \implique attente éternelle...
+	    \\
+	    \implique il faudrait exécuter les lignes 13 et 14 en
+	    section critique
+	    \\
+	    tout en autorisant le signal à arriver pendant \code{pause}
+
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {API POSIX -- Primitive sigsuspend}
+
+    \lstinputlisting [basicstyle=\fE\lstmonstyle, firstline=17, numbers=left] {\inc/sigsuspend.c}
+
+    \begin {itemize}
+	\item les lignes 12 à 15 sont exécutées en section critique
+	    \begin {itemize}
+		\item pendant l'attente, la section critique est levée
+		\item on ne peut pas être interrompu entre 14 et 15
+	    \end {itemize}
+	\item ne pas abuser des sections critiques
+    \end {itemize}
+
+\end {frame}
+
 
 \begin {frame} {API POSIX -- Bilan}
 

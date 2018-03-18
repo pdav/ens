@@ -196,6 +196,8 @@ LSTsig = \
 	inc7-sig/compteur.c \
 	inc7-sig/volatile.c \
 	inc7-sig/sigaction.c \
+	inc7-sig/sigprocmask.c \
+	inc7-sig/sigsuspend.c \
 
 
 ##############################################################################
