@@ -1,5 +1,5 @@
-/* attribut specifique gcc (et clang) */
-void fct (__attribute__ ((unused)) int signum)
+void fct (int signum)
 {
-    /* code de la fonction */
+    (void) signum ;      // hack : resultat ignore
+    /* reste de la fonction qui n'utilise pas signum */
 }

@@ -1,5 +1,7 @@
 \def\inc{inc7-sig}
 
+\newcommand {\ctrl} [2] {\framebox{#2{}CTRL}\framebox{#2{}#1}}
+
 \titreA {Gestion des signaux}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -21,7 +23,7 @@
 	\item événements matériels
 	    \begin {itemize}
 		\item déconnexion (\code {SIGHUP}),
-		\item appui sur \framebox {\fC CTRL}\framebox {\fC C}
+		\item appui sur \ctrl{C}{\fD}
 		    (\code {SIGINT})
 	    \end {itemize}
 	\item événements suite à une action du programme
@@ -44,20 +46,14 @@
     Les signaux sont représentés par des entiers \implique \code {SIG*}
 \end {frame}
 
-\begin {frame} {Introduction}
-    Notification au processus \implique actions possibles du processus :
+\begin {frame} {Introduction -- Action par défaut}
+    Notification au processus \implique action par défaut du processus
 
     \begin {itemize}
-	\item ignorer le signal
-	    \begin {itemize}
-		\item action par défaut pour quelques rares signaux
-		\item exemple : \code {SIGCHLD} \implique terminaison
-		    d'un fils
-	    \end {itemize}
 	\item terminer le processus
 	    \begin {itemize}
-		\item action par défaut pour la plupart des signaux
-		\item exemple : \code {SIGSEGV} \implique erreur
+		\item exemple : \ctrl{C}{\fD}
+		\item exemple : \code{SIGSEGV} \implique erreur
 		    d'adressage mémoire
 		\item certains signaux provoquent la génération d'un
 		    fichier \code {core}
@@ -69,7 +65,62 @@
 
 		    \end {itemize}
 	    \end {itemize}
-	\item exécuter une fonction spécifiée préalablement
+	\item ignorer le signal
+	    \begin {itemize}
+		\item exemple : terminaison d'un fils
+		    \implique \code{SIGCHLD}
+	    \end {itemize}
+	\item suspendre l'exécution du processus
+	    \begin {itemize}
+		\item exemple : \ctrl{Z}{\fD}
+		    \implique \code{SIGTSTP} (terminal stop)
+		\item ou envoi de \code{SIGSTOP}
+	    \end {itemize}
+	\item reprendre l'exécution du processus
+	    \begin {itemize}
+		\item Job control : \code{fg}/\code{bg} en shell \implique
+		    \code {SIGCONT}
+
+	    \end {itemize}
+    \end {itemize}
+\end {frame}
+
+\begin {frame} {Introduction -- Action par défaut}
+    Quelques signaux et leurs actions par défaut :
+    \ctableau {\fD} {|l|l|c|l|} {
+	\textbf {Signal}
+	    & \textbf {Action}
+	    & \textbf {core}
+	    & \textbf {Signification}
+	    \\ \hline
+	SIGALRM  & Terminer  &     & Alarme de processus \\
+	SIGCHLD  & Ignorer   &     & Terminaison d'un fils \\
+	SIGCONT  & Reprendre &     & \code{fg}/\code{bg} \\
+	SIGFPE   & Terminer  & oui & Expression invalide (ex: division par 0) \\
+	SIGHUP   & Terminer  &     & Déconnexion \\
+	SIGINT   & Terminer  &     & \ctrl{C}{\fE} \\
+	SIGKILL  & Terminer  &     & Arme atomique... \\
+	SIGPIPE  & Terminer  &     & Écriture dans un tube sans lecteur \\
+	SIGQUIT  & Terminer  & oui & \ctrl{\textbackslash}{\fE} \\
+	SIGSEGV  & Terminer  & oui & Accès à une case mémoire invalide \\
+	SIGSTOP  & Suspendre &     & Suspendre le processus \\
+	SIGTERM  & Terminer  &     & Demande de terminaison du processus \\
+	SIGTSTP  & Suspendre &     & \ctrl{Z}{\fE} \\
+	SIGUSR1  & Terminer  &     & Signal sans définition système 1 \\
+	SIGUSR2  & Terminer  &     & Signal sans définition système 2 \\
+	SIGWINCH & Ignorer   &     & Changement de taille de fenêtre \\
+    }
+\end {frame}
+
+\begin {frame} {Introduction -- Changement d'action}
+
+    L'action par défaut n'est pas toujours souhaitable \\
+    \implique une action spécifique peut être associée à chaque signal
+
+    \begin {itemize}
+	\item \code{SIG\_IGN} : ignorer le signal
+	\item \code{SIG\_DFL} : l'action par défaut
+	\item exécuter une fonction définie préalablement
 	    \begin {itemize}
 		\item la fonction interrompt l'exécution du programme
 		\item lorsque la fonction se termine, le programme reprend
@@ -83,18 +134,17 @@
     \begin {itemize}
 	\item sauvegarder le calcul en cours en cas d'interruption
 	    \begin {itemize}
-		\item appui sur \framebox {\fC CTRL}\framebox {\fC C}
+		\item appui sur \ctrl{C}{\fD}
 		    \implique \code {SIGINT}
 		\item appeler la fonction programmée pour \code {SIGINT}
 	    \end {itemize}
 
 	\item interrompre une action sans sortir du programme
 	    \begin {itemize}
-		\item exemple : \framebox {\fC CTRL}\framebox {\fC C}
-		    avec \code {vi}
+		\item exemple : \ctrl{C}{\fD} avec \code{vi}
 	    \end {itemize}
 
-	\item terminer le programme proprement
+	\item terminer le programme « proprement »
 	    \begin {itemize}
 		\item l'utilisateur envoie le signal \code {SIGTERM}
 		\item appeler la fonction programmée pour \code {SIGTERM}
@@ -118,25 +168,47 @@
     \end {itemize}
 \end {frame}
 
-\begin {frame} {Cas particulier -- SIGKILL}
+\begin {frame} {Cas particuliers}
+    Deux signaux particuliers : impossible de modifier l'action
+
     \begin {itemize}
-	\item Avec les signaux, il est possible d'exécuter une fonction
-	    au lieu de terminer le processus par défaut
-
-	\item S'il est possible de programmer une fonction pour chacun
-	    des signaux, on peut avoir des processus «~immortels~»
-
-	\item D'où le signal \code {SIGKILL} :
-
+	\item \code {SIGKILL}
 	    \begin {itemize}
-		\item action = action par défaut
-		    \implique terminer le processus
-		\item impossible de changer cette action
-		\item il reste toujours un moyen de terminer un processus !
+		\item Avec les signaux, il est possible d'exécuter une fonction
+		    au lieu de terminer le processus par défaut
+
+		\item S'il est possible de programmer une fonction pour chacun
+		    des signaux, on peut avoir des processus «~immortels~»
+
+		\item D'où le signal \code {SIGKILL} :
+		    \begin {itemize}
+			\item action = action par défaut
+			    \implique terminer le processus
+			\item impossible de modifier cette action
+			\item il reste toujours un moyen de terminer un processus !
+			\item ne pas envoyer \code{SIGKILL} (= 9)
+			    directement à un processus \\
+			    \implique le processus ne peut pas se terminer
+				«~proprement~» \\
+			    \implique faire d'abord des tirs de sommation
+				(ex : \code{SIGHUP}, \code{SIGTERM})
+
+		    \end {itemize}
+
+	    \end {itemize}
+
+	\item \code {SIGSTOP}
+	    \begin {itemize}
+		\item Analogue à \code{SIGKILL} : 
+		    suspension impérative de processus
+		\item Ne pas confondre avec \code {SIGTSTP}
+		    (envoyé suite à \ctrl{Z}{\fD})
+
 	    \end {itemize}
 
     \end {itemize}
 \end {frame}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % API Unix v7
@@ -247,6 +319,25 @@
     \end {itemize}
 \end {frame}
 
+\begin {frame} {API Unix v7 -- Primitive signal}
+    \begin {block} {\casseroler {Analogie du radio-réveil}}
+    \begin {itemize}
+	\item \code{signal} \textbf {n'attend pas} l'arrivée d'un signal
+	    \begin {itemize}
+		\item \code{signal} spécifie l'action à effectuer quand
+		    le signal \textbf {arrivera}
+	    \end {itemize}
+	\item comme un radio-réveil ou un smartphone :
+	    \begin {itemize}
+		\item on \textbf {règle} la radio à écouter lorsque
+		    le réveil \textbf {sonnera}
+		\item on \textbf {indique} la chanson à écouter lorsque
+		    le réveil \textbf {sonnera}
+	    \end {itemize}
+    \end {itemize}
+    \end {block}
+\end {frame}
+
 \begin {frame} {API Unix v7 -- Fonction appelée}
     La fonction appelée doit avoir le prototype suivant :
 
@@ -259,7 +350,7 @@
 
 	\item avec les options \code {-Wall -Werror} du
 	    compilateur \code {gcc}, il faut éviter de générer une
-	    erreur si l'argument n'est pas utilisé
+	    erreur si l'argument n'est pas utilisé :
 
 	    \lstinputlisting [basicstyle=\fD\lstmonstyle] {\inc/unused.c}
     \end {itemize}
@@ -301,7 +392,7 @@
 		\item type \code {sig\_atomic\_t} : variable modifiée
 		    en une seule opération
 		    \\
-		    \implique voir cours de Systèmes Concurrents en L3S5
+		    \implique voir semestre prochain
 	    \end {itemize}
     \end {itemize}
 
@@ -341,7 +432,7 @@
 
 	    \begin {itemize}
 		\item suspend l'exécution du programme en attendant
-		    l'arrivée d'un signal
+		    l'arrivée d'un signal \implique attente \textit{passive}
 
 		\item si le signal est ignoré, \code {pause} ne
 		    termine pas
@@ -354,8 +445,12 @@
 	\item \code {unsigned int alarm (unsigned int nsec)}
 
 	    \begin {itemize}
-		\item programme l'émission de \code {SIGALRM}
-		    vers le processus courant
+		\item programme l'envoi de \code {SIGALRM}
+		    au processus courant
+		\item dans l'analogie du radio-réveil, \code{signal}
+		    règle la radio, et \code{alarm} règle l'heure
+		    de réveil
+
 	    \end {itemize}
 
     \end {itemize}
@@ -564,14 +659,15 @@
 	    \end {itemize}
 	\item signal courant pas auto-masqué
 	    \begin {itemize}
+		\item dépendant de l'implémentation
 		\item fonction associée au signal interrompue par
 		    elle-même...
 	    \end {itemize}
 	\item action peut-être réinitialisée à l'action par défaut
 	    \begin {itemize}
 		\item dépendant de l'implémentation
-		\item deux appuis successifs sur
-		    \framebox {\fC CTRL}\framebox {\fC C} \implique patatras !
+		\item deux appuis successifs sur \ctrl{C}{\fD}
+		    \implique patatras !
 	    \end {itemize}
     \end {itemize}
 
