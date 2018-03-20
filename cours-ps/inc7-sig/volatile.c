@@ -5,7 +5,7 @@ volatile sig_atomic_t arret = 0 ;
 
 void fct (int sig)
 {
-    /* sig_atomic_t => modification en "une" operation */
+    // sig\_atomic\_t $\Rightarrow$ modification en "une" opération
     arret = 1 ;
 }
 
@@ -15,7 +15,7 @@ int main (int argc, char *argv [])
 
     signal (SIGINT, fct) ;
 
-    /* volatile => variable relue a chaque iteration */
+    // volatile $\Rightarrow$ variable relue à chaque iteration
     while (! arret)
 	n++ ;
 

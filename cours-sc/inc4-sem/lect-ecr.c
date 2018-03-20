@@ -5,7 +5,7 @@ init () {
 }
 ecrivain () {
     P (Secrivain) ;
-    /* ecriture */
+    // écriture
     V (Secrivain) ;
 }
 lecteur () {
@@ -15,7 +15,7 @@ lecteur () {
 	P (Secrivain)
     }
     V (Smutex) ;
-    /* lecture */
+    // lecture
     P (Smutex) ;
     nlect-- ;
     if (nlect == 0) {

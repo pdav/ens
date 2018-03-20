@@ -8,7 +8,7 @@ void incrementer (void)
     if (sigprocmask (SIG_BLOCK, &masque, &vieux) == -1)
 	raler ("masquage") ;
 
-    // debut de section critique
+    // début de section critique
     if (c.grand == UINT32_MAX)
     {
 	c.grand = 0 ;
@@ -17,7 +17,7 @@ void incrementer (void)
     else c.grand++ ;
     // fin de section critique
 
-    // demasquer SIGINT
+    // démasquer SIGINT
     if (sigprocmask (SIG_SETMASK, &vieux, NULL) == -1)
 	raler ("demasquage") ;
 }

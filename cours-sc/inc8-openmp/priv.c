@@ -6,13 +6,13 @@
 int v ;
 
 void f (void) {
-    v = 5 ;	/* quelle variable v est modifiee ? */
+    v = 5 ;	// quelle variable v est modifiée ?
 }
 
 void main () {
     #pragma omp parallel private (v)
     {
 	f () ;
-	printf ("%d\n", v) ;	/* resultat indefini */
+	printf ("%d\n", v) ;	// résultat indéfini
     }
 }

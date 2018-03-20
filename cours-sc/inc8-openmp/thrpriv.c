@@ -7,13 +7,13 @@ int v ;
 #pragma omp threadprivate (v)
 
 void f (void) {
-    v = 5 ;	/* la variable v privee est modifiee */
+    v = 5 ;	// la variable v privée est modifiee
 }
 
 void main () {
     #pragma omp parallel
     {
 	f () ;
-	printf ("%d\n", v) ;	/* resultat : 5 */
+	printf ("%d\n", v) ;	// résultat : 5
     }
 }

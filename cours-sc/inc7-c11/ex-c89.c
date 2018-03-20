@@ -1,10 +1,10 @@
-extern void g (int x, const char *y) ; /* prototype */
+extern void g (int x, const char *y) ; // prototype
 
-void f (int a, int b, char *c) /* declaration des parametres */
+void f (int a, int b, char *c) // déclaration des paramètres
 {
-    /* declaration des variables avant les instructions */
+    // déclaration des variables avant les instructions
     struct toto *p ; 
 
-    g (a+b, c) ;               /* verification des arguments */
-    p = malloc (sizeof *p) ;   /* malloc renvoie un void * */
+    g (a+b, c) ;               // vérification des arguments
+    p = malloc (sizeof *p) ;   // malloc renvoie un void *
 }

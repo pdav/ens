@@ -15,7 +15,7 @@ void attendre (void) {
 
 void reveiller (void) {
     pthread_mutex_lock (&m) ;
-    var = 1 ;	/* section critique si non atomique */
+    var = 1 ;	// section critique si non atomique
     pthread_mutex_unlock (&m) ;
     pthread_cond_signal (&c) ;
 }

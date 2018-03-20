@@ -15,6 +15,6 @@ void main () {
     #pragma omp parallel copyin (v)
     {
 	f () ;
-	printf ("%d\n", v) ;	/* 4 dans chaque thread */
+	printf ("%d\n", v) ;	// 4 dans chaque thread
     }
 }

@@ -3,15 +3,15 @@ volatile sig_atomic_t condition = 0 ;
 void signal_machin (int signum)
 {
     (void) signum ;
-    condition = 1 ;       // l'evenement est arrive
+    condition = 1 ;       // l'événement est arrivé
 }
 
 int main (...)
 {
     signal (SIGmachin, signal_machin) ;
     ...
-    if (! condition)      // si l'evenement n'est pas arrive
-	pause ()          // alors attendre l'evenement
+    if (! condition)      // si l'événement n'est pas arrivé
+	pause ()          // alors attendre l'événement
     ...
 }
 
@@ -24,11 +24,11 @@ int main (...)
     sigaddset (&masque, SIGmachin) ;
 
     ...
-    // section critique : signal SIGmachin masque
+    // section critique : signal SIGmachin masqué
     if (sigprocmask (SIG_BLOCK, &masque, NULL) == -1)
 	raler ("masquage") ;
-    if (! condition)          // l'evenement ne peut pas arriver ici
-	sigsuspend (&vide) ;  // section critique levee pendant l'attente
-    // quand on est reveille, on est toujours en section critique
+    if (! condition)          // l'événement ne peut pas arriver ici
+	sigsuspend (&vide) ;  // section critique levée pendant l'attente
+    // quand on est reveillé, on est toujours en section critique
     ...
 }
