@@ -307,7 +307,7 @@ main () {
     \begin {lstlisting} [basicstyle=\scriptsize\lstmonstyle]
     void verrouiller (int *verrou) {
       while (*verrou != 0)
-        ;       /* attente active */
+        ;       // attente active
       *verrou = 1 ;
     }
     void deverrouiller (int *verrou) {
@@ -328,12 +328,12 @@ main () {
     Exemple de code généré par le compilateur~:
 
     \begin {lstlisting} [language=bash,basicstyle=\scriptsize\lstmonstyle]
-    verrouiller:        # on suppose le parametre dans r1
-       mov r0,(r1)      # r0 <- lecture a l'adresse r1
-       tst r0           # tester le contenu de r0
-       jnz verrouiller  # saut si precedente valeur != 0
+    verrouiller:        # on suppose le paramètre dans r$_1$
+       mov r0,(r1)      # r$_0$ $\leftarrow$ lecture à l'adresse r$_1$
+       tst r0           # tester le contenu de r$_0$
+       jnz verrouiller  # saut si précédente valeur $\neq$ 0
        mov r0,1
-       mov (r1),r0      # memoire a l'adresse r1 <- 1
+       mov (r1),r0      # mémoire à l'adresse r$_1$ $\leftarrow$ 1
        rtn
     \end{lstlisting}
 
@@ -373,8 +373,8 @@ main () {
     jeveux [i] = true ;
     tour = j ;
     while (jeveux [j] && tour == j)
-       ;                /* attente active */
-    /* section critique */
+       ;                // attente active
+    // section critique
     jeveux [i] = false ;
     \end{lstlisting}
 
@@ -445,7 +445,7 @@ main () {
     \begin {lstlisting} [basicstyle=\scriptsize\lstmonstyle]
     void verrouiller (int *verrou) {
       while (fetch_and_set (verrou, 1) != 0)
-        ;       /* attente active */
+        ;       // attente active
     }
     void deverrouiller (int *verrou) {
       *verrou = 0 ;
@@ -459,11 +459,11 @@ main () {
     La fonction \texttt {verrouiller} en assembleur~:
 
     \begin {lstlisting} [language=bash,basicstyle=\scriptsize\lstmonstyle]
-    verrouiller:        # on suppose le parametre dans r1
+    verrouiller:        # on suppose le paramètre dans r$_1$
        mov r0,1
-       fas (r1),r0      # r0tmp=*verrou, *verrou=r0, r0=r0tmp
-       tst r0           # tester le contenu de r0
-       jnz  verrouiller # saut si precedente valeur != 0
+       fas (r1),r0      # r$_0$tmp=*verrou, *verrou=r$_0$, r$_0$=r$_0$tmp
+       tst r0           # tester le contenu de r$_0$
+       jnz  verrouiller # saut si précédente valeur $\neq$ 0
        rtn
     \end{lstlisting}
 
@@ -560,10 +560,10 @@ main () {
       do {
         fd = open (verrou, O_CREAT | O_WRONLY | O_EXCL, 0600) ;
         if (fd == -1 && errno == EEXISTS)
-          sleep (1) ;        /* attente active ralentie */
+          sleep (1) ;        // attente active ralentie
       } while (fd == -1 && errno == EEXISTS) ;
       if (fd == -1)
-        /* raler */
+        raler (...) ;
       close (fd) ;
     }
 
@@ -598,11 +598,11 @@ main () {
     \begin {lstlisting} [basicstyle=\scriptsize\lstmonstyle]
     void verrouiller (int fd) {
       if (lockf (fd, F_LOCK, 0) == -1)
-        /* raler */
+        raler (...) ;
     }
     void deverrouiller (int fd) {
       if (lockf (fd, F_ULOCK, 0) == -1)
-        /* raler */
+        raler (...) ;
     }
     \end{lstlisting}
 

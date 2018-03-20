@@ -4,10 +4,10 @@ switch ((pid = fork ())
 {
     case -1 :
 	raler ("fork") ;
-    case 0 :		/* le fils */
+    case 0 :		// le fils
 	fils () ;
 	exit (0) ;
-    default :		/* le pere */
+    default :		// le père
 
 	if (wait (&raison) == -1)
 	    raler ("wait") ;

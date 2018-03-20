@@ -18,7 +18,7 @@ void *f (void *arg)
     p = malloc (sizeof (int)) ;
     *p = i * 2 ;
 
-    pthread_exit (p) ;		/* <=> return p */
+    pthread_exit (p) ;		// $\Leftrightarrow$ return p
 }
 
 void raler (int errno, char *msg)

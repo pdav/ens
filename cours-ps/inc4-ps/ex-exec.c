@@ -3,11 +3,11 @@ switch (fork ())
     case -1 :
 	raler ("fork") ;
 
-    case 0 :		/* fils */
+    case 0 :		// fils
 	execl ("/bin/echo", "echo", "a", NULL) ;
 	raler ("execl") ;
 
-    default :
+    default :		// père
 	if (wait (&raison) == -1)
 	    raler ("wait") ;
 	if (WIFEXITED (raison) && WEXITSTATUS (raison) == 0)

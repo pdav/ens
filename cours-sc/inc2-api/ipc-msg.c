@@ -91,19 +91,19 @@ int main (int argc, char *argv [])
     
     if (argc < 2) usage (argv [0]) ;
     switch (*argv [1]) {
-	case 'c' :		/* (c)reer */
+	case 'c' :		// (c)reer
 	    (void) creer_file () ;
 	    break ;
-	case 'd' :		/* (d)etruire */
+	case 'd' :		// (d)etruire
 	    id = acceder_file () ;
 	    supprimer_file (id) ;
 	    break ;
-	case 'e' :		/* (e)crire */
+	case 'e' :		// (e)crire
 	    id = acceder_file () ;
 	    if (argc < 3) usage (argv [0]) ;
 	    ecrire_valeur (id, atoi (argv [2])) ;
 	    break ;
-	case 'l' :		/* (l)ire */
+	case 'l' :		// (l)ire
 	    id = acceder_file () ;
 	    val = lire_valeur (id) ;
 	    printf ("val = %d\n", val) ;

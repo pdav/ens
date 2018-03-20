@@ -94,19 +94,19 @@ int main (int argc, char *argv [])
     
     if (argc < 2) usage (argv [0]) ;
     switch (*argv [1]) {
-	case 'c' :		/* (c)reer */
+	case 'c' :		// (c)reer
 	    (void) creer_segment () ;
 	    break ;
-	case 'd' :		/* (d)etruire */
+	case 'd' :		// (d)etruire
 	    id = acceder_segment () ;
 	    supprimer_segment (id) ;
 	    break ;
-	case 'e' :		/* (e)crire */
+	case 'e' :		// (e)crire
 	    id = acceder_segment () ;
 	    if (argc < 4) usage (argv [0]) ;
 	    ecrire_valeurs (id, atoi (argv [2]), atoi (argv [3])) ;
 	    break ;
-	case 'l' :		/* (l)ire */
+	case 'l' :		// (l)ire
 	    id = acceder_segment () ;
 	    lire_valeurs (id, &v1, &v2) ;
 	    printf ("v1 = %d, v2 = %d\n", v1, v2) ;

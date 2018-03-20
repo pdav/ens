@@ -76,7 +76,13 @@
 
 \RequirePackage {listings}
 \newcommand {\lstmonstyle} {\color {blue}\ttfamily}
-\lstset {language=c, basicstyle=\footnotesize\lstmonstyle, texcl=true, keywordstyle=}
+\lstset {
+    language=c,
+    basicstyle=\footnotesize\lstmonstyle,
+    texcl=true,					% latex ds commentaires C "//"
+    commentstyle=\sffamily\itshape,		% commentaires en sans-serif
+    keywordstyle=				% pas de mise en valeur
+}
 \newcommand {\code} [1] {{\lstmonstyle #1}}
 
 % \prototype {\code {int blabla (...)}}

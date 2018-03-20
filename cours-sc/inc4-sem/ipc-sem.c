@@ -83,19 +83,19 @@ int main (int argc, char *argv [])
     
     if (argc < 2) usage (argv [0]) ;
     switch (*argv [1]) {
-	case 'c' :		/* (c)reer */
+	case 'c' :		// (c)reer
 	    if (argc < 3) usage (argv [0]) ;
 	    (void) creer_semaphore (atoi (argv [2])) ;
 	    break ;
-	case 'd' :		/* (d)etruire */
+	case 'd' :		// (d)etruire
 	    id = acceder_semaphore () ;
 	    supprimer_semaphore (id) ;
 	    break ;
-	case 'p' :		/* (p) */
+	case 'p' :		// (p)
 	    id = acceder_semaphore () ;
 	    P (id) ;
 	    break ;
-	case 'v' :		/* (v) */
+	case 'v' :		// (v)
 	    id = acceder_semaphore () ;
 	    V (id) ;
 	    break ;

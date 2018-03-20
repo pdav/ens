@@ -1175,7 +1175,7 @@ int pthread_create (pthread_t *id,
 \begin {lstlisting}
 char *strtok (char *str, char *delim) {
   static char *last ;
-  /* variable last unique pour tous les threads */
+  // variable last unique pour tous les threads
   ...
 }
 \end{lstlisting}
@@ -1238,7 +1238,7 @@ char *strtok (char *str, char *delim) {
 	\item Exemple (lecture de répertoire)~:
 \begin {lstlisting}
 struct dirent *readdir (DIR *dirp) {
-  /* variable d unique pour tous les threads */
+  // variable d unique pour tous les threads
   static struct dirent d ;
   ...
   return &d ;
@@ -1316,13 +1316,13 @@ struct dirent *readdir (DIR *dirp) {
 
 	    \implique il est donc possible d'écrire~:
 
-\begin {quote}
+\begin {center}
 \begin {lstlisting}
 errno = pthread_... (...) ;
 if (errno != 0)
     raler ("pthread_...") ;
 \end{lstlisting}
-\end {quote}
+\end {center}
 
     \end {itemize}
 

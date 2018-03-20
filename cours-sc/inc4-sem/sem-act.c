@@ -1,6 +1,6 @@
 P (compteur) {
     while (compteur <= 0)
-	;        /* attente active */
+	;        // attente active
     compteur--
 }
 
