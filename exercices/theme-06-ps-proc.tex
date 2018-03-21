@@ -35,12 +35,12 @@ système {\tt fork}.
 
 \question
 
-Écrivez un programme qui lance {\em n} processus fils dans une
-première étape puis, dans une deuxième étape, attend leur terminaison
+Écrivez un programme admettant un argument entier $n$. Ce programme
+doit lancer {\em n} processus fils dans une
+première étape puis, dans une deuxième étape, attendre leur terminaison
 à l'aide de la primitive {\tt wait}.
-\`A chaque fois qu'un processus se termine,
+À chaque fois qu'un processus se termine,
 le père affiche son numéro ({\em pid}) et son code de retour.
-Vous passerez $n$ en argument à votre programme.
 
 
 \question
@@ -61,10 +61,9 @@ Combien de processus sont générés au total ?
 \question
 % ajouté par Vincent, 12/9/13
 
-Écrivez un programme qui~:
+Écrivez un programme admettant un argument, un nom de fichier, et qui~:
 \begin {enumerate}
-    \item ouvre un fichier dont le nom est passé en argument (en
-	lecture)~;
+    \item ouvre le fichier en lecture~;
     \item créé un processus fils~;
     \item puis les deux processus (père et fils) lisent les caractères
 	l'un après l'autre dans le fichier en utilisant la primitive système
@@ -79,7 +78,8 @@ Que se passe-t-il lorsque le fichier est ouvert {\em après} l'appel à
 
 \question
 
-Écrivez un programme qui~:
+Écrivez un programme admettant un argument, un nom de répertoire,
+et qui~:
 
 \begin {enumerate}
     \item affiche d'abord l'heure, sous forme de secondes et de
@@ -97,14 +97,16 @@ Que se passe-t-il lorsque le fichier est ouvert {\em après} l'appel à
 
 \question
 
-Écrivez un programme qui~:
+Écrivez un programme admettant un argument, un nom de répertoire,
+et qui~:
 
 \begin {enumerate}
-    \item lance la commande {\tt ls} sur un répertoire passé en
-        paramètre~;
+    \item lance la commande {\tt ls} avec l'option \texttt{-R} sur
+	le répertoire~;
     \item redirige la sortie standard de {\tt ls} sur {\tt /dev/null}~;
-    \item affiche les temps (réel et processeur) en secondes
-	pris par la commande {\tt ls} (primitive système {\tt times}).
+    \item affiche la somme des temps « processeur »
+	consommés par la commande {\tt ls} (primitive système {\tt times})
+	en secondes.
 \end {enumerate}
 
 
