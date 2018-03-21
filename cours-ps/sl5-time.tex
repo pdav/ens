@@ -335,7 +335,7 @@
     \end {center}
 
     \begin {itemize}
-	\item état « zombie » : permet de transmettre 3 informations
+	\item état « zombie » permet de transmettre :
 	    \begin {itemize}
 		\item code de retour (primitive \code {exit})
 		\item consommation CPU agrégée en mode utilisateur
@@ -354,8 +354,10 @@
 
     \begin {itemize}
 	\item primitive \code {times} limitée à la consommation CPU
+	\begin {itemize}
 	\item \implique besoin d'une primitive plus générale pour
 	    l'ensemble des ressources consommées par un processus
+	\end {itemize}
 	\item paramètre \code {qui} :
 	    \ctableau {\fD} {|l|l|} {
 		\code {RUSAGE\_SELF}
@@ -373,6 +375,8 @@
 		\code {ru\_inblock} & nombre de lectures disques \\
 		\code {ru\_outblock} & nombre d'écritures disques \\
 	    }
+	\item valeurs remontées du fils vers le père lors du \code{wait}
+
     \end {itemize}
 \end {frame}
 
