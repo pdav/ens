@@ -134,6 +134,8 @@
 		\item taille maximum variable (même sur le même système)
 		\item \implique être prêt à ce que \code{write}
 		    renvoie moins que demandé
+		\item exception : si taille demandée $\leq$ \code{PIPE\_BUF},
+		    alors \code{write} doit écrire ce qui est demandé
 
 	    \end {itemize}
 
@@ -178,7 +180,11 @@
 		    entre écrivains
 		\item taille $>$ \code {PIPE\_BUF} : mélange possible
 		    entre écrivains
-		\item \code {PIPE\_BUF} = 512 (FreeBSD) ou 4096 (Linux)
+		\item POSIX spécifie que \code{PIPE\_BUF} vaut 512
+		    octets au minimum
+		    \begin {itemize}
+			\item \code {PIPE\_BUF} = 512 (FreeBSD) ou 4096 (Linux)
+		    \end {itemize}
 	    \end {itemize}
 
     \end {itemize}
