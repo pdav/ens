@@ -23,6 +23,22 @@ données sur l'entrée standard et les passe par un {\em tube} au fils
 qui les affiche sur sa sortie standard. Le père attend ensuite la
 terminaison du fils.
 
+Pour débuter, il est suggéré de rédiger une fonction \texttt{void
+copier(int fdsrc, int fddst)} qui recopie le contenu du fichier dont
+le descripteur est \texttt{fdsrc} vers le fichier dont le descripteur
+est \texttt{fddst}, puis d'utiliser cette fonction dans un programme
+simple (mono-processus) pour recopier l'entrée standard sur la sortie
+standard. Vous pouvez tester avec :
+
+\begin {quote}
+\begin {verbatim}
+$ ./a.out < /bin/ls > toto
+$ cmp /bin/ls toto
+\end{verbatim}
+\end {quote}
+
+Si \texttt{cmp} n'affiche aucune erreur, la copie s'est bien passée.
+
 
 \question
 
@@ -50,8 +66,8 @@ ci-dessus.
 \question
 
 Écrivez un programme qui crée deux processus fils, redirige les
-entrées/sorties et appelle la fonction execlp, pour faire l'équivalent
-de ce que fait le shell lorsqu'on tape la commande~:
+entrées/sorties et appelle la fonction \texttt{execlp} pour faire
+l'équivalent de ce que fait le shell lorsqu'on tape la commande~:
 
 \begin {quote}
     \texttt {ps eaux | grep "\^{ }<nom>" | wc -l}
