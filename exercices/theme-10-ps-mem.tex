@@ -40,14 +40,17 @@ champs de la structure décrite dans l'exercice précédent.
 
 \question
 
-Pour détecter les corruptions mémoire, on propose d'utiliser la
-technique dite du «~canari~»~: à chaque fois qu'une zone mémoire est
-allouée, \texttt {malloc} initialise un espace avant et un espace après
-avec des valeurs convenues\footnote {On prendra par exemple les 8 octets
-\texttt {0x01}, \texttt {0x23} ... \texttt {0xef}.}
-(fixes).  Lorsqu'on libère la zone, \texttt {free} vérifie que ces
-valeurs convenues sont toujours présentes. Si elles ne le sont pas,
-\texttt {free} signale l'erreur.
+Pour détecter les corruptions mémoire, on propose d'utiliser
+la technique dite du «~canari~»\footnote{Autrefois, pour détecter
+les gaz toxiques dans les mines de charbon, les mineurs emmenaient
+avec eux un canari. Lorsque celui-ci, plus sensible, donnait des
+signes d'intoxication, les mineurs devaient quitter la mine au plus
+vite.}~: à chaque fois qu'une zone mémoire est allouée, \texttt
+{malloc} initialise un espace avant et un espace après avec des valeurs
+convenues\footnote {On prendra par exemple les 8 octets \texttt {0x01},
+\texttt {0x23} ... \texttt {0xef}.} (fixes).  Lorsqu'on libère la
+zone, \texttt {free} vérifie que ces valeurs convenues sont toujours
+présentes. Si elles ne le sont pas, \texttt {free} signale l'erreur.
 
 Écrivez les fonctions \texttt {mon\_malloc} et \texttt {mon\_free}
 qui fonctionnent comme décrit ci-dessus. Vos fonctions appelleront
