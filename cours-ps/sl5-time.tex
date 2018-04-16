@@ -291,8 +291,6 @@
 	    \begin {itemize}
 		\item contenu de la \code {struct tms}~:
 
-		    \vspace* {-3mm}
-
 		    \ctableau {\fD} {|l|l|} {
 			\code {tms\_utime}
 			    & consommation CPU du processus
@@ -365,7 +363,7 @@
 		\code {RUSAGE\_CHILDREN}
 		    & consommation cumulée des fils \\
 	    }
-	    \vspace* {1mm}
+
 	\item exemples (non exhaustifs) de champs de \code {struct rusage} :
 
 	    \ctableau {\fD} {|l|l|} {
@@ -375,6 +373,9 @@
 		\code {ru\_inblock} & nombre de lectures disques \\
 		\code {ru\_outblock} & nombre d'écritures disques \\
 	    }
+
+	    Note : seuls les deux premiers sont normalisés par POSIX
+
 	\item valeurs remontées du fils vers le père lors du \code{wait}
 
     \end {itemize}

@@ -1506,6 +1506,9 @@ résume les 6 possibilités~:
     \end {tabular}
 \end {center}
 
+Sur la plupart des implémentations, seule l'une de ces primitives est
+implémentée comme une primitive, les 5 autres sont implémentées sous
+la forme de fonctions de bibliothèque.
 
 Si ces primitives retournent à l'appelant, une erreur est
 arrivée. La valeur renvoyée est donc toujours -1.
@@ -2549,6 +2552,9 @@ courante en secondes écoulées depuis
 Si le paramètre \texttt {adresse} est non nul, la valeur
 de retour est aussi stockée à l'adresse
 indiquée.
+
+Sur certains systèmes, \texttt{time} est implémenté comme une fonction
+de bibliothèque appelant \texttt{gettimeofday}.
 
 La primitive \texttt {time} renvoie l'heure courante, ou -1 (ou plus
 exactement \verb|((time_t)-1)|) en cas d'erreur.

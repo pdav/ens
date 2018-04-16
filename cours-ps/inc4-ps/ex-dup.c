@@ -4,7 +4,7 @@ if (fd == -1)
 close (1) ;
 if (dup (fd) == -1)
     raler ("dup") ;
-if (close (fd))
+if (close (fd) == -1)
     raler ("close") ;
 execv (path, tabargv) ;
 raler ("execv") ;

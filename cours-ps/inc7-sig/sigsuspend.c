@@ -11,7 +11,7 @@ int main (...)
     signal (SIGmachin, signal_machin) ;
     ...
     if (! condition)      // si l'événement n'est pas arrivé
-	pause ()          // alors attendre l'événement
+	pause () ;        // alors attendre l'événement
     ...
 }
 
